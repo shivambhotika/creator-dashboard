@@ -1,26 +1,43 @@
 @import "tailwindcss";
 
+/* Dark mode via .dark class on <html> */
+@variant dark (&:where(.dark, .dark *));
+
+/* ── Theme tokens ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base:     #ffffff;
+  --bg-surface:  #f8fafc;
+  --bg-card:     #ffffff;
+  --border:      #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --text-primary:   #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #94a3b8;
+  --accent:         #6366f1;
+  --accent-light:   #eef2ff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  --bg-base:     #030712;
+  --bg-surface:  #0f1117;
+  --bg-card:     #111827;
+  --border:      #1f2937;
+  --border-subtle: #1a2332;
+  --text-primary:   #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted:     #4b5563;
+  --accent:         #6366f1;
+  --accent-light:   #1e1b4b;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  transition: background 0.15s ease, color 0.15s ease;
 }
+
+/* Smooth scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
