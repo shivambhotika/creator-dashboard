@@ -5,39 +5,98 @@
 
 /* ── Theme tokens ── */
 :root {
-  --bg-base:     #ffffff;
-  --bg-surface:  #f8fafc;
-  --bg-card:     #ffffff;
-  --border:      #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --text-primary:   #0f172a;
-  --text-secondary: #475569;
-  --text-muted:     #94a3b8;
-  --accent:         #6366f1;
-  --accent-light:   #eef2ff;
+  /* Surface hierarchy: base → card → surface → elevated */
+  --bg-base:      #f4f4fb;
+  --bg-card:      #ffffff;
+  --bg-surface:   #f0f0f8;
+  --bg-elevated:  #ffffff;
+
+  /* Borders */
+  --border:        #e4e4ef;
+  --border-subtle: #ededf5;
+
+  /* Text */
+  --text-primary:   #0d0d1a;
+  --text-secondary: #52526e;
+  --text-muted:     #9999b3;
+
+  /* Accent */
+  --accent:       #6366f1;
+  --accent-dim:   #e0e7ff;
+  --accent-fg:    #ffffff;
 }
 
 html.dark {
-  --bg-base:     #030712;
-  --bg-surface:  #0f1117;
-  --bg-card:     #111827;
-  --border:      #1f2937;
-  --border-subtle: #1a2332;
-  --text-primary:   #f9fafb;
-  --text-secondary: #9ca3af;
-  --text-muted:     #4b5563;
-  --accent:         #6366f1;
-  --accent-light:   #1e1b4b;
+  /* Surface hierarchy */
+  --bg-base:      #07070f;
+  --bg-card:      #0f0f1a;
+  --bg-surface:   #14141f;
+  --bg-elevated:  #1a1a28;
+
+  /* Borders — barely visible, not loud */
+  --border:        #1e1e2e;
+  --border-subtle: #181826;
+
+  /* Text */
+  --text-primary:   #ededf5;
+  --text-secondary: #8888a8;
+  --text-muted:     #44445a;
+
+  /* Accent */
+  --accent:       #6366f1;
+  --accent-dim:   #1e1b4b;
+  --accent-fg:    #ffffff;
+}
+
+/* ── Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--bg-base);
   color: var(--text-primary);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 
-/* Smooth scrollbars */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* ── Scrollbars ── */
+::-webkit-scrollbar         { width: 5px; height: 5px; }
+::-webkit-scrollbar-track   { background: transparent; }
+::-webkit-scrollbar-thumb   { background: var(--border); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Typography utilities ── */
+.label-caps {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-number {
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+/* ── Card surface ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.card-elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+}

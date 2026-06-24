@@ -72,22 +72,93 @@ export const creators: Creator[] = [
     id: "c8", name: "Aevy TV", handle: "@aevytvdaily",
     platform: "Instagram", tier: "Mid", niche: "News / Finance / Business",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 80156,
+    followers: 329000, avgViews: 80156,
     sheetUrl: "https://www.instagram.com/aevytvdaily/",
   },
   {
     id: "c9", name: "Arjun Vaidya", handle: "@abvaidya",
     platform: "Instagram", tier: "Mid", niche: "Business / Entrepreneurship",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 33563,
-    sheetUrl: "https://www.instagram.com/abvaidya/",
+    followers: 374000, avgViews: 33563,
+    sheetUrl: "https://www.instagram.com/abvaidya/?hl=en",
   },
   {
     id: "c10", name: "Maitri Mangal", handle: "@maitrimangal",
     platform: "Instagram", tier: "Mid", niche: "Finance / Lifestyle",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 0,
-    sheetUrl: "https://www.instagram.com/maitrimangal/",
+    followers: 157000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/maitrimangal",
+  },
+  // ── Palak (early batch) ───────────────────────────────────────
+  {
+    id: "c77", name: "Aarti Samant", handle: "@thesortedgirl",
+    platform: "Instagram", tier: "Macro", niche: "Finance / Lifestyle",
+    agency: "Palak", contactEmail: "", status: "Active",
+    followers: 419000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/thesortedgirl/",
+  },
+  {
+    id: "c78", name: "Gayatri Agrawal", handle: "@gayatri.tech",
+    platform: "Instagram", tier: "Mid", niche: "Tech / Finance",
+    agency: "Direct", contactEmail: "", status: "Active",
+    followers: 210000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/gayatri.tech/",
+  },
+  {
+    id: "c79", name: "Anurag Bansal", handle: "@businesswithbansal",
+    platform: "Instagram", tier: "Mid", niche: "Business / Finance",
+    agency: "Direct", contactEmail: "", status: "Active",
+    followers: 366000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/businesswithbansal",
+  },
+  {
+    id: "c80", name: "Ayush Wadhwa", handle: "@ayushwadhwa",
+    platform: "Instagram", tier: "Mid", niche: "Business / Entrepreneurship",
+    agency: "Direct", contactEmail: "", status: "Active",
+    followers: 380000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/ayushwadhwa/?hl=en",
+  },
+  {
+    id: "c81", name: "Jivraj Sachar", handle: "@jivrajsinghsachar",
+    platform: "LinkedIn", tier: "Micro", niche: "Career / Productivity",
+    agency: "Palak", contactEmail: "", status: "Active",
+    followers: 53000, avgViews: 0,
+    sheetUrl: "https://www.linkedin.com/in/jivrajsinghsachar/",
+  },
+  {
+    id: "c82", name: "Miti Shah", handle: "@miti-shah-content-creator",
+    platform: "LinkedIn", tier: "Micro", niche: "Content / Marketing",
+    agency: "Palak", contactEmail: "", status: "Active",
+    followers: 87000, avgViews: 0,
+    sheetUrl: "https://www.linkedin.com/in/miti-shah-content-creator/",
+  },
+  {
+    id: "c83", name: "Ansh Mehra", handle: "@anshmehraofficial",
+    platform: "Instagram", tier: "Mid", niche: "Business / Finance",
+    agency: "Social Tag", contactEmail: "", status: "Active",
+    followers: 255000, avgViews: 0,
+    sheetUrl: "https://www.youtube.com/channel/UCZknyXD-6tETm9aN8GQCi8g",
+  },
+  {
+    id: "c84", name: "Paras Madan", handle: "@parasmadan.in",
+    platform: "Instagram", tier: "Mid", niche: "Finance / Career",
+    agency: "Palak", contactEmail: "", status: "Active",
+    followers: 219000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/parasmadan.in",
+  },
+  {
+    id: "c85", name: "Anik Jain", handle: "@anikjaindesign",
+    platform: "Instagram", tier: "Macro", niche: "Design / Business",
+    agency: "Social Tag", contactEmail: "", status: "Active",
+    followers: 463000, avgViews: 0,
+    sheetUrl: "https://www.instagram.com/anikjaindesign/?hl=en",
+  },
+  {
+    id: "c86", name: "Aditya Agrawal", handle: "@aditya-agrawal-95422616a",
+    platform: "LinkedIn", tier: "Micro", niche: "Business / Entrepreneurship",
+    agency: "Palak", contactEmail: "", status: "Active",
+    followers: 40000, avgViews: 0,
+    sheetUrl: "https://www.linkedin.com/in/aditya-agrawal-95422616a/",
   },
   // ── Owled ─────────────────────────────────────────────────────
   // gommaboy — profile & reel both 404 as of 20 Jun 2026 (account deactivated)
@@ -565,53 +636,30 @@ export const creators: Creator[] = [
 // Total Owled spend:   ₹4,20,000 + 1,50,000 + 90,086 + 1,40,000 + 2,40,000 + 1,32,063 + 5,50,000 + 3,63,172 + 5,50,000 + 5,50,000 = ₹31,85,321
 export const campaigns: Campaign[] = [
   {
-    id: "camp1",
-    name: "Finnet Influencer Campaign",
-    startDate: "2026-05-15",
-    totalBudget: 1347000,
-    totalSpend: 1347000,
-    status: "Active",
-    primaryPlatform: "Multi",
-    creatorIds: ["c1", "c2", "c3", "c4", "c5", "c6", "c7"],
-    goal: "Brand awareness + app installs across IG & YouTube",
-  },
-  {
-    id: "camp2",
-    name: "AOS March 2026",
-    startDate: "2026-03-12",
-    endDate: "2026-03-31",
-    totalBudget: Math.round(11420 * USD_INR),
-    totalSpend: Math.round(11420 * USD_INR),
+    // Merged: Finnet (c1-c7) + AEOS (c8-c10) + Owled (c11-c20) + LinkedIn Seeding (c21-c31) + Batch 1 (c77-c86)
+    // Budget: ₹1,347,000 (Finnet) + ₹1,030,000 (AEOS corrected) + ₹3,185,321 (Owled)
+    //       + ₹0 (LinkedIn Seeding) + ₹2,310,000 (Batch 1: Palak/Direct/Social Tag) = ₹7,872,321
+    id: "camp-india",
+    name: "Wispr India Launch",
+    startDate: "2026-02-01",
+    endDate: "2026-06-14",
+    totalBudget: 7872321,
+    totalSpend: 7872321,
     status: "Ended",
     primaryPlatform: "Multi",
-    creatorIds: ["c8", "c9", "c10"],
-    goal: "App installs + brand awareness — IG Reels + YT Shorts",
+    creatorIds: [
+      "c1","c2","c3","c4","c5","c6","c7",           // Finnet
+      "c8","c9","c10",                               // AEOS
+      "c11","c12","c13","c14","c15","c16","c17","c18","c19","c20", // Owled
+      "c21","c22","c23","c24","c25","c26","c27","c28","c29","c30","c31", // LinkedIn Seeding
+      "c77","c78","c79","c80","c81","c82","c83","c84","c85","c86", // Batch 1 (Palak/Direct/Social Tag)
+    ],
+    goal: "India market launch — content seeding across Instagram, YouTube, and LinkedIn via Finnet, AEOS, Owled, organic LinkedIn creators, and Batch 1 (Palak/Direct/Social Tag)",
   },
   {
-    id: "camp3",
-    name: "Owled Launch Campaign",
-    startDate: "2026-05-07",
-    totalBudget: 3185321,
-    totalSpend: 3185321,
-    status: "Active",
-    primaryPlatform: "Instagram",
-    creatorIds: ["c11", "c12", "c13", "c14", "c15", "c16", "c17", "c18", "c19", "c20"],
-    goal: "Wispr Flow India launch — brand awareness via IG Reels & Carousel",
-  },
-  {
-    id: "camp4",
-    name: "LinkedIn — India Launch Kannada Seeding",
-    startDate: "2026-04-20",
-    totalBudget: 0,
-    totalSpend: 0,
-    status: "Ended",
-    primaryPlatform: "LinkedIn",
-    creatorIds: ["c21","c22","c23","c24","c25","c26","c27","c28","c29","c30","c31"],
-    goal: "Organic LinkedIn seeding for Wispr Flow India launch — Kannada-speaking audience",
-  },
-  {
-    id: "camp5",
-    name: "LinkedIn — Wispr at MTW",
+    // LinkedIn Mumbai Tech Week activation
+    id: "camp-mtw",
+    name: "Mumbai Tech Week",
     startDate: "2026-05-16",
     endDate: "2026-05-21",
     totalBudget: 522000,
@@ -619,218 +667,285 @@ export const campaigns: Campaign[] = [
     status: "Ended",
     primaryPlatform: "LinkedIn",
     creatorIds: ["c32","c33","c34","c35","c36","c37","c38","c39","c40","c41","c42","c43","c44","c45","c46","c47","c48","c49"],
-    goal: "Mumbai Tech Week activation — LinkedIn creators posting live from the event with referral links",
+    goal: "Mumbai Tech Week activation — LinkedIn creator network posting live from the event with referral links",
   },
   {
-    id: "camp7",
-    name: "Coding First — June 2026",
+    // Merged: WLDD (camp6) + Coding First (camp7) — July overflow included
+    // Budget: ₹0 (WLDD) + ₹1,182,000 (Coding First) = ₹1,182,000
+    id: "camp-june",
+    name: "June 2026",
     startDate: "2026-06-01",
     totalBudget: 1182000,
     totalSpend: 0,
     status: "Active",
-    primaryPlatform: "YouTube",
-    creatorIds: ["c67","c68","c69","c70","c71","c72","c73","c74","c75","c76"],
-    goal: "App signups via YouTube integrations — coding/dev audience with UTM-tracked links",
+    primaryPlatform: "Multi",
+    creatorIds: [
+      "c50","c51","c52","c53","c54","c55","c56","c57","c58","c59","c60","c61","c62","c63","c64","c65","c66", // WLDD
+      "c67","c68","c69","c70","c71","c72","c73","c74","c75","c76",  // Coding First
+    ],
+    goal: "Monthly programming — YouTube and Instagram content from coding/dev and regional creator cohorts (WLDD + Coding First)",
   },
   {
-    id: "camp6",
-    name: "Wispr × WLDD — June 2026",
-    startDate: "2026-06-07",
+    // Placeholder for July programming — first-batch list pending from user
+    id: "camp-july",
+    name: "July 2026",
+    startDate: "2026-07-01",
     totalBudget: 0,
     totalSpend: 0,
-    status: "Active",
+    status: "Planned",
     primaryPlatform: "Multi",
-    creatorIds: ["c50","c51","c52","c53","c54","c55","c56","c57","c58","c59","c60","c61","c62","c63","c64","c65","c66"],
-    goal: "Brand awareness + app signups — IG Reels & YouTube integrations with UTM-tracked referral links",
+    creatorIds: [],
+    goal: "July monthly programming — creator list pending",
   },
 ];
 
 export const videos: Video[] = [
   // ── Finnet — Instagram ──────────────────────────────────────
   {
-    id: "v1", creatorId: "c1", creatorName: "Anushka Rathod", campaignId: "camp1",
-    title: "Wispr AI — Anushka Rathod IG Reel",
+    id: "v1", creatorId: "c1", creatorName: "Anushka Rathod", campaignId: "camp-india",
+    title: "Anushka Rathod",
     url: "https://www.instagram.com/reel/DWoZrPsvVc2/",
-    platform: "Instagram", goLiveDate: "2026-05-20", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-28", format: "Integration", status: "Live",
   },
   {
-    id: "v2", creatorId: "c2", creatorName: "Nidhi Kunwar", campaignId: "camp1",
-    title: "Wispr AI — Nidhi Kunwar IG Reel",
+    id: "v2", creatorId: "c2", creatorName: "Nidhi Kunwar", campaignId: "camp-india",
+    title: "Nidhi Kunwar",
     url: "https://www.instagram.com/reel/DWgtCi1jL5o/",
-    platform: "Instagram", goLiveDate: "2026-05-25", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-21", format: "Integration", status: "Live",
   },
   {
-    id: "v3", creatorId: "c3", creatorName: "Ayush Shukla", campaignId: "camp1",
-    title: "Wispr AI — Ayush Shukla IG Reel",
+    id: "v3", creatorId: "c3", creatorName: "Ayush Shukla", campaignId: "camp-india",
+    title: "Ayush Shukla",
     url: "https://www.instagram.com/reel/DWglq3fCgjx/",
-    platform: "Instagram", goLiveDate: "2026-05-25", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-30", format: "Integration", status: "Live",
   },
   {
-    id: "v4", creatorId: "c4", creatorName: "Ananya Bagri", campaignId: "camp1",
-    title: "Wispr AI — Ananya Bagri IG Post",
+    id: "v4", creatorId: "c4", creatorName: "Ananya Bagri", campaignId: "camp-india",
+    title: "Ananya Bagri",
     url: "https://www.instagram.com/p/DWTz_KNzfU-/",
-    platform: "Instagram", goLiveDate: "2026-05-15", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-25", format: "Short", status: "Live",
   },
   {
-    id: "v5", creatorId: "c5", creatorName: "Jayant (Markets with Jayant)", campaignId: "camp1",
-    title: "Wispr AI — Markets with Jayant IG Post",
+    id: "v5", creatorId: "c5", creatorName: "Jayant (Markets with Jayant)", campaignId: "camp-india",
+    title: "Jayant (Markets with Jayant)",
     url: "https://www.instagram.com/p/DWTRiUACMlS/",
-    platform: "Instagram", goLiveDate: "2026-05-15", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-28", format: "Short", status: "Live",
   },
   {
-    id: "v6", creatorId: "c6", creatorName: "Shankar Bhalla", campaignId: "camp1",
-    title: "Wispr AI — Shankar Bhalla IG Reel",
+    id: "v6", creatorId: "c6", creatorName: "Shankar Bhalla", campaignId: "camp-india",
+    title: "Shankar Bhalla",
     url: "https://www.instagram.com/reel/DW1XOIsk5J-/",
-    platform: "Instagram", goLiveDate: "2026-06-01", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-25", format: "Integration", status: "Live",
   },
   // ── Finnet — YouTube ────────────────────────────────────────
   {
-    id: "v7", creatorId: "c7", creatorName: "CA Nandini", campaignId: "camp1",
-    title: "Wispr AI — CA Nandini YouTube Integration",
+    id: "v7", creatorId: "c7", creatorName: "CA Nandini", campaignId: "camp-india",
+    title: "CA Nandini",
     url: "https://www.youtube.com/watch?v=0mr6d9z8iio",
-    platform: "YouTube", goLiveDate: "2026-05-20", format: "Integration", status: "Live",
+    platform: "YouTube", goLiveDate: "2026-03-25", format: "Integration", status: "Live",
   },
   // ── AOS — Instagram ─────────────────────────────────────────
   {
-    id: "v8", creatorId: "c8", creatorName: "Aevy TV", campaignId: "camp2",
-    title: "Wispr AI — Aevy TV IG Reel",
+    id: "v8", creatorId: "c8", creatorName: "Aevy TV", campaignId: "camp-india",
+    title: "Aevy TV",
     url: "https://www.instagram.com/reel/DVyTPmuD-XA/",
     platform: "Instagram", goLiveDate: "2026-03-12", format: "Dedicated", status: "Live",
   },
   {
-    id: "v9", creatorId: "c9", creatorName: "Arjun Vaidya", campaignId: "camp2",
-    title: "Wispr AI — Arjun Vaidya IG Reel",
+    id: "v9", creatorId: "c9", creatorName: "Arjun Vaidya", campaignId: "camp-india",
+    title: "Arjun Vaidya",
     url: "https://www.instagram.com/reel/DWB-g4OgiuS/",
     platform: "Instagram", goLiveDate: "2026-03-17", format: "Integration", status: "Live",
   },
   {
-    id: "v10", creatorId: "c10", creatorName: "Maitri Mangal", campaignId: "camp2",
-    title: "Wispr AI — Maitri Mangal IG Reel",
+    id: "v10", creatorId: "c10", creatorName: "Maitri Mangal", campaignId: "camp-india",
+    title: "Maitri Mangal",
     url: "https://www.instagram.com/reel/DWApCVZjUuj/",
-    platform: "Instagram", goLiveDate: "2026-03-17", format: "Integration", status: "Live",
+    platform: "Instagram", goLiveDate: "2026-03-18", format: "Integration", status: "Live",
+  },
+  // ── Batch 1 — Palak / Direct / Social Tag ───────────────────
+  {
+    id: "v77", creatorId: "c77", creatorName: "Aarti Samant", campaignId: "camp-india",
+    title: "Aarti Samant",
+    url: "https://www.instagram.com/reel/DWEnV1CjBlS/",
+    platform: "Instagram", goLiveDate: "2026-03-19", format: "Integration", status: "Live",
+  },
+  {
+    id: "v78", creatorId: "c78", creatorName: "Gayatri Agrawal", campaignId: "camp-india",
+    title: "Gayatri Agrawal",
+    url: "https://www.instagram.com/reel/DWd9x0IjxFv/",
+    platform: "Instagram", goLiveDate: "2026-03-20", format: "Integration", status: "Live",
+  },
+  {
+    id: "v79", creatorId: "c79", creatorName: "Anurag Bansal", campaignId: "camp-india",
+    title: "Anurag Bansal",
+    url: "https://www.instagram.com/reel/DWEP0bCjA4L/",
+    platform: "Instagram", goLiveDate: "2026-03-18", format: "Integration", status: "Live",
+  },
+  {
+    id: "v80", creatorId: "c80", creatorName: "Ayush Wadhwa", campaignId: "camp-india",
+    title: "Ayush Wadhwa",
+    url: "https://www.instagram.com/reel/DWmAOtKEXNx/",
+    platform: "Instagram", goLiveDate: "2026-03-25", format: "Integration", status: "Live",
+  },
+  {
+    id: "v81", creatorId: "c81", creatorName: "Jivraj Sachar", campaignId: "camp-india",
+    title: "Jivraj Sachar",
+    url: "https://www.linkedin.com/posts/jivrajsinghsachar_i-walk-out-of-almost-every-meeting-with-a-activity-7439276060401348609-yRqb",
+    platform: "LinkedIn", goLiveDate: "2026-03-16", format: "Integration", status: "Live",
+  },
+  {
+    id: "v82", creatorId: "c82", creatorName: "Miti Shah", campaignId: "camp-india",
+    title: "Miti Shah",
+    url: "https://www.linkedin.com/posts/miti-shah-content-creator_the-hardest-part-of-content-creation-isn-activity-7439906181088854016-X9lO",
+    platform: "LinkedIn", goLiveDate: "2026-03-18", format: "Integration", status: "Live",
+  },
+  {
+    id: "v83", creatorId: "c83", creatorName: "Ansh Mehra", campaignId: "camp-india",
+    title: "Ansh Mehra",
+    url: "https://www.instagram.com/reel/DWG3m6-k2lc/",
+    platform: "Instagram", goLiveDate: "2026-03-20", format: "Integration", status: "Live",
+  },
+  {
+    id: "v84", creatorId: "c84", creatorName: "Paras Madan", campaignId: "camp-india",
+    title: "Paras Madan",
+    url: "https://www.instagram.com/reels/DWIrGS6E9ic/",
+    platform: "Instagram", goLiveDate: "2026-03-19", format: "Integration", status: "Live",
+  },
+  {
+    id: "v85", creatorId: "c85", creatorName: "Anik Jain", campaignId: "camp-india",
+    title: "Anik Jain",
+    url: "https://www.instagram.com/reel/DWHBGzbCIVU/",
+    platform: "Instagram", goLiveDate: "2026-03-20", format: "Integration", status: "Live",
+  },
+  {
+    id: "v86", creatorId: "c86", creatorName: "Aditya Agrawal", campaignId: "camp-india",
+    title: "Aditya Agrawal",
+    url: "https://www.linkedin.com/in/aditya-agrawal-95422616a/",
+    platform: "LinkedIn", goLiveDate: "2026-03-20", format: "Integration", status: "Live",
   },
   // ── Owled — Instagram ───────────────────────────────────────
   {
-    id: "v11", creatorId: "c11", creatorName: "gommaboy", campaignId: "camp3",
-    title: "Wispr Flow — gommaboy IG Reel",
+    id: "v11", creatorId: "c11", creatorName: "gommaboy", campaignId: "camp-india",
+    title: "gommaboy",
     url: "https://www.instagram.com/reel/DXok0rJD2GF/",
     platform: "Instagram", goLiveDate: "2026-05-07", format: "Integration", status: "Live",
   },
   {
-    id: "v12", creatorId: "c12", creatorName: "Kartik Sadvij", campaignId: "camp3",
-    title: "Wispr Flow — Kartik Sadvij IG Reel",
+    id: "v12", creatorId: "c12", creatorName: "Kartik Sadvij", campaignId: "camp-india",
+    title: "Kartik Sadvij",
     url: "https://www.instagram.com/reel/DX9ksZdsCJy/",
     platform: "Instagram", goLiveDate: "2026-05-14", format: "Integration", status: "Live",
   },
   {
-    id: "v13", creatorId: "c13", creatorName: "Raj Patel", campaignId: "camp3",
-    title: "Wispr Flow — Raj Patel IG Reel",
+    id: "v13", creatorId: "c13", creatorName: "Raj Patel", campaignId: "camp-india",
+    title: "Raj Patel",
     url: "https://www.instagram.com/reel/DX4A7wqJTj5/",
     platform: "Instagram", goLiveDate: "2026-05-11", format: "Integration", status: "Live",
   },
   {
-    id: "v14", creatorId: "c14", creatorName: "Nitin Sequeira", campaignId: "camp3",
-    title: "Wispr Flow — Nitin Sequeira IG Reel",
+    id: "v14", creatorId: "c14", creatorName: "Nitin Sequeira", campaignId: "camp-india",
+    title: "Nitin Sequeira",
     url: "https://www.instagram.com/reel/DX_8x-Vznlm/",
     platform: "Instagram", goLiveDate: "2026-05-16", format: "Integration", status: "Live",
   },
   {
-    id: "v15", creatorId: "c15", creatorName: "Kiran Kumar", campaignId: "camp3",
-    title: "Wispr Flow — Kiran Kumar IG Reel",
+    id: "v15", creatorId: "c15", creatorName: "Kiran Kumar", campaignId: "camp-india",
+    title: "Kiran Kumar",
     url: "https://www.instagram.com/reel/DX6rL-7BgIU/",
     platform: "Instagram", goLiveDate: "2026-05-12", format: "Integration", status: "Live",
   },
   {
-    id: "v16", creatorId: "c16", creatorName: "Varun Agarwal", campaignId: "camp3",
-    title: "Wispr Flow — Varun Agarwal IG Carousel",
+    id: "v16", creatorId: "c16", creatorName: "Varun Agarwal", campaignId: "camp-india",
+    title: "Varun Agarwal",
     url: "https://www.instagram.com/p/DYBsQdpGsw1/",
     platform: "Instagram", goLiveDate: "2026-05-22", format: "Integration", status: "Live",
   },
   {
-    id: "v17", creatorId: "c17", creatorName: "Vishal Dayama", campaignId: "camp3",
-    title: "Wispr Flow — Vishal Dayama IG Reel",
+    id: "v17", creatorId: "c17", creatorName: "Vishal Dayama", campaignId: "camp-india",
+    title: "Vishal Dayama",
     url: "https://www.instagram.com/reel/DYMUY5VJpVh/",
     platform: "Instagram", goLiveDate: "2026-05-29", format: "Dedicated", status: "Live",
   },
   {
-    id: "v18", creatorId: "c18", creatorName: "Jay Kapoor", campaignId: "camp3",
-    title: "Wispr Flow — Jay Kapoor IG Reel",
+    id: "v18", creatorId: "c18", creatorName: "Jay Kapoor", campaignId: "camp-india",
+    title: "Jay Kapoor",
     url: "https://www.instagram.com/reel/DX1uWLxPwwH/",
     platform: "Instagram", goLiveDate: "2026-05-09", format: "Integration", status: "Live",
   },
   {
-    id: "v19", creatorId: "c19", creatorName: "Pritika Loonia", campaignId: "camp3",
-    title: "Wispr Flow — Pritika Loonia IG Reel",
+    id: "v19", creatorId: "c19", creatorName: "Pritika Loonia", campaignId: "camp-india",
+    title: "Pritika Loonia",
     url: "https://www.instagram.com/reel/DX34GZnxFAG/",
     platform: "Instagram", goLiveDate: "2026-05-10", format: "Integration", status: "Live",
   },
   {
-    id: "v20", creatorId: "c20", creatorName: "Shivanshu Agrawal", campaignId: "camp3",
-    title: "Wispr Flow — Shivanshu Agrawal IG Reel",
+    id: "v20", creatorId: "c20", creatorName: "Shivanshu Agrawal", campaignId: "camp-india",
+    title: "Shivanshu Agrawal",
     url: "https://www.instagram.com/reel/DX6_jZnM3uY/",
     platform: "Instagram", goLiveDate: "2026-05-12", format: "Integration", status: "Live",
   },
   // ── LinkedIn Seeding ────────────────────────────────────────
-  { id: "v21", creatorId: "c21", creatorName: "Anubhav Dubey",       campaignId: "camp4", title: "Wispr Flow — Anubhav Dubey LinkedIn",       url: "https://www.linkedin.com/posts/anubhavdubey_indore-is-not-bengaluru-tamil-nadu-is-not-share-7456371857936764928-E0Rm/",         platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v22", creatorId: "c22", creatorName: "Shivani Gera",        campaignId: "camp4", title: "Wispr Flow — Shivani Gera LinkedIn",        url: "https://www.linkedin.com/posts/shivanigera30_bangalore-has-a-productivity-hack-nobody-ugcPost-7456401431588286464-rPdP/",   platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v23", creatorId: "c23", creatorName: "Anant Sekhsaria",     campaignId: "camp4", title: "Wispr Flow — Anant Sekhsaria LinkedIn",     url: "https://www.linkedin.com/posts/anant5_wispr-flow-recently-ran-an-on-ground-campaign-share-7457039757613617152-IO-i/",    platform: "LinkedIn", goLiveDate: "2026-04-21", format: "Integration", status: "Live" },
-  { id: "v24", creatorId: "c24", creatorName: "Parth Sanghvi",       campaignId: "camp4", title: "Wispr Flow — Parth Sanghvi LinkedIn",       url: "https://www.linkedin.com/posts/parth-sanghvi-humour-finance_siri-and-google-assistant-are-brilliant-pieces-share-7457757975584149504-uHRw/", platform: "LinkedIn", goLiveDate: "2026-04-22", format: "Integration", status: "Live" },
-  { id: "v25", creatorId: "c25", creatorName: "CA Rahul Arora",      campaignId: "camp4", title: "Wispr Flow — CA Rahul Arora LinkedIn",      url: "https://www.linkedin.com/posts/rahul-arora29_wisprflow-startup-marketing-share-7456336599455256576-w0Xc/",                  platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v26", creatorId: "c26", creatorName: "Harinder Singh Pelia", campaignId: "camp4", title: "Wispr Flow — Harinder Singh Pelia LinkedIn", url: "https://www.linkedin.com/posts/harindersinghpelia_i-love-it-when-founders-dont-get-defensive-share-7456610108899352576-TY-1/",  platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v27", creatorId: "c27", creatorName: "Adityan Kayalakal",   campaignId: "camp4", title: "Wispr Flow — Adityan Kayalakal LinkedIn",   url: "https://www.linkedin.com/posts/adityanmktng_most-brands-dont-fail-because-they-make-activity-7456338537697705985-zRf9/",    platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v28", creatorId: "c28", creatorName: "Jeet Chandan",        campaignId: "camp4", title: "Wispr Flow — Jeet Chandan LinkedIn",        url: "https://www.linkedin.com/posts/jeetchandan_something-ive-been-thinking-about-from-the-share-7456616762650857472-QOEq/",      platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v29", creatorId: "c29", creatorName: "Prateek Malpani",     campaignId: "camp4", title: "Wispr Flow — Prateek Malpani LinkedIn",     url: "https://www.linkedin.com/posts/prateekmalpani_ive-been-using-wispr-flow-for-a-bit-now-activity-7456014037730869248-sSNm/",    platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
-  { id: "v30", creatorId: "c30", creatorName: "Saransh Anand",       campaignId: "camp4", title: "Wispr Flow — Saransh Anand LinkedIn",       url: "https://www.linkedin.com/posts/saransh-anand_lyft-bought-a-startup-just-to-put-ads-on-activity-7457045814855618560-Qbi7/",    platform: "LinkedIn", goLiveDate: "2026-04-21", format: "Integration", status: "Live" },
-  { id: "v31", creatorId: "c31", creatorName: "Rohit Singh",         campaignId: "camp4", title: "Wispr Flow — Rohit Singh LinkedIn",         url: "https://www.linkedin.com/posts/rohitsingh1387_in-13-years-of-working-with-global-firms-ugcPost-7456008947116900352-h_lz/",     platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v21", creatorId: "c21", creatorName: "Anubhav Dubey",       campaignId: "camp-india", title: "Anubhav Dubey",       url: "https://www.linkedin.com/posts/anubhavdubey_indore-is-not-bengaluru-tamil-nadu-is-not-share-7456371857936764928-E0Rm/",         platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v22", creatorId: "c22", creatorName: "Shivani Gera",        campaignId: "camp-india", title: "Shivani Gera",        url: "https://www.linkedin.com/posts/shivanigera30_bangalore-has-a-productivity-hack-nobody-ugcPost-7456401431588286464-rPdP/",   platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v23", creatorId: "c23", creatorName: "Anant Sekhsaria",     campaignId: "camp-india", title: "Anant Sekhsaria",     url: "https://www.linkedin.com/posts/anant5_wispr-flow-recently-ran-an-on-ground-campaign-share-7457039757613617152-IO-i/",    platform: "LinkedIn", goLiveDate: "2026-04-21", format: "Integration", status: "Live" },
+  { id: "v24", creatorId: "c24", creatorName: "Parth Sanghvi",       campaignId: "camp-india", title: "Parth Sanghvi",       url: "https://www.linkedin.com/posts/parth-sanghvi-humour-finance_siri-and-google-assistant-are-brilliant-pieces-share-7457757975584149504-uHRw/", platform: "LinkedIn", goLiveDate: "2026-04-22", format: "Integration", status: "Live" },
+  { id: "v25", creatorId: "c25", creatorName: "CA Rahul Arora",      campaignId: "camp-india", title: "CA Rahul Arora",      url: "https://www.linkedin.com/posts/rahul-arora29_wisprflow-startup-marketing-share-7456336599455256576-w0Xc/",                  platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v26", creatorId: "c26", creatorName: "Harinder Singh Pelia", campaignId: "camp-india", title: "Harinder Singh Pelia", url: "https://www.linkedin.com/posts/harindersinghpelia_i-love-it-when-founders-dont-get-defensive-share-7456610108899352576-TY-1/",  platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v27", creatorId: "c27", creatorName: "Adityan Kayalakal",   campaignId: "camp-india", title: "Adityan Kayalakal",   url: "https://www.linkedin.com/posts/adityanmktng_most-brands-dont-fail-because-they-make-activity-7456338537697705985-zRf9/",    platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v28", creatorId: "c28", creatorName: "Jeet Chandan",        campaignId: "camp-india", title: "Jeet Chandan",        url: "https://www.linkedin.com/posts/jeetchandan_something-ive-been-thinking-about-from-the-share-7456616762650857472-QOEq/",      platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v29", creatorId: "c29", creatorName: "Prateek Malpani",     campaignId: "camp-india", title: "Prateek Malpani",     url: "https://www.linkedin.com/posts/prateekmalpani_ive-been-using-wispr-flow-for-a-bit-now-activity-7456014037730869248-sSNm/",    platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
+  { id: "v30", creatorId: "c30", creatorName: "Saransh Anand",       campaignId: "camp-india", title: "Saransh Anand",       url: "https://www.linkedin.com/posts/saransh-anand_lyft-bought-a-startup-just-to-put-ads-on-activity-7457045814855618560-Qbi7/",    platform: "LinkedIn", goLiveDate: "2026-04-21", format: "Integration", status: "Live" },
+  { id: "v31", creatorId: "c31", creatorName: "Rohit Singh",         campaignId: "camp-india", title: "Rohit Singh",         url: "https://www.linkedin.com/posts/rohitsingh1387_in-13-years-of-working-with-global-firms-ugcPost-7456008947116900352-h_lz/",     platform: "LinkedIn", goLiveDate: "2026-04-20", format: "Integration", status: "Live" },
   // ── LinkedIn MTW ────────────────────────────────────────────
-  { id: "v32", creatorId: "c32", creatorName: "Jhalak",               campaignId: "camp5", title: "Wispr at MTW — Jhalak",               url: "https://www.linkedin.com/posts/jhalakkkk_mumbai-tech-week-was-basically-me-running-activity-7467085372976533504-04cs/",               platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v33", creatorId: "c33", creatorName: "Rishika Maheshwari",   campaignId: "camp5", title: "Wispr at MTW — Rishika Maheshwari",   url: "https://www.linkedin.com/posts/rishika-maheswari-9a996a250_we-all-think-at-150-words-per-minute-but-ugcPost-7467095232984256512-iwri/",   platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v34", creatorId: "c34", creatorName: "Sagar Kumar",          campaignId: "camp5", title: "Wispr at MTW — Sagar Kumar",          url: "https://www.linkedin.com/posts/sagarkumar9525_at-mumbai-tech-week-i-watched-someone-spend-ugcPost-7467868806267301888-0qv_/",          platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
-  { id: "v35", creatorId: "c35", creatorName: "Suryakant Chaurasiya", campaignId: "camp5", title: "Wispr at MTW — Suryakant",            url: "https://www.linkedin.com/posts/suryakantchaurasiya_i-spent-2-days-at-mumbai-tech-week-surrounded-ugcPost-7467030827537752064-dIKI/",   platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v36", creatorId: "c36", creatorName: "Bhavya Taneja",        campaignId: "camp5", title: "Wispr at MTW — Bhavya Taneja",        url: "https://www.linkedin.com/posts/bhavya-taneja-b08a12105_forget-bangalore-traffic-why-does-noone-share-7466804578894675968-TkJv/",        platform: "LinkedIn", goLiveDate: "2026-05-16", format: "Integration", status: "Live" },
-  { id: "v37", creatorId: "c37", creatorName: "Jayesh Marathe",       campaignId: "camp5", title: "Wispr at MTW — Jayesh Marathe",       url: "https://www.linkedin.com/posts/jayeshmarathe2011_i-dont-build-software-i-build-ev-infrastructure-ugcPost-7467175703734824960-_RJp/", platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v38", creatorId: "c38", creatorName: "Riyasha Jaiswal",      campaignId: "camp5", title: "Wispr at MTW — Riyasha",              url: "https://www.linkedin.com/posts/riyasha-jaiswal-765071199_came-back-from-mumbai-tech-week-to-200-messages-activity-7467051342801342465-C4jS/", platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v39", creatorId: "c39", creatorName: "Riya Thukral",         campaignId: "camp5", title: "Wispr at MTW — Riya Thukral",         url: "https://www.linkedin.com/posts/riyathukral-ic_nobody-talks-about-the-most-exhausting-part-activity-7467450644929433601-s1lR/",       platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
-  { id: "v40", creatorId: "c40", creatorName: "Supriya Purohit",      campaignId: "camp5", title: "Wispr at MTW — Supriya",              url: "https://www.linkedin.com/posts/supriyapurohit27_mumbaitechweek-productmanagement-productdesign-activity-7468536661610758145-ds_i/",     platform: "LinkedIn", goLiveDate: "2026-05-21", format: "Integration", status: "Live" },
-  { id: "v41", creatorId: "c41", creatorName: "Raunak Yadush",        campaignId: "camp5", title: "Wispr at MTW — Raunak Yadush",        url: "https://www.linkedin.com/posts/raunakyadush_coding-is-faster-ai-is-share-7468497853850570752-sdD8/",                                  platform: "LinkedIn", goLiveDate: "2026-05-21", format: "Integration", status: "Live" },
-  { id: "v42", creatorId: "c42", creatorName: "Vikram Kushwaha",      campaignId: "camp5", title: "Wispr at MTW — Vikram Kushwaha",      url: "https://www.linkedin.com/posts/vikram-kushwaha-73101023a_voice-to-text-never-works-for-developers-share-7467576642287128576-5AbB/",      platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
-  { id: "v43", creatorId: "c43", creatorName: "Yogesh Lakhpatani",    campaignId: "camp5", title: "Wispr at MTW — Yogesh Lakhpatani",    url: "https://www.linkedin.com/posts/yogesh-lakhpatani-172839180_mumbai-tech-week-gave-me-ideas-a-lot-of-share-7468280443730096128-M5Aq/",    platform: "LinkedIn", goLiveDate: "2026-05-20", format: "Integration", status: "Live" },
-  { id: "v44", creatorId: "c44", creatorName: "Pratyaksh Sharma",     campaignId: "camp5", title: "Wispr at MTW — Pratyaksh Sharma",     url: "https://www.linkedin.com/posts/pratyaksh-sharma-9b308753_wisprflow-mumbaitechweek-productivity-share-7467514500750094336-dSqc/",         platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
-  { id: "v45", creatorId: "c45", creatorName: "Sonali Malhotra",      campaignId: "camp5", title: "Wispr at MTW — Sonali Malhotra",      url: "https://www.linkedin.com/posts/sonali-malhotra23_my-rule-at-conferences-if-you-dont-follow-ugcPost-7467180354051948545-pucF/",          platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v46", creatorId: "c46", creatorName: "Kriti Khanna",         campaignId: "camp5", title: "Wispr at MTW — Kriti Khanna",         url: "https://www.linkedin.com/posts/kritiiii_i-went-to-mumbai-tech-week-looking-for-the-ugcPost-7467195227183886336-obhC/",             platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v47", creatorId: "c47", creatorName: "Vijay Chollangi",      campaignId: "camp5", title: "Wispr at MTW — Vijay Chollangi",      url: "https://www.linkedin.com/posts/vijay-chollangi-3230abcd12271_ai-productivity-artificialintelligence-activity-7467488940661485568-AS56/", platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
-  { id: "v48", creatorId: "c48", creatorName: "Avani Rathore",        campaignId: "camp5", title: "Wispr at MTW — Avani Rathore",        url: "https://www.linkedin.com/posts/avanirathore_people-who-send-4-minute-voice-notes-at-work-share-7467168795334291458-AC73/",          platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
-  { id: "v49", creatorId: "c49", creatorName: "Aashish Jhunjhunwala", campaignId: "camp5", title: "Wispr at MTW — Aashish Jhunjhunwala", url: "https://www.linkedin.com/posts/aashish-jhunjhunwala_at-goldman-and-bcg-i-never-thought-about-activity-7466826146685579264-5axC/",    platform: "LinkedIn", goLiveDate: "2026-05-16", format: "Integration", status: "Live" },
+  { id: "v32", creatorId: "c32", creatorName: "Jhalak",               campaignId: "camp-mtw", title: "Jhalak",               url: "https://www.linkedin.com/posts/jhalakkkk_mumbai-tech-week-was-basically-me-running-activity-7467085372976533504-04cs/",               platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v33", creatorId: "c33", creatorName: "Rishika Maheshwari",   campaignId: "camp-mtw", title: "Rishika Maheshwari",   url: "https://www.linkedin.com/posts/rishika-maheswari-9a996a250_we-all-think-at-150-words-per-minute-but-ugcPost-7467095232984256512-iwri/",   platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v34", creatorId: "c34", creatorName: "Sagar Kumar",          campaignId: "camp-mtw", title: "Sagar Kumar",          url: "https://www.linkedin.com/posts/sagarkumar9525_at-mumbai-tech-week-i-watched-someone-spend-ugcPost-7467868806267301888-0qv_/",          platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
+  { id: "v35", creatorId: "c35", creatorName: "Suryakant Chaurasiya", campaignId: "camp-mtw", title: "Suryakant",            url: "https://www.linkedin.com/posts/suryakantchaurasiya_i-spent-2-days-at-mumbai-tech-week-surrounded-ugcPost-7467030827537752064-dIKI/",   platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v36", creatorId: "c36", creatorName: "Bhavya Taneja",        campaignId: "camp-mtw", title: "Bhavya Taneja",        url: "https://www.linkedin.com/posts/bhavya-taneja-b08a12105_forget-bangalore-traffic-why-does-noone-share-7466804578894675968-TkJv/",        platform: "LinkedIn", goLiveDate: "2026-05-16", format: "Integration", status: "Live" },
+  { id: "v37", creatorId: "c37", creatorName: "Jayesh Marathe",       campaignId: "camp-mtw", title: "Jayesh Marathe",       url: "https://www.linkedin.com/posts/jayeshmarathe2011_i-dont-build-software-i-build-ev-infrastructure-ugcPost-7467175703734824960-_RJp/", platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v38", creatorId: "c38", creatorName: "Riyasha Jaiswal",      campaignId: "camp-mtw", title: "Riyasha",              url: "https://www.linkedin.com/posts/riyasha-jaiswal-765071199_came-back-from-mumbai-tech-week-to-200-messages-activity-7467051342801342465-C4jS/", platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v39", creatorId: "c39", creatorName: "Riya Thukral",         campaignId: "camp-mtw", title: "Riya Thukral",         url: "https://www.linkedin.com/posts/riyathukral-ic_nobody-talks-about-the-most-exhausting-part-activity-7467450644929433601-s1lR/",       platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
+  { id: "v40", creatorId: "c40", creatorName: "Supriya Purohit",      campaignId: "camp-mtw", title: "Supriya",              url: "https://www.linkedin.com/posts/supriyapurohit27_mumbaitechweek-productmanagement-productdesign-activity-7468536661610758145-ds_i/",     platform: "LinkedIn", goLiveDate: "2026-05-21", format: "Integration", status: "Live" },
+  { id: "v41", creatorId: "c41", creatorName: "Raunak Yadush",        campaignId: "camp-mtw", title: "Raunak Yadush",        url: "https://www.linkedin.com/posts/raunakyadush_coding-is-faster-ai-is-share-7468497853850570752-sdD8/",                                  platform: "LinkedIn", goLiveDate: "2026-05-21", format: "Integration", status: "Live" },
+  { id: "v42", creatorId: "c42", creatorName: "Vikram Kushwaha",      campaignId: "camp-mtw", title: "Vikram Kushwaha",      url: "https://www.linkedin.com/posts/vikram-kushwaha-73101023a_voice-to-text-never-works-for-developers-share-7467576642287128576-5AbB/",      platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
+  { id: "v43", creatorId: "c43", creatorName: "Yogesh Lakhpatani",    campaignId: "camp-mtw", title: "Yogesh Lakhpatani",    url: "https://www.linkedin.com/posts/yogesh-lakhpatani-172839180_mumbai-tech-week-gave-me-ideas-a-lot-of-share-7468280443730096128-M5Aq/",    platform: "LinkedIn", goLiveDate: "2026-05-20", format: "Integration", status: "Live" },
+  { id: "v44", creatorId: "c44", creatorName: "Pratyaksh Sharma",     campaignId: "camp-mtw", title: "Pratyaksh Sharma",     url: "https://www.linkedin.com/posts/pratyaksh-sharma-9b308753_wisprflow-mumbaitechweek-productivity-share-7467514500750094336-dSqc/",         platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
+  { id: "v45", creatorId: "c45", creatorName: "Sonali Malhotra",      campaignId: "camp-mtw", title: "Sonali Malhotra",      url: "https://www.linkedin.com/posts/sonali-malhotra23_my-rule-at-conferences-if-you-dont-follow-ugcPost-7467180354051948545-pucF/",          platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v46", creatorId: "c46", creatorName: "Kriti Khanna",         campaignId: "camp-mtw", title: "Kriti Khanna",         url: "https://www.linkedin.com/posts/kritiiii_i-went-to-mumbai-tech-week-looking-for-the-ugcPost-7467195227183886336-obhC/",             platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v47", creatorId: "c47", creatorName: "Vijay Chollangi",      campaignId: "camp-mtw", title: "Vijay Chollangi",      url: "https://www.linkedin.com/posts/vijay-chollangi-3230abcd12271_ai-productivity-artificialintelligence-activity-7467488940661485568-AS56/", platform: "LinkedIn", goLiveDate: "2026-05-18", format: "Integration", status: "Live" },
+  { id: "v48", creatorId: "c48", creatorName: "Avani Rathore",        campaignId: "camp-mtw", title: "Avani Rathore",        url: "https://www.linkedin.com/posts/avanirathore_people-who-send-4-minute-voice-notes-at-work-share-7467168795334291458-AC73/",          platform: "LinkedIn", goLiveDate: "2026-05-17", format: "Integration", status: "Live" },
+  { id: "v49", creatorId: "c49", creatorName: "Aashish Jhunjhunwala", campaignId: "camp-mtw", title: "Aashish Jhunjhunwala", url: "https://www.linkedin.com/posts/aashish-jhunjhunwala_at-goldman-and-bcg-i-never-thought-about-activity-7466826146685579264-5axC/",    platform: "LinkedIn", goLiveDate: "2026-05-16", format: "Integration", status: "Live" },
   // ── Wispr × WLDD June 2026 — Instagram ─────────────────────
-  { id: "v50", creatorId: "c50", creatorName: "infoby_shree",       campaignId: "camp6", title: "Wispr Flow — infoby_shree IG Reel",         url: "https://www.instagram.com/reel/DZXUbN9qNmI/",               platform: "Instagram", goLiveDate: "2026-06-07", format: "Integration", status: "Live" },
-  { id: "v51", creatorId: "c51", creatorName: "insta__nirav",        campaignId: "camp6", title: "Wispr Flow — insta__nirav IG Reel",          url: "https://www.instagram.com/reel/DZXW7oqsqIf/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
-  { id: "v52", creatorId: "c52", creatorName: "kochu.ai",            campaignId: "camp6", title: "Wispr Flow — kochu.ai IG Reel",              url: "https://www.instagram.com/reel/DZXSVpBygnD/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
-  { id: "v53", creatorId: "c53", creatorName: "financewithjobi",     campaignId: "camp6", title: "Wispr Flow — financewithjobi IG Reel",       url: "https://www.instagram.com/reel/DZmwJA2Jzz_/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
-  { id: "v54", creatorId: "c54", creatorName: "prettymuchbusiness",  campaignId: "camp6", title: "Wispr Flow — prettymuchbusiness IG Reel",    url: "https://www.instagram.com/reel/DZpZdqCRGFy/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
+  { id: "v50", creatorId: "c50", creatorName: "infoby_shree",       campaignId: "camp-june", title: "infoby_shree",         url: "https://www.instagram.com/reel/DZXUbN9qNmI/",               platform: "Instagram", goLiveDate: "2026-06-07", format: "Integration", status: "Live" },
+  { id: "v51", creatorId: "c51", creatorName: "insta__nirav",        campaignId: "camp-june", title: "insta__nirav",          url: "https://www.instagram.com/reel/DZXW7oqsqIf/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
+  { id: "v52", creatorId: "c52", creatorName: "kochu.ai",            campaignId: "camp-june", title: "kochu.ai",              url: "https://www.instagram.com/reel/DZXSVpBygnD/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
+  { id: "v53", creatorId: "c53", creatorName: "financewithjobi",     campaignId: "camp-june", title: "financewithjobi",       url: "https://www.instagram.com/reel/DZmwJA2Jzz_/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
+  { id: "v54", creatorId: "c54", creatorName: "prettymuchbusiness",  campaignId: "camp-june", title: "prettymuchbusiness",    url: "https://www.instagram.com/reel/DZpZdqCRGFy/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
   // ── Wispr × WLDD June 2026 — YouTube ───────────────────────
-  { id: "v55", creatorId: "c55", creatorName: "Apple Wale Bhaiya",   campaignId: "camp6", title: "10 Mac Apps To Fix 10 Mac Problems!",        url: "https://youtu.be/KtZwESJLohc",                               platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
-  { id: "v56", creatorId: "c56", creatorName: "ezsnippet",           campaignId: "camp6", title: "VIBE Coding is DEAD 💀",                     url: "https://www.youtube.com/watch?v=G0YnO9rown0",                platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
-  { id: "v57", creatorId: "c57", creatorName: "Vaibhav Kadnar",      campaignId: "camp6", title: "\"BORING\" Businesses That Are Printing Money", url: "https://youtu.be/szGD3CmhulY",                           platform: "YouTube",   goLiveDate: "2026-06-13", format: "Integration", status: "Live" },
-  { id: "v58", creatorId: "c58", creatorName: "bisboworld",          campaignId: "camp6", title: "Ola's Krutrim AI failure vs Sarvam",         url: "https://youtu.be/uuxdQx9EvVg",                               platform: "YouTube",   goLiveDate: "2026-06-13", format: "Integration", status: "Live" },
-  { id: "v59", creatorId: "c59", creatorName: "Akber Shaikh",        campaignId: "camp6", title: "Internship Strategy",                        url: "https://youtu.be/HgsoWFIaT18",                               platform: "YouTube",   goLiveDate: "2026-06-19", format: "Integration", status: "Live" },
-  { id: "v60", creatorId: "c60", creatorName: "WhyBhanshu",          campaignId: "camp6", title: "FIFA World Cup cost breakdown",               url: "https://youtu.be/cjp0IXYbw6I",                               platform: "YouTube",   goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
-  { id: "v61", creatorId: "c61", creatorName: "Mohammed Fraz",       campaignId: "camp6", title: "Wispr Flow — Mohammed Fraz YouTube",         url: "https://www.youtube.com/@mohammedfraz",                      platform: "YouTube",   goLiveDate: "2026-06-21", format: "Integration", status: "Live" },
-  { id: "v62", creatorId: "c62", creatorName: "Think Wings",         campaignId: "camp6", title: "Wispr Flow — Think Wings YouTube",           url: "https://www.youtube.com/@thinkwings",                         platform: "YouTube",   goLiveDate: "2026-06-27", format: "Integration", status: "Scheduled" },
-  { id: "v63", creatorId: "c63", creatorName: "Full Disclosure",     campaignId: "camp6", title: "Wispr Flow — Full Disclosure YouTube",       url: "https://www.youtube.com/@fulldisclosureyt",                   platform: "YouTube",   goLiveDate: "2026-06-30", format: "Integration", status: "Scheduled" },
-  { id: "v64", creatorId: "c64", creatorName: "Technical Suneja",    campaignId: "camp6", title: "Wispr Flow — Technical Suneja YouTube",      url: "https://www.youtube.com/@technicalsuneja",                    platform: "YouTube",   goLiveDate: "2026-07-03", format: "Integration", status: "Scheduled" },
-  { id: "v65", creatorId: "c65", creatorName: "Dhaval Kataria",      campaignId: "camp6", title: "Wispr Flow — Dhaval Kataria YouTube",        url: "https://www.youtube.com/@dhavalkataria",                      platform: "YouTube",   goLiveDate: "2026-07-07", format: "Integration", status: "Scheduled" },
-  { id: "v66", creatorId: "c66", creatorName: "Tharun Speaks",       campaignId: "camp6", title: "Wispr Flow — Tharun Speaks YouTube",         url: "https://www.youtube.com/@tharunspeaks",                       platform: "YouTube",   goLiveDate: "2026-07-10", format: "Integration", status: "Scheduled" },
+  { id: "v55", creatorId: "c55", creatorName: "Apple Wale Bhaiya",   campaignId: "camp-june", title: "10 Mac Apps To Fix 10 Mac Problems!",        url: "https://youtu.be/KtZwESJLohc",                               platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
+  { id: "v56", creatorId: "c56", creatorName: "ezsnippet",           campaignId: "camp-june", title: "VIBE Coding is DEAD 💀",                     url: "https://www.youtube.com/watch?v=G0YnO9rown0",                platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
+  { id: "v57", creatorId: "c57", creatorName: "Vaibhav Kadnar",      campaignId: "camp-june", title: "\"BORING\" Businesses That Are Printing Money", url: "https://youtu.be/szGD3CmhulY",                           platform: "YouTube",   goLiveDate: "2026-06-13", format: "Integration", status: "Live" },
+  { id: "v58", creatorId: "c58", creatorName: "bisboworld",          campaignId: "camp-june", title: "Ola's Krutrim AI failure vs Sarvam",         url: "https://youtu.be/uuxdQx9EvVg",                               platform: "YouTube",   goLiveDate: "2026-06-13", format: "Integration", status: "Live" },
+  { id: "v59", creatorId: "c59", creatorName: "Akber Shaikh",        campaignId: "camp-june", title: "Internship Strategy",                        url: "https://youtu.be/HgsoWFIaT18",                               platform: "YouTube",   goLiveDate: "2026-06-19", format: "Integration", status: "Live" },
+  { id: "v60", creatorId: "c60", creatorName: "WhyBhanshu",          campaignId: "camp-june", title: "FIFA World Cup cost breakdown",               url: "https://youtu.be/cjp0IXYbw6I",                               platform: "YouTube",   goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
+  { id: "v61", creatorId: "c61", creatorName: "Mohammed Fraz",       campaignId: "camp-june", title: "Mohammed Fraz",         url: "https://www.youtube.com/@mohammedfraz",                      platform: "YouTube",   goLiveDate: "2026-06-21", format: "Integration", status: "Live" },
+  { id: "v62", creatorId: "c62", creatorName: "Think Wings",         campaignId: "camp-june", title: "Think Wings",           url: "https://www.youtube.com/@thinkwings",                         platform: "YouTube",   goLiveDate: "2026-06-27", format: "Integration", status: "Scheduled" },
+  { id: "v63", creatorId: "c63", creatorName: "Full Disclosure",     campaignId: "camp-june", title: "Full Disclosure",       url: "https://www.youtube.com/@fulldisclosureyt",                   platform: "YouTube",   goLiveDate: "2026-06-30", format: "Integration", status: "Scheduled" },
+  { id: "v64", creatorId: "c64", creatorName: "Technical Suneja",    campaignId: "camp-june", title: "Technical Suneja",      url: "https://www.youtube.com/@technicalsuneja",                    platform: "YouTube",   goLiveDate: "2026-07-03", format: "Integration", status: "Scheduled" },
+  { id: "v65", creatorId: "c65", creatorName: "Dhaval Kataria",      campaignId: "camp-june", title: "Dhaval Kataria",        url: "https://www.youtube.com/@dhavalkataria",                      platform: "YouTube",   goLiveDate: "2026-07-07", format: "Integration", status: "Scheduled" },
+  { id: "v66", creatorId: "c66", creatorName: "Tharun Speaks",       campaignId: "camp-june", title: "Tharun Speaks",         url: "https://www.youtube.com/@tharunspeaks",                       platform: "YouTube",   goLiveDate: "2026-07-10", format: "Integration", status: "Scheduled" },
   // ── Coding First — June 2026 (YouTube) ─────────────────────
-  { id: "v67", creatorId: "c67", creatorName: "Coding with Sagar",  campaignId: "camp7", title: "Wispr Flow — Coding with Sagar YouTube",   url: "https://www.youtube.com/watch?v=2tagcO5v9aw",   platform: "YouTube", goLiveDate: "2026-06-05", format: "Integration", status: "Live" },
-  { id: "v68", creatorId: "c68", creatorName: "Nishant Chahar",     campaignId: "camp7", title: "Wispr Flow — Nishant Chahar YouTube",      url: "https://youtu.be/78z_gw5rh6s",                  platform: "YouTube", goLiveDate: "2026-06-08", format: "Integration", status: "Live" },
-  { id: "v69", creatorId: "c69", creatorName: "Saumya Singh",       campaignId: "camp7", title: "Wispr Flow — Saumya Singh YouTube",        url: "https://youtu.be/mJOUQ700KaY",                  platform: "YouTube", goLiveDate: "2026-06-03", format: "Integration", status: "Live" },
-  { id: "v70", creatorId: "c70", creatorName: "Pavan Lalwani",      campaignId: "camp7", title: "Wispr Flow — Pavan Lalwani YouTube",       url: "https://www.youtube.com/watch?v=OrJpkD7XHt0",   platform: "YouTube", goLiveDate: "2026-06-17", format: "Integration", status: "Live" },
-  { id: "v71", creatorId: "c71", creatorName: "Mehul Mohan",        campaignId: "camp7", title: "Wispr Flow — Mehul Mohan YouTube",         url: "https://youtu.be/y--xkGbsmZc",                  platform: "YouTube", goLiveDate: "2026-06-12", format: "Integration", status: "Live" },
-  { id: "v72", creatorId: "c72", creatorName: "Sheryians Coding",   campaignId: "camp7", title: "Wispr Flow — Sheryians Coding YouTube",    url: "https://www.youtube.com/@sheryians",             platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live" },
-  { id: "v73", creatorId: "c73", creatorName: "Engineering Digest", campaignId: "camp7", title: "Wispr Flow — Engineering Digest YouTube",  url: "https://www.youtube.com/@engineeringdigest",     platform: "YouTube", goLiveDate: "2026-06-06", format: "Integration", status: "Live" },
-  { id: "v74", creatorId: "c74", creatorName: "Arsh Goyal",         campaignId: "camp7", title: "Wispr Flow — Arsh Goyal YouTube",          url: "https://www.youtube.com/@arshgoyal",             platform: "YouTube", goLiveDate: "2026-06-23", format: "Integration", status: "Scheduled" },
-  { id: "v75", creatorId: "c75", creatorName: "Code And Bug",       campaignId: "camp7", title: "Wispr Flow — Code And Bug YouTube",        url: "https://www.youtube.com/@codeandbug",            platform: "YouTube", goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
-  { id: "v76", creatorId: "c76", creatorName: "Astro",              campaignId: "camp7", title: "Wispr Flow — Astro YouTube",               url: "https://youtu.be/TRSfMlEnLJc",                  platform: "YouTube", goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
+  { id: "v67", creatorId: "c67", creatorName: "Coding with Sagar",  campaignId: "camp-june", title: "Coding with Sagar",   url: "https://www.youtube.com/watch?v=2tagcO5v9aw",   platform: "YouTube", goLiveDate: "2026-06-05", format: "Integration", status: "Live" },
+  { id: "v68", creatorId: "c68", creatorName: "Nishant Chahar",     campaignId: "camp-june", title: "Nishant Chahar",      url: "https://youtu.be/78z_gw5rh6s",                  platform: "YouTube", goLiveDate: "2026-06-08", format: "Integration", status: "Live" },
+  { id: "v69", creatorId: "c69", creatorName: "Saumya Singh",       campaignId: "camp-june", title: "Saumya Singh",        url: "https://youtu.be/mJOUQ700KaY",                  platform: "YouTube", goLiveDate: "2026-06-03", format: "Integration", status: "Live" },
+  { id: "v70", creatorId: "c70", creatorName: "Pavan Lalwani",      campaignId: "camp-june", title: "Pavan Lalwani",       url: "https://www.youtube.com/watch?v=OrJpkD7XHt0",   platform: "YouTube", goLiveDate: "2026-06-17", format: "Integration", status: "Live" },
+  { id: "v71", creatorId: "c71", creatorName: "Mehul Mohan",        campaignId: "camp-june", title: "Mehul Mohan",         url: "https://youtu.be/y--xkGbsmZc",                  platform: "YouTube", goLiveDate: "2026-06-12", format: "Integration", status: "Live" },
+  { id: "v72", creatorId: "c72", creatorName: "Sheryians Coding",   campaignId: "camp-june", title: "Sheryians Coding",    url: "https://www.youtube.com/@sheryians",             platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live" },
+  { id: "v73", creatorId: "c73", creatorName: "Engineering Digest", campaignId: "camp-june", title: "Engineering Digest",  url: "https://www.youtube.com/@engineeringdigest",     platform: "YouTube", goLiveDate: "2026-06-06", format: "Integration", status: "Live" },
+  { id: "v74", creatorId: "c74", creatorName: "Arsh Goyal",         campaignId: "camp-june", title: "Arsh Goyal",          url: "https://www.youtube.com/@arshgoyal",             platform: "YouTube", goLiveDate: "2026-06-23", format: "Integration", status: "Scheduled" },
+  { id: "v75", creatorId: "c75", creatorName: "Code And Bug",       campaignId: "camp-june", title: "Code And Bug",        url: "https://www.youtube.com/@codeandbug",            platform: "YouTube", goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
+  { id: "v76", creatorId: "c76", creatorName: "Astro",              campaignId: "camp-june", title: "Astro",               url: "https://youtu.be/TRSfMlEnLJc",                  platform: "YouTube", goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
 ];
 
 // Performance data sourced from IG Insights screenshots + Google Sheet
@@ -861,6 +976,17 @@ export const performances: VideoPerformance[] = [
   },
   // AOS Maitri Mangal — insights shared as video; data pending
   { videoId: "v10", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-03-18" },
+  // Batch 1 — Palak / Direct / Social Tag — impressions pending from agency
+  { videoId: "v77", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Aarti Samant
+  { videoId: "v78", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Gayatri Agrawal
+  { videoId: "v79", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Anurag Bansal
+  { videoId: "v80", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Ayush Wadhwa
+  { videoId: "v81", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Jivraj Sachar
+  { videoId: "v82", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Miti Shah
+  { videoId: "v83", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Ansh Mehra
+  { videoId: "v84", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Paras Madan
+  { videoId: "v85", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Anik Jain
+  { videoId: "v86", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Aditya Agrawal
   // Owled — full metrics from Sheet 4 (1b13aZcqM5q82Hm9KQLKxDVwdVWxdguiBxxgJLrpYzp8), synced 22 Jun 2026
   { videoId: "v11", views: 0,       likes: 0,     comments: 0,   shares: 0,    saves: 0,    reposts: 0,   watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // gommaboy — page deleted
   { videoId: "v12", views: 4640,    likes: 148,   comments: 6,   shares: 24,   saves: 6,    reposts: 4,   watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" },
@@ -940,85 +1066,96 @@ export const performances: VideoPerformance[] = [
 // attributionSource: "Manual" (short link click → signup, not Dub API)
 // Total confirmed MTW signups: 200
 export const installs: InstallRecord[] = [
-  { id: "i1",  videoId: "v32", creatorId: "c32", campaignId: "camp5", installs: 1,   attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
-  { id: "i2",  videoId: "v33", creatorId: "c33", campaignId: "camp5", installs: 7,   attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
-  { id: "i3",  videoId: "v36", creatorId: "c36", campaignId: "camp5", installs: 13,  attributionSource: "Manual", date: "2026-05-16", revenue: 0 },
-  { id: "i4",  videoId: "v38", creatorId: "c38", campaignId: "camp5", installs: 16,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
-  { id: "i5",  videoId: "v41", creatorId: "c41", campaignId: "camp5", installs: 132, attributionSource: "Manual", date: "2026-05-21", revenue: 0 },
-  { id: "i6",  videoId: "v44", creatorId: "c44", campaignId: "camp5", installs: 3,   attributionSource: "Manual", date: "2026-05-18", revenue: 0 },
-  { id: "i7",  videoId: "v45", creatorId: "c45", campaignId: "camp5", installs: 10,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
-  { id: "i8",  videoId: "v48", creatorId: "c48", campaignId: "camp5", installs: 18,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
+  { id: "i1",  videoId: "v32", creatorId: "c32", campaignId: "camp-mtw", installs: 1,   attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
+  { id: "i2",  videoId: "v33", creatorId: "c33", campaignId: "camp-mtw", installs: 7,   attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
+  { id: "i3",  videoId: "v36", creatorId: "c36", campaignId: "camp-mtw", installs: 13,  attributionSource: "Manual", date: "2026-05-16", revenue: 0 },
+  { id: "i4",  videoId: "v38", creatorId: "c38", campaignId: "camp-mtw", installs: 16,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
+  { id: "i5",  videoId: "v41", creatorId: "c41", campaignId: "camp-mtw", installs: 132, attributionSource: "Manual", date: "2026-05-21", revenue: 0 },
+  { id: "i6",  videoId: "v44", creatorId: "c44", campaignId: "camp-mtw", installs: 3,   attributionSource: "Manual", date: "2026-05-18", revenue: 0 },
+  { id: "i7",  videoId: "v45", creatorId: "c45", campaignId: "camp-mtw", installs: 10,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
+  { id: "i8",  videoId: "v48", creatorId: "c48", campaignId: "camp-mtw", installs: 18,  attributionSource: "Manual", date: "2026-05-17", revenue: 0 },
   // Wispr × WLDD June 2026 — UTM signup counts from Dub dashboard (ref.wisprflow.ai/*)
-  { id: "i9",  videoId: "v55", creatorId: "c55", campaignId: "camp6", installs: 21,  attributionSource: "Dub", date: "2026-06-10", revenue: 35616 },
-  { id: "i10", videoId: "v56", creatorId: "c56", campaignId: "camp6", installs: 190, attributionSource: "Dub", date: "2026-06-10", revenue: 0 },
-  { id: "i11", videoId: "v57", creatorId: "c57", campaignId: "camp6", installs: 8,   attributionSource: "Dub", date: "2026-06-13", revenue: 0 },
-  { id: "i12", videoId: "v59", creatorId: "c59", campaignId: "camp6", installs: 2,   attributionSource: "Dub", date: "2026-06-19", revenue: 0 },
-  { id: "i13", videoId: "v60", creatorId: "c60", campaignId: "camp6", installs: 1,   attributionSource: "Dub", date: "2026-06-20", revenue: 0 },
+  { id: "i9",  videoId: "v55", creatorId: "c55", campaignId: "camp-june", installs: 21,  attributionSource: "Dub", date: "2026-06-10", revenue: 35616 },
+  { id: "i10", videoId: "v56", creatorId: "c56", campaignId: "camp-june", installs: 190, attributionSource: "Dub", date: "2026-06-10", revenue: 0 },
+  { id: "i11", videoId: "v57", creatorId: "c57", campaignId: "camp-june", installs: 8,   attributionSource: "Dub", date: "2026-06-13", revenue: 0 },
+  { id: "i12", videoId: "v59", creatorId: "c59", campaignId: "camp-june", installs: 2,   attributionSource: "Dub", date: "2026-06-19", revenue: 0 },
+  { id: "i13", videoId: "v60", creatorId: "c60", campaignId: "camp-june", installs: 1,   attributionSource: "Dub", date: "2026-06-20", revenue: 0 },
   // Coding First — June 2026 — UTM signups from Dub
-  { id: "i14", videoId: "v67", creatorId: "c67", campaignId: "camp7", installs: 6,   attributionSource: "Dub", date: "2026-06-05", revenue: 0 },
-  { id: "i15", videoId: "v68", creatorId: "c68", campaignId: "camp7", installs: 7,   attributionSource: "Dub", date: "2026-06-08", revenue: 0 },
-  { id: "i16", videoId: "v69", creatorId: "c69", campaignId: "camp7", installs: 3,   attributionSource: "Dub", date: "2026-06-03", revenue: 0 },
-  { id: "i17", videoId: "v70", creatorId: "c70", campaignId: "camp7", installs: 2,   attributionSource: "Dub", date: "2026-06-17", revenue: 0 },
-  { id: "i18", videoId: "v71", creatorId: "c71", campaignId: "camp7", installs: 2,   attributionSource: "Dub", date: "2026-06-12", revenue: 0 },
+  { id: "i14", videoId: "v67", creatorId: "c67", campaignId: "camp-june", installs: 6,   attributionSource: "Dub", date: "2026-06-05", revenue: 0 },
+  { id: "i15", videoId: "v68", creatorId: "c68", campaignId: "camp-june", installs: 7,   attributionSource: "Dub", date: "2026-06-08", revenue: 0 },
+  { id: "i16", videoId: "v69", creatorId: "c69", campaignId: "camp-june", installs: 3,   attributionSource: "Dub", date: "2026-06-03", revenue: 0 },
+  { id: "i17", videoId: "v70", creatorId: "c70", campaignId: "camp-june", installs: 2,   attributionSource: "Dub", date: "2026-06-17", revenue: 0 },
+  { id: "i18", videoId: "v71", creatorId: "c71", campaignId: "camp-june", installs: 2,   attributionSource: "Dub", date: "2026-06-12", revenue: 0 },
 ];
 
 export const costs: Cost[] = [
   // Finnet — "Commercials" column from sheet (INR, gross = net — agency fee not itemised)
-  { videoId: "v1",  creatorId: "c1",  campaignId: "camp1", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR" },
-  { videoId: "v2",  creatorId: "c2",  campaignId: "camp1", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" },
-  { videoId: "v3",  creatorId: "c3",  campaignId: "camp1", grossCost: 200000, agencyFee: 0, netCost: 200000, currency: "INR" },
-  { videoId: "v4",  creatorId: "c4",  campaignId: "camp1", grossCost: 12000,  agencyFee: 0, netCost: 12000,  currency: "INR" },
-  { videoId: "v5",  creatorId: "c5",  campaignId: "camp1", grossCost: 275000, agencyFee: 0, netCost: 275000, currency: "INR" },
-  { videoId: "v6",  creatorId: "c6",  campaignId: "camp1", grossCost: 160000, agencyFee: 0, netCost: 160000, currency: "INR" },
+  { videoId: "v1",  creatorId: "c1",  campaignId: "camp-india", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR" },
+  { videoId: "v2",  creatorId: "c2",  campaignId: "camp-india", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" },
+  { videoId: "v3",  creatorId: "c3",  campaignId: "camp-india", grossCost: 200000, agencyFee: 0, netCost: 200000, currency: "INR" },
+  { videoId: "v4",  creatorId: "c4",  campaignId: "camp-india", grossCost: 12000,  agencyFee: 0, netCost: 12000,  currency: "INR" },
+  { videoId: "v5",  creatorId: "c5",  campaignId: "camp-india", grossCost: 275000, agencyFee: 0, netCost: 275000, currency: "INR" },
+  { videoId: "v6",  creatorId: "c6",  campaignId: "camp-india", grossCost: 160000, agencyFee: 0, netCost: 160000, currency: "INR" },
   // CA Nandini (v7) — no cost in sheet YT section; omitted
   // AOS — USD costs × ₹84
-  { videoId: "v8",  creatorId: "c8",  campaignId: "camp2", grossCost: 378000, agencyFee: 0, netCost: 378000, currency: "INR" }, // $4,500
-  { videoId: "v9",  creatorId: "c9",  campaignId: "camp2", grossCost: 161280, agencyFee: 0, netCost: 161280, currency: "INR" }, // $1,920
-  { videoId: "v10", creatorId: "c10", campaignId: "camp2", grossCost: 420000, agencyFee: 0, netCost: 420000, currency: "INR" }, // $5,000
+  { videoId: "v8",  creatorId: "c8",  campaignId: "camp-india", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR" }, // ₹4L from Batch 1 sheet
+  { videoId: "v9",  creatorId: "c9",  campaignId: "camp-india", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR" }, // ₹1.8L from Batch 1 sheet
+  { videoId: "v10", creatorId: "c10", campaignId: "camp-india", grossCost: 450000, agencyFee: 0, netCost: 450000, currency: "INR" }, // ₹4.5L from Batch 1 sheet
   // Owled — "Commercials (INR)" column from sheet (exact figures as entered)
-  { videoId: "v11", creatorId: "c11", campaignId: "camp3", grossCost: 420000,  agencyFee: 0, netCost: 420000,  currency: "INR" },
-  { videoId: "v12", creatorId: "c12", campaignId: "camp3", grossCost: 150000,  agencyFee: 0, netCost: 150000,  currency: "INR" },
-  { videoId: "v13", creatorId: "c13", campaignId: "camp3", grossCost: 90086,   agencyFee: 0, netCost: 90086,   currency: "INR" },
-  { videoId: "v14", creatorId: "c14", campaignId: "camp3", grossCost: 140000,  agencyFee: 0, netCost: 140000,  currency: "INR" },
-  { videoId: "v15", creatorId: "c15", campaignId: "camp3", grossCost: 240000,  agencyFee: 0, netCost: 240000,  currency: "INR" },
-  { videoId: "v16", creatorId: "c16", campaignId: "camp3", grossCost: 132063,  agencyFee: 0, netCost: 132063,  currency: "INR" },
-  { videoId: "v17", creatorId: "c17", campaignId: "camp3", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
-  { videoId: "v18", creatorId: "c18", campaignId: "camp3", grossCost: 363172,  agencyFee: 0, netCost: 363172,  currency: "INR" },
-  { videoId: "v19", creatorId: "c19", campaignId: "camp3", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
-  { videoId: "v20", creatorId: "c20", campaignId: "camp3", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
+  { videoId: "v11", creatorId: "c11", campaignId: "camp-india", grossCost: 420000,  agencyFee: 0, netCost: 420000,  currency: "INR" },
+  { videoId: "v12", creatorId: "c12", campaignId: "camp-india", grossCost: 150000,  agencyFee: 0, netCost: 150000,  currency: "INR" },
+  { videoId: "v13", creatorId: "c13", campaignId: "camp-india", grossCost: 90086,   agencyFee: 0, netCost: 90086,   currency: "INR" },
+  { videoId: "v14", creatorId: "c14", campaignId: "camp-india", grossCost: 140000,  agencyFee: 0, netCost: 140000,  currency: "INR" },
+  { videoId: "v15", creatorId: "c15", campaignId: "camp-india", grossCost: 240000,  agencyFee: 0, netCost: 240000,  currency: "INR" },
+  { videoId: "v16", creatorId: "c16", campaignId: "camp-india", grossCost: 132063,  agencyFee: 0, netCost: 132063,  currency: "INR" },
+  { videoId: "v17", creatorId: "c17", campaignId: "camp-india", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
+  { videoId: "v18", creatorId: "c18", campaignId: "camp-india", grossCost: 363172,  agencyFee: 0, netCost: 363172,  currency: "INR" },
+  { videoId: "v19", creatorId: "c19", campaignId: "camp-india", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
+  { videoId: "v20", creatorId: "c20", campaignId: "camp-india", grossCost: 550000,  agencyFee: 0, netCost: 550000,  currency: "INR" },
   // LinkedIn MTW — costs from sheet (INR)
-  { videoId: "v32", creatorId: "c32", campaignId: "camp5", grossCost: 22000,  agencyFee: 0, netCost: 22000,  currency: "INR" },
-  { videoId: "v33", creatorId: "c33", campaignId: "camp5", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
-  { videoId: "v34", creatorId: "c34", campaignId: "camp5", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
-  { videoId: "v35", creatorId: "c35", campaignId: "camp5", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
-  { videoId: "v36", creatorId: "c36", campaignId: "camp5", grossCost: 17000,  agencyFee: 0, netCost: 17000,  currency: "INR" },
-  { videoId: "v37", creatorId: "c37", campaignId: "camp5", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
-  { videoId: "v38", creatorId: "c38", campaignId: "camp5", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
-  { videoId: "v39", creatorId: "c39", campaignId: "camp5", grossCost: 26000,  agencyFee: 0, netCost: 26000,  currency: "INR" },
-  { videoId: "v40", creatorId: "c40", campaignId: "camp5", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
-  { videoId: "v41", creatorId: "c41", campaignId: "camp5", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
-  { videoId: "v42", creatorId: "c42", campaignId: "camp5", grossCost: 16000,  agencyFee: 0, netCost: 16000,  currency: "INR" },
-  { videoId: "v43", creatorId: "c43", campaignId: "camp5", grossCost: 16000,  agencyFee: 0, netCost: 16000,  currency: "INR" },
-  { videoId: "v44", creatorId: "c44", campaignId: "camp5", grossCost: 10000,  agencyFee: 0, netCost: 10000,  currency: "INR" },
-  { videoId: "v45", creatorId: "c45", campaignId: "camp5", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
-  { videoId: "v46", creatorId: "c46", campaignId: "camp5", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
-  { videoId: "v47", creatorId: "c47", campaignId: "camp5", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
-  { videoId: "v48", creatorId: "c48", campaignId: "camp5", grossCost: 70000,  agencyFee: 0, netCost: 70000,  currency: "INR" },
-  { videoId: "v49", creatorId: "c49", campaignId: "camp5", grossCost: 55000,  agencyFee: 0, netCost: 55000,  currency: "INR" },
+  { videoId: "v32", creatorId: "c32", campaignId: "camp-mtw", grossCost: 22000,  agencyFee: 0, netCost: 22000,  currency: "INR" },
+  { videoId: "v33", creatorId: "c33", campaignId: "camp-mtw", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
+  { videoId: "v34", creatorId: "c34", campaignId: "camp-mtw", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
+  { videoId: "v35", creatorId: "c35", campaignId: "camp-mtw", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
+  { videoId: "v36", creatorId: "c36", campaignId: "camp-mtw", grossCost: 17000,  agencyFee: 0, netCost: 17000,  currency: "INR" },
+  { videoId: "v37", creatorId: "c37", campaignId: "camp-mtw", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
+  { videoId: "v38", creatorId: "c38", campaignId: "camp-mtw", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
+  { videoId: "v39", creatorId: "c39", campaignId: "camp-mtw", grossCost: 26000,  agencyFee: 0, netCost: 26000,  currency: "INR" },
+  { videoId: "v40", creatorId: "c40", campaignId: "camp-mtw", grossCost: 30000,  agencyFee: 0, netCost: 30000,  currency: "INR" },
+  { videoId: "v41", creatorId: "c41", campaignId: "camp-mtw", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
+  { videoId: "v42", creatorId: "c42", campaignId: "camp-mtw", grossCost: 16000,  agencyFee: 0, netCost: 16000,  currency: "INR" },
+  { videoId: "v43", creatorId: "c43", campaignId: "camp-mtw", grossCost: 16000,  agencyFee: 0, netCost: 16000,  currency: "INR" },
+  { videoId: "v44", creatorId: "c44", campaignId: "camp-mtw", grossCost: 10000,  agencyFee: 0, netCost: 10000,  currency: "INR" },
+  { videoId: "v45", creatorId: "c45", campaignId: "camp-mtw", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
+  { videoId: "v46", creatorId: "c46", campaignId: "camp-mtw", grossCost: 20000,  agencyFee: 0, netCost: 20000,  currency: "INR" },
+  { videoId: "v47", creatorId: "c47", campaignId: "camp-mtw", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" },
+  { videoId: "v48", creatorId: "c48", campaignId: "camp-mtw", grossCost: 70000,  agencyFee: 0, netCost: 70000,  currency: "INR" },
+  { videoId: "v49", creatorId: "c49", campaignId: "camp-mtw", grossCost: 55000,  agencyFee: 0, netCost: 55000,  currency: "INR" },
+  // Batch 1 — Palak / Direct / Social Tag — fees from Batch 1 tab, claude tool - influencer sheet
+  { videoId: "v77", creatorId: "c77", campaignId: "camp-india", grossCost: 220000, agencyFee: 0, netCost: 220000, currency: "INR" }, // Aarti Samant
+  { videoId: "v78", creatorId: "c78", campaignId: "camp-india", grossCost: 500000, agencyFee: 0, netCost: 500000, currency: "INR" }, // Gayatri Agrawal
+  { videoId: "v79", creatorId: "c79", campaignId: "camp-india", grossCost: 250000, agencyFee: 0, netCost: 250000, currency: "INR" }, // Anurag Bansal
+  { videoId: "v80", creatorId: "c80", campaignId: "camp-india", grossCost: 600000, agencyFee: 0, netCost: 600000, currency: "INR" }, // Ayush Wadhwa
+  { videoId: "v81", creatorId: "c81", campaignId: "camp-india", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" }, // Jivraj Sachar
+  { videoId: "v82", creatorId: "c82", campaignId: "camp-india", grossCost: 0,      agencyFee: 0, netCost: 0,      currency: "INR" }, // Miti Shah — ₹0 fee
+  { videoId: "v83", creatorId: "c83", campaignId: "camp-india", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" }, // Ansh Mehra
+  { videoId: "v84", creatorId: "c84", campaignId: "camp-india", grossCost: 65000,  agencyFee: 0, netCost: 65000,  currency: "INR" }, // Paras Madan
+  { videoId: "v85", creatorId: "c85", campaignId: "camp-india", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" }, // Anik Jain
+  { videoId: "v86", creatorId: "c86", campaignId: "camp-india", grossCost: 35000,  agencyFee: 0, netCost: 35000,  currency: "INR" }, // Aditya Agrawal
   // LinkedIn Seeding — no cost data in sheet (organic seeding)
   // Wispr × WLDD June 2026 — no cost data available in sheet yet
   // Coding First — June 2026 — costs from "coding first - june" tab, Sheet 1
   // Column D = quoted, Column G = net negotiated. Source: gviz API, 22 Jun 2026
-  { videoId: "v67", creatorId: "c67", campaignId: "camp7", grossCost: 179000, agencyFee: 0, netCost: 150000, currency: "INR" }, // Coding with Sagar
-  { videoId: "v68", creatorId: "c68", campaignId: "camp7", grossCost: 286000, agencyFee: 0, netCost: 200000, currency: "INR" }, // Nishant Chahar
-  { videoId: "v69", creatorId: "c69", campaignId: "camp7", grossCost: 177000, agencyFee: 0, netCost: 150000, currency: "INR" }, // Saumya Singh
-  { videoId: "v70", creatorId: "c70", campaignId: "camp7", grossCost: 160000, agencyFee: 0, netCost: 140000, currency: "INR" }, // Pavan Lalwani
-  { videoId: "v71", creatorId: "c71", campaignId: "camp7", grossCost: 165000, agencyFee: 0, netCost: 165000, currency: "INR" }, // Mehul Mohan
-  { videoId: "v72", creatorId: "c72", campaignId: "camp7", grossCost: 100000, agencyFee: 0, netCost:  75000, currency: "INR" }, // Sheryians Coding
-  { videoId: "v73", creatorId: "c73", campaignId: "camp7", grossCost:  41000, agencyFee: 0, netCost:  41000, currency: "INR" }, // Engineering Digest
-  { videoId: "v74", creatorId: "c74", campaignId: "camp7", grossCost: 143000, agencyFee: 0, netCost: 143000, currency: "INR" }, // Arsh Goyal
-  { videoId: "v75", creatorId: "c75", campaignId: "camp7", grossCost:  56000, agencyFee: 0, netCost:  56000, currency: "INR" }, // Code And Bug
-  { videoId: "v76", creatorId: "c76", campaignId: "camp7", grossCost:  62000, agencyFee: 0, netCost:  62000, currency: "INR" }, // Astro
+  { videoId: "v67", creatorId: "c67", campaignId: "camp-june", grossCost: 179000, agencyFee: 0, netCost: 150000, currency: "INR" }, // Coding with Sagar
+  { videoId: "v68", creatorId: "c68", campaignId: "camp-june", grossCost: 286000, agencyFee: 0, netCost: 200000, currency: "INR" }, // Nishant Chahar
+  { videoId: "v69", creatorId: "c69", campaignId: "camp-june", grossCost: 177000, agencyFee: 0, netCost: 150000, currency: "INR" }, // Saumya Singh
+  { videoId: "v70", creatorId: "c70", campaignId: "camp-june", grossCost: 160000, agencyFee: 0, netCost: 140000, currency: "INR" }, // Pavan Lalwani
+  { videoId: "v71", creatorId: "c71", campaignId: "camp-june", grossCost: 165000, agencyFee: 0, netCost: 165000, currency: "INR" }, // Mehul Mohan
+  { videoId: "v72", creatorId: "c72", campaignId: "camp-june", grossCost: 100000, agencyFee: 0, netCost:  75000, currency: "INR" }, // Sheryians Coding
+  { videoId: "v73", creatorId: "c73", campaignId: "camp-june", grossCost:  41000, agencyFee: 0, netCost:  41000, currency: "INR" }, // Engineering Digest
+  { videoId: "v74", creatorId: "c74", campaignId: "camp-june", grossCost: 143000, agencyFee: 0, netCost: 143000, currency: "INR" }, // Arsh Goyal
+  { videoId: "v75", creatorId: "c75", campaignId: "camp-june", grossCost:  56000, agencyFee: 0, netCost:  56000, currency: "INR" }, // Code And Bug
+  { videoId: "v76", creatorId: "c76", campaignId: "camp-june", grossCost:  62000, agencyFee: 0, netCost:  62000, currency: "INR" }, // Astro
 ];
 
 // ── Derived metrics ──────────────────────────────────────────

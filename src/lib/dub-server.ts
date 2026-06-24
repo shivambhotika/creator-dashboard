@@ -34,6 +34,17 @@ export const DUB_SLUGS: Record<string, string> = {
   v76: "astrokj",
   // LinkedIn MTW — ref.wisprflow.ai tracking
   v35: "suryakant-chaurasiya",
+  // Batch 1 — Palak / Direct / Social Tag (March 2026)
+  v77: "AartiS",
+  v78: "Gayatri",
+  v79: "Anurag",
+  v80: "Ayush",
+  v81: "Jivraj",
+  v82: "MitiS",
+  v83: "AnshM",
+  v84: "ParasM",
+  v85: "AnikJ",
+  v86: "AdityaA",
 };
 
 export interface DubStats {

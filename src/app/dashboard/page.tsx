@@ -1,304 +1,363 @@
-import { creators, videos, performances, costs, campaigns, installs, getAllCreatorMetrics, getCampaignStats } from "@/lib/mock-data";
-import { formatNumber, formatCurrency } from "@/lib/utils";
-import { Download, DollarSign, TrendingUp, Users, Target, Zap, BarChart2 } from "lucide-react";
-import { StatCard } from "@/components/StatCard";
-import { Badge } from "@/components/Badge";
-import { statusBadge } from "@/lib/badges";
-import { OverviewCharts } from "@/components/OverviewCharts";
+import React from "react";
+import { videos, performances, costs, installs, creators } from "@/lib/mock-data";
 import { getDubStats } from "@/lib/dub-server";
 
-export default async function DashboardPage() {
-  const [allMetrics, dub] = await Promise.all([
-    Promise.resolve(getAllCreatorMetrics()),
-    getDubStats(),
-  ]);
+const USD_INR = 84;
 
-  // Top-line numbers
-  const totalInstalls   = installs.reduce((s, i) => s + i.installs, 0);
-  const totalRevenue    = installs.reduce((s, i) => s + (i.revenue ?? 0), 0);
-  const totalSpend      = costs.reduce((s, c) => s + c.netCost, 0);
-  const totalViews      = performances.reduce((s, p) => s + p.views, 0);
-  // Live Dub clicks take precedence over cached performance.clickThroughs
-  const totalClicks     = dub.totalClicks > 0
+// Format large numbers as 1.2M / 45.3K etc.
+function fmt(n: number, decimals = 1): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(decimals)}M`;
+  if (n >= 1_000)     return `${(n / 1_000).toFixed(decimals)}K`;
+  return n.toFixed(0);
+}
+
+function usd(inr: number, digits = 2): string {
+  return `$${(inr / USD_INR).toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits })}`;
+}
+
+function pct(n: number, digits = 1): string {
+  return `${n.toFixed(digits)}%`;
+}
+
+// ── Sub-components ─────────────────────────────────────────────
+
+function FunnelCard({
+  label, value, tag, tagColor = "#6366f1",
+  sub, subLabel, border = false,
+}: {
+  label: string; value: string; tag?: string; tagColor?: string;
+  sub?: string; subLabel?: string; border?: boolean;
+}) {
+  return (
+    <div
+      className="rounded-xl p-5 flex flex-col gap-1.5"
+      style={{
+        background: "var(--bg-card)",
+        border: border ? `2px solid ${tagColor}30` : "1px solid var(--border)",
+      }}
+    >
+      <p className="label-caps">{label}</p>
+      <p className="stat-number">{value}</p>
+      {tag && (
+        <p className="text-xs font-semibold" style={{ color: tagColor }}>
+          {tag}
+        </p>
+      )}
+      {sub && (
+        <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+          {subLabel && <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{subLabel} · </span>}
+          {sub}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SectionHeader({ title, sub }: { title: string; sub?: string }) {
+  return (
+    <div className="mb-4">
+      <h2 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>{title}</h2>
+      {sub && <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{sub}</p>}
+    </div>
+  );
+}
+
+// ── Page ───────────────────────────────────────────────────────
+
+export default async function DashboardPage() {
+  const dub = await getDubStats();
+
+  // ── Aggregate totals ──────────────────────────────────────────
+  const totalImpressions = performances.reduce((s, p) => s + p.views, 0);
+  const totalClicks      = dub.totalClicks > 0
     ? dub.totalClicks
     : performances.reduce((s, p) => s + p.clickThroughs, 0);
-  const totalLeads      = dub.totalLeads > 0 ? dub.totalLeads : totalInstalls;
-  const overallCPI      = totalLeads > 0 ? totalSpend / totalLeads : 0;
-  const overallROAS     = totalSpend > 0 ? totalRevenue / totalSpend : 0;
-  const overallC2I      = totalClicks > 0 ? (totalLeads / totalClicks) * 100 : 0;
-  const activeCreators  = creators.filter((c) => c.status === "Active").length;
-  const liveVideos      = videos.filter((v) => v.status === "Live").length;
+  const totalInstalls    = installs.reduce((s, i) => s + i.installs, 0);
+  const totalSpendINR    = costs.reduce((s, c) => s + c.netCost, 0);
+  const totalSpendUSD    = totalSpendINR / USD_INR;
+  const totalRevenue     = installs.reduce((s, i) => s + (i.revenue ?? 0), 0);
+  const totalCreators    = creators.length;
+  const liveVideos       = videos.filter((v) => v.status === "Live").length;
 
-  // Ranked creators by efficiency
-  const ranked = [...allMetrics]
-    .filter((m) => m.videoCount > 0 && m.totalInstalls > 0)
-    .sort((a, b) => b.efficiencyScore - a.efficiencyScore);
+  const cpm   = totalImpressions > 0 ? (totalSpendUSD / totalImpressions) * 1000 : 0;
+  const ctr   = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
+  const cpc   = totalClicks > 0 ? totalSpendUSD / totalClicks : 0;
+  const cpi   = totalInstalls > 0 ? totalSpendUSD / totalInstalls : 0;
+  const c2i   = totalClicks > 0 ? (totalInstalls / totalClicks) * 100 : 0;
+
+  // ── Platform breakdown ────────────────────────────────────────
+  const PLATFORMS = ["YouTube", "Instagram", "LinkedIn", "Twitter"] as const;
+
+  const platformStats = PLATFORMS.map((platform) => {
+    const pvids  = videos.filter((v) => v.platform === platform).map((v) => v.id);
+    const perfs  = performances.filter((p) => pvids.includes(p.videoId));
+    const pcosts = costs.filter((c) => pvids.includes(c.videoId));
+    const pinst  = installs.filter((i) => pvids.includes(i.videoId));
+
+    const imp  = perfs.reduce((s, p) => s + p.views, 0);
+    const clk  = perfs.reduce((s, p) => s + p.clickThroughs, 0);
+    const inst = pinst.reduce((s, i) => s + i.installs, 0);
+    const spd  = pcosts.reduce((s, c) => s + c.netCost, 0) / USD_INR;
+
+    return {
+      platform,
+      imp,
+      clk,
+      inst,
+      spd,
+      cpm:  imp  > 0 ? (spd / imp) * 1000 : 0,
+      ctr:  imp  > 0 ? (clk / imp) * 100  : 0,
+      cpc:  clk  > 0 ? spd / clk           : 0,
+      c2i:  clk  > 0 ? (inst / clk) * 100  : 0,
+      cpi:  inst > 0 ? spd / inst           : 0,
+    };
+  });
+
+  // ── Monthly breakdown ─────────────────────────────────────────
+  // Build map: "2026-03" → { imp, clk, inst, spd }
+  type MonthBucket = { imp: number; clk: number; inst: number; spdINR: number };
+  const monthMap = new Map<string, MonthBucket>();
+
+  for (const video of videos) {
+    const ym = video.goLiveDate?.slice(0, 7);
+    if (!ym) continue;
+    if (!monthMap.has(ym)) monthMap.set(ym, { imp: 0, clk: 0, inst: 0, spdINR: 0 });
+    const bucket = monthMap.get(ym)!;
+    const perf = performances.find((p) => p.videoId === video.id);
+    const cost = costs.find((c) => c.videoId === video.id);
+    const inst = installs.find((i) => i.videoId === video.id);
+    bucket.imp   += perf?.views          ?? 0;
+    bucket.clk   += perf?.clickThroughs  ?? 0;
+    bucket.inst  += inst?.installs        ?? 0;
+    bucket.spdINR+= cost?.netCost         ?? 0;
+  }
+
+  const months = [...monthMap.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([ym, b]) => ({
+      ym,
+      label: new Date(ym + "-15").toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+      ...b,
+      spdUSD: b.spdINR / USD_INR,
+    }));
+
+  const maxImp = Math.max(...months.map((m) => m.imp), 1);
+
+  const PLATFORM_COLOR: Record<string, string> = {
+    YouTube:   "#ff0000",
+    Instagram: "#e1306c",
+    LinkedIn:  "#0a66c2",
+    Twitter:   "#1da1f2",
+  };
 
   return (
-    <div className="p-4 md:p-8">
-      {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+    <div className="p-4 md:p-8 max-w-6xl">
+      {/* ── Header ────────────────────────────────────────────── */}
+      <div className="mb-8 flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Overview</h1>
           <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-            Creator marketing · Install attribution via Dub
+            {liveVideos} videos live across {totalCreators} creators · Dub attribution
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border"
-            style={{ borderColor: "var(--border)", color: "var(--text-muted)", background: "var(--bg-surface)" }}>
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            {liveVideos} videos live
-          </div>
           {!dub.partial && (
-            <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-indigo-300 dark:border-indigo-700"
-              style={{ color: "#6366f1", background: "rgba(99,102,241,0.08)" }}>
+            <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.25)", color: "#6366f1" }}>
               <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
               Dub live
             </div>
           )}
+          <div className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full"
+            style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", color: "var(--text-muted)" }}>
+            All costs in USD · ₹84/$ rate
+          </div>
         </div>
       </div>
 
-      {/* Primary KPIs — install-first */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-        <StatCard
-          label="Total Installs"
-          value={formatNumber(totalInstalls)}
-          sub={`${liveVideos} live videos`}
-          icon={Download}
-          iconColor="text-indigo-500"
-          iconBg="bg-indigo-100 dark:bg-indigo-500/10"
+      {/* ── Stat cards ─────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
+        <FunnelCard
+          label="Total Impressions"
+          value={fmt(totalImpressions)}
+          sub="Views across all platforms"
         />
-        <StatCard
-          label="CPI (Cost per Install)"
-          value={formatCurrency(overallCPI)}
-          sub="net spend / installs"
-          icon={Target}
-          iconColor="text-rose-500"
-          iconBg="bg-rose-100 dark:bg-rose-500/10"
+        <FunnelCard
+          label="CPM"
+          value={usd(cpm, 2)}
+          sub="Cost per 1,000 impressions"
+          tagColor="#6366f1"
         />
-        <StatCard
-          label="ROAS"
-          value={`${overallROAS.toFixed(2)}x`}
-          sub={`Revenue ${formatCurrency(totalRevenue)}`}
-          icon={TrendingUp}
-          iconColor="text-emerald-500"
-          iconBg="bg-emerald-100 dark:bg-emerald-500/10"
+        <FunnelCard
+          label="Clicks"
+          value={fmt(totalClicks)}
+          sub="Link clicks via Dub tracking"
         />
-        <StatCard
-          label="Net Spend"
-          value={formatCurrency(totalSpend)}
-          sub="across all campaigns"
-          icon={DollarSign}
-          iconColor="text-amber-500"
-          iconBg="bg-amber-100 dark:bg-amber-500/10"
+        <FunnelCard
+          label="CPC"
+          value={usd(cpc, 2)}
+          sub="Cost per click"
+          tagColor="#0ea5e9"
         />
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard
-          label="Click → Lead Rate"
-          value={`${overallC2I.toFixed(1)}%`}
-          sub={`${formatNumber(totalClicks)} clicks · ${formatNumber(totalLeads)} leads`}
-          icon={Zap}
-          iconColor="text-violet-500"
-          iconBg="bg-violet-100 dark:bg-violet-500/10"
+        <FunnelCard
+          label="CTR"
+          value={pct(ctr, 2)}
+          sub="Click-through rate"
+          tagColor="#8b5cf6"
         />
-        <StatCard
-          label="Total Views"
-          value={formatNumber(totalViews)}
-          sub={`CPV ${formatCurrency(totalViews > 0 ? totalSpend / totalViews : 0)}`}
-          icon={BarChart2}
-          iconColor="text-sky-500"
-          iconBg="bg-sky-100 dark:bg-sky-500/10"
-        />
-        <StatCard
-          label="Active Creators"
-          value={String(activeCreators)}
-          sub={`${creators.length} total roster`}
-          icon={Users}
-          iconColor="text-teal-500"
-          iconBg="bg-teal-100 dark:bg-teal-500/10"
-        />
-        <StatCard
-          label="Total Revenue"
-          value={formatCurrency(totalRevenue)}
-          sub="attributed via Dub"
-          icon={DollarSign}
-          iconColor="text-emerald-500"
-          iconBg="bg-emerald-100 dark:bg-emerald-500/10"
+        <FunnelCard
+          label="Cost per Install"
+          value={usd(cpi, 2)}
+          sub={`${fmt(totalInstalls, 0)} installs · C→I ${pct(c2i, 1)}`}
+          tagColor="#10b981"
         />
       </div>
 
-      {/* Charts */}
-      <OverviewCharts
-        costs={costs}
-        creators={creators}
-        performances={performances}
-        installs={installs}
-        videos={videos}
+      {/* ── Platform breakdown ─────────────────────────────────── */}
+      <SectionHeader
+        title="Platform Breakdown"
+        sub="Same funnel split by channel — all costs in USD"
       />
-
-      {/* Campaigns + creator ranking */}
-      <div className="grid grid-cols-2 gap-4 mt-6">
-        {/* Campaigns */}
-        <div className="rounded-xl border p-5" style={{ background: "var(--bg-card)", borderColor: "var(--border)" }}>
-          <h2 className="text-sm font-semibold mb-4" style={{ color: "var(--text-primary)" }}>Campaigns</h2>
-          <div className="space-y-5">
-            {campaigns.map((camp) => {
-              const stats = getCampaignStats(camp.id);
-              const pacing = stats?.pacingPct ?? 0;
-              return (
-                <div key={camp.id}>
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{camp.name}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-                        {camp.creatorIds.length} creators · {camp.goal}
-                      </p>
-                    </div>
-                    <div className="text-right ml-4 shrink-0">
-                      <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                        {stats ? formatNumber(stats.installs) : "—"} installs
-                      </p>
-                      <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                        CPI {stats?.cpi ? formatCurrency(stats.cpi) : "—"}
-                      </p>
-                    </div>
+      <div className="rounded-xl overflow-hidden mb-10" style={{ border: "1px solid var(--border)" }}>
+        <table className="w-full text-sm">
+          <thead>
+            <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
+              {["Platform", "Impressions", "CPM", "Clicks", "CTR", "CPC", "Installs", "C→I", "CPI", "Spend"].map((h) => (
+                <th key={h} className="text-left px-4 py-3 label-caps whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {platformStats.map((ps, i) => (
+              <tr key={ps.platform} style={{ borderBottom: i < platformStats.length - 1 ? "1px solid var(--border)" : "none" }}>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ background: PLATFORM_COLOR[ps.platform] }} />
+                    <span className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{ps.platform}</span>
                   </div>
-
-                  {/* Budget pacing bar */}
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
-                      <div
-                        className={`h-full rounded-full ${pacing > 90 ? "bg-red-500" : pacing > 70 ? "bg-amber-500" : "bg-indigo-500"}`}
-                        style={{ width: `${Math.min(pacing, 100)}%` }}
-                      />
-                    </div>
-                    <span className="text-xs shrink-0" style={{ color: "var(--text-muted)" }}>
-                      {pacing.toFixed(0)}%
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Badge label={camp.status} className={statusBadge[camp.status]} />
-                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-                      {stats ? formatCurrency(stats.spent) : "—"} of {formatCurrency(camp.totalBudget)}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Creator efficiency ranking */}
-        <div className="rounded-xl border p-5" style={{ background: "var(--bg-card)", borderColor: "var(--border)" }}>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Creator Efficiency Ranking</h2>
-            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400">
-              Score /100
-            </span>
-          </div>
-          <div className="space-y-4">
-            {ranked.map((m, i) => {
-              const creator = creators.find((c) => c.id === m.creatorId);
-              if (!creator) return null;
-              return (
-                <div key={m.creatorId} className="flex items-center gap-3">
-                  <span className={`text-xs font-bold w-5 text-center shrink-0 ${
-                    i === 0 ? "text-amber-500" : i === 1 ? "text-slate-400" : i === 2 ? "text-orange-600" : ""
-                  }`} style={i > 2 ? { color: "var(--text-muted)" } : {}}>
-                    {i + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-xs font-medium truncate" style={{ color: "var(--text-primary)" }}>
-                        {creator.name}
-                      </p>
-                      <span className="text-xs font-bold ml-2 shrink-0" style={{ color: "var(--text-primary)" }}>
-                        {m.efficiencyScore}
-                      </span>
-                    </div>
-                    <div className="h-1.5 rounded-full overflow-hidden mb-1" style={{ background: "var(--bg-surface)" }}>
-                      <div
-                        className={`h-full rounded-full ${i === 0 ? "bg-amber-500" : "bg-indigo-500"}`}
-                        style={{ width: `${m.efficiencyScore}%` }}
-                      />
-                    </div>
-                    <div className="flex gap-3">
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                        CPI {formatCurrency(m.cpi)}
-                      </span>
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                        C→I {m.clickToInstallRate.toFixed(1)}%
-                      </span>
-                      <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                        ROAS {m.roas.toFixed(1)}x
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-
-            {ranked.length === 0 && (
-              <p className="text-sm text-center py-6" style={{ color: "var(--text-muted)" }}>
-                No install data yet — connect Dub in Settings
-              </p>
-            )}
-          </div>
-        </div>
+                </td>
+                <td className="px-4 py-3 font-mono text-sm" style={{ color: "var(--text-secondary)" }}>
+                  {ps.imp > 0 ? fmt(ps.imp) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                  {ps.cpm > 0 ? usd(ps.cpm, 2) : "—"}
+                </td>
+                <td className="px-4 py-3 font-mono text-sm" style={{ color: "var(--text-secondary)" }}>
+                  {ps.clk > 0 ? fmt(ps.clk) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                  {ps.ctr > 0 ? pct(ps.ctr, 2) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                  {ps.cpc > 0 ? usd(ps.cpc, 2) : "—"}
+                </td>
+                <td className="px-4 py-3 font-semibold text-indigo-500">
+                  {ps.inst > 0 ? fmt(ps.inst, 0) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: ps.c2i > 2 ? "#10b981" : "var(--text-muted)" }}>
+                  {ps.c2i > 0 ? pct(ps.c2i, 1) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: ps.cpi > 0 && ps.cpi < 5 ? "#10b981" : ps.cpi > 10 ? "#f59e0b" : "var(--text-secondary)" }}>
+                  {ps.cpi > 0 ? usd(ps.cpi, 2) : "—"}
+                </td>
+                <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>
+                  {ps.spd > 0 ? usd(ps.spd * USD_INR) : "—"}
+                </td>
+              </tr>
+            ))}
+            {/* Totals row */}
+            <tr style={{ background: "var(--bg-surface)", borderTop: "2px solid var(--border)" }}>
+              <td className="px-4 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>Total</td>
+              <td className="px-4 py-3 font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmt(totalImpressions)}</td>
+              <td className="px-4 py-3 text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>{usd(cpm, 2)}</td>
+              <td className="px-4 py-3 font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmt(totalClicks)}</td>
+              <td className="px-4 py-3 text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>{pct(ctr, 2)}</td>
+              <td className="px-4 py-3 text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>{usd(cpc, 2)}</td>
+              <td className="px-4 py-3 font-bold text-indigo-500">{fmt(totalInstalls, 0)}</td>
+              <td className="px-4 py-3 text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>{pct(c2i, 1)}</td>
+              <td className="px-4 py-3 text-sm font-semibold" style={{ color: "var(--text-secondary)" }}>{usd(cpi, 2)}</td>
+              <td className="px-4 py-3 font-bold text-sm" style={{ color: "var(--text-primary)" }}>{usd(totalSpendINR)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      {/* Campaign comparison */}
-      <div className="mt-4 rounded-xl border overflow-hidden" style={{ background: "var(--bg-card)", borderColor: "var(--border)" }}>
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
-          <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Campaign Comparison</h2>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Side-by-side efficiency across all campaigns</p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--bg-surface)" }}>
-                {["Campaign", "Platform", "Creators", "Views", "Installs", "CPI", "CPV", "Spend"].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider whitespace-nowrap" style={{ color: "var(--text-muted)" }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {campaigns.map((camp, i) => {
-                const stats = getCampaignStats(camp.id);
-                const campPerfs = performances.filter(p => {
-                  const v = videos.find(v => v.id === p.videoId);
-                  return v?.campaignId === camp.id;
-                });
-                const totalViews = campPerfs.reduce((s, p) => s + p.views, 0);
-                const cpv = totalViews > 0 && stats && stats.spent > 0 ? stats.spent / totalViews : 0;
+      {/* ── Monthly breakdown ──────────────────────────────────── */}
+      <SectionHeader
+        title="Month-on-Month"
+        sub="All metrics by month with delta vs. prior month — costs in USD"
+      />
+      <div className="rounded-xl overflow-hidden mb-4" style={{ border: "1px solid var(--border)" }}>
+        <table className="w-full text-sm">
+          <thead>
+            <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
+              {["Month", "Impressions", "Δ Imp", "CPM", "Clicks", "Δ Clicks", "CTR", "CPC", "Installs", "Δ Inst", "CPI", "Spend"].map((h) => (
+                <th key={h} className="text-left px-4 py-3 label-caps whitespace-nowrap">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {months.map((m, i) => {
+              const prev = i > 0 ? months[i - 1] : null;
+              const mCtr = m.imp > 0 ? (m.clk / m.imp) * 100 : 0;
+              const mCpi = m.inst > 0 ? m.spdUSD / m.inst : 0;
+              const mCpm = m.imp > 0 ? (m.spdUSD / m.imp) * 1000 : 0;
+              const mCpc = m.clk > 0 ? m.spdUSD / m.clk : 0;
+              const barWidth = maxImp > 0 ? (m.imp / maxImp) * 100 : 0;
+
+              function delta(curr: number, prior: number | undefined): React.ReactElement {
+                if (!prior || prior === 0 || curr === 0) return <span style={{ color: "var(--text-muted)" }}>—</span>;
+                const d = ((curr - prior) / prior) * 100;
+                const up = d >= 0;
                 return (
-                  <tr key={camp.id} style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-                    <td className="px-4 py-3">
-                      <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{camp.name}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{camp.status}</p>
-                    </td>
-                    <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>{camp.primaryPlatform}</td>
-                    <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>{camp.creatorIds.length}</td>
-                    <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>{totalViews > 0 ? formatNumber(totalViews) : "—"}</td>
-                    <td className="px-4 py-3 text-sm font-semibold text-indigo-500">{stats && stats.installs > 0 ? formatNumber(stats.installs) : "—"}</td>
-                    <td className="px-4 py-3 text-sm">
-                      {stats && stats.cpi > 0 ? (
-                        <span className={stats.cpi <= 300 ? "text-emerald-500" : stats.cpi <= 800 ? "text-amber-500" : "text-red-500"}>
-                          {formatCurrency(stats.cpi)}
-                        </span>
-                      ) : <span style={{ color: "var(--text-muted)" }}>—</span>}
-                    </td>
-                    <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>{cpv > 0 ? formatCurrency(cpv) : "—"}</td>
-                    <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>{stats && stats.spent > 0 ? formatCurrency(stats.spent) : "—"}</td>
-                  </tr>
+                  <span className="text-xs font-semibold" style={{ color: up ? "#10b981" : "#f59e0b" }}>
+                    {up ? "▲" : "▼"} {Math.abs(d).toFixed(0)}%
+                  </span>
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              }
+
+              return (
+                <tr key={m.ym} style={{ borderBottom: i < months.length - 1 ? "1px solid var(--border)" : "none" }}>
+                  <td className="px-4 py-3 font-semibold text-sm whitespace-nowrap" style={{ color: "var(--text-primary)" }}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-16 h-1 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
+                        <div className="h-full rounded-full bg-indigo-500" style={{ width: `${barWidth}%` }} />
+                      </div>
+                      {m.label}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 font-mono text-sm" style={{ color: "var(--text-secondary)" }}>
+                    {m.imp > 0 ? fmt(m.imp) : "—"}
+                  </td>
+                  <td className="px-4 py-3">{delta(m.imp, prev?.imp)}</td>
+                  <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                    {mCpm > 0 ? usd(mCpm * USD_INR, 2) : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>
+                    {m.clk > 0 ? fmt(m.clk) : "—"}
+                  </td>
+                  <td className="px-4 py-3">{delta(m.clk, prev?.clk)}</td>
+                  <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                    {mCtr > 0 ? pct(mCtr, 2) : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-sm" style={{ color: "var(--text-muted)" }}>
+                    {mCpc > 0 ? usd(mCpc * USD_INR, 2) : "—"}
+                  </td>
+                  <td className="px-4 py-3 font-semibold text-indigo-400">
+                    {m.inst > 0 ? fmt(m.inst, 0) : "—"}
+                  </td>
+                  <td className="px-4 py-3">{delta(m.inst, prev?.inst)}</td>
+                  <td className="px-4 py-3 text-sm" style={{ color: mCpi > 0 && mCpi < 5 ? "#10b981" : mCpi > 10 ? "#f59e0b" : "var(--text-muted)" }}>
+                    {mCpi > 0 ? usd(mCpi * USD_INR, 2) : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-sm" style={{ color: "var(--text-secondary)" }}>
+                    {m.spdUSD > 0 ? `$${m.spdUSD.toLocaleString("en-US", { maximumFractionDigits: 0 })}` : "—"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,9 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { videos, creators, campaigns } from "@/lib/mock-data";
+import { videos, creators, campaigns, performances, installs } from "@/lib/mock-data";
 import type { Video } from "@/types";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+
+const USD_INR = 84;
+
+function fmtNum(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000)     return `${(n / 1_000).toFixed(1)}K`;
+  return n.toFixed(0);
+}
+
+const perfByVideo  = Object.fromEntries(performances.map((p) => [p.videoId, p]));
+const installByVideo = Object.fromEntries(installs.map((i) => [i.videoId, i]));
 
 // ── helpers ──────────────────────────────────────────────────
 
@@ -279,6 +290,38 @@ export default function CalendarPage() {
                             </span>
                             <span className="ml-1.5">{v.format}</span>
                           </div>
+                          {/* Impact metrics */}
+                          {(() => {
+                            const perf = perfByVideo[v.id];
+                            const inst = installByVideo[v.id];
+                            const views   = perf?.views          ?? 0;
+                            const clicks  = perf?.clickThroughs   ?? 0;
+                            const insts   = inst?.installs        ?? 0;
+                            const hasData = views > 0 || clicks > 0 || insts > 0;
+                            if (!hasData) return null;
+                            return (
+                              <div className="mt-2 grid grid-cols-3 gap-1 rounded-lg p-2" style={{ background: "var(--bg-surface)" }}>
+                                <div className="text-center">
+                                  <div className="text-[10px] font-semibold" style={{ color: "var(--text-muted)" }}>Views</div>
+                                  <div className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>
+                                    {views > 0 ? fmtNum(views) : "—"}
+                                  </div>
+                                </div>
+                                <div className="text-center" style={{ borderLeft: "1px solid var(--border)", borderRight: "1px solid var(--border)" }}>
+                                  <div className="text-[10px] font-semibold" style={{ color: "var(--text-muted)" }}>Clicks</div>
+                                  <div className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>
+                                    {clicks > 0 ? fmtNum(clicks) : "—"}
+                                  </div>
+                                </div>
+                                <div className="text-center">
+                                  <div className="text-[10px] font-semibold" style={{ color: "var(--text-muted)" }}>Installs</div>
+                                  <div className="text-xs font-bold text-indigo-400">
+                                    {insts > 0 ? fmtNum(insts) : "—"}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })()}
                           <a
                             href={v.url}
                             target="_blank"
