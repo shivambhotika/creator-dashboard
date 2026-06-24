@@ -7,8 +7,9 @@ import { useTheme } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Video, BarChart2,
-  DollarSign, ExternalLink, Sun, Moon, Settings, CalendarDays, X, Menu, FileSpreadsheet, LogOut,
+  DollarSign, ExternalLink, Sun, Moon, Settings, CalendarDays, X, Menu, FileSpreadsheet, LogOut, Building2,
 } from "lucide-react";
+import { CurrencyToggle } from "@/components/CurrencyToggle";
 
 const nav = [
   { href: "/dashboard",             label: "Overview",     icon: LayoutDashboard },
@@ -17,6 +18,7 @@ const nav = [
   { href: "/dashboard/calendar",    label: "Calendar",     icon: CalendarDays },
   { href: "/dashboard/performance", label: "Performance",  icon: BarChart2 },
   { href: "/dashboard/costs",       label: "Costs & ROI",  icon: DollarSign },
+  { href: "/dashboard/agency",      label: "Agencies",     icon: Building2 },
 ];
 
 function NavItem({
@@ -126,8 +128,10 @@ function SidebarContent({ onClose, pathname, theme, toggle }: {
       {/* Sheet quick-links */}
       <SheetLinks />
 
-      {/* Bottom bar: theme toggle + sign out */}
-      <div className="px-4 py-3 flex items-center justify-between gap-2" style={{ borderTop: "1px solid var(--border)" }}>
+      {/* Bottom bar: currency toggle + theme + sign out */}
+      <div className="px-3 py-3 flex items-center gap-2" style={{ borderTop: "1px solid var(--border)" }}>
+        <CurrencyToggle />
+        <div className="flex-1" />
         <button
           onClick={toggle}
           className="w-7 h-7 flex items-center justify-center rounded-md transition-colors"
@@ -139,7 +143,6 @@ function SidebarContent({ onClose, pathname, theme, toggle }: {
             : <Moon className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
           }
         </button>
-        <span className="label-caps flex-1 text-center">{theme === "dark" ? "Dark" : "Light"}</span>
         <SignOutButton />
       </div>
     </div>
