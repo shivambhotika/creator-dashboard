@@ -6,13 +6,22 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard, Users, Video, BarChart2,
+  LayoutDashboard, Users, Video, BarChart2, Search,
   DollarSign, ExternalLink, Sun, Moon, Settings, CalendarDays, X, Menu,
   FileSpreadsheet, LogOut, Building2, ShieldAlert, Target,
 } from "lucide-react";
 import { CurrencyToggle } from "@/components/CurrencyToggle";
+import { CommandPalette } from "@/components/CommandPalette";
+import { HIGH_PRIORITY_COUNT } from "@/lib/action-items";
 
-const NAV_ANALYTICS = [
+interface NavEntry {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  badge?: number;
+}
+
+const NAV_ANALYTICS: NavEntry[] = [
   { href: "/dashboard",             label: "Overview",    icon: LayoutDashboard },
   { href: "/dashboard/creators",    label: "Creators",    icon: Users },
   { href: "/dashboard/videos",      label: "Videos",      icon: Video },
@@ -20,14 +29,15 @@ const NAV_ANALYTICS = [
   { href: "/dashboard/performance", label: "Performance", icon: BarChart2 },
   { href: "/dashboard/costs",       label: "Costs & ROI", icon: DollarSign },
   { href: "/dashboard/agency",      label: "Agencies",    icon: Building2 },
-  { href: "/dashboard/decision",    label: "Decision",    icon: Target },
+  { href: "/dashboard/decision",    label: "Decision",    icon: Target, badge: HIGH_PRIORITY_COUNT },
   { href: "/dashboard/data-health", label: "Data Health", icon: ShieldAlert },
 ];
 
-const NAV_RESOURCES = [
+const NAV_RESOURCES_TYPED: NavEntry[] = [
   { href: "/dashboard/sheets",   label: "Sheet Links",    icon: FileSpreadsheet },
   { href: "/dashboard/settings", label: "Connect Sheets", icon: Settings },
 ];
+
 
 function NavGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -54,12 +64,14 @@ function NavItem({
   label,
   icon: Icon,
   active,
+  badge,
   onClick,
 }: {
   href: string;
   label: string;
   icon: typeof LayoutDashboard;
   active: boolean;
+  badge?: number;
   onClick?: () => void;
 }) {
   return (
@@ -84,7 +96,20 @@ function NavItem({
         className="w-4 h-4 shrink-0"
         style={{ color: active ? "rgba(255,255,255,0.85)" : "var(--text-muted)" }}
       />
-      {label}
+      <span className="flex-1">{label}</span>
+      {badge != null && badge > 0 && (
+        <span
+          className="text-xs font-bold px-1.5 py-0.5 rounded-full leading-none"
+          style={{
+            background: active ? "rgba(255,255,255,0.25)" : "#ef4444",
+            color: active ? "#fff" : "#fff",
+            minWidth: "18px",
+            textAlign: "center",
+          }}
+        >
+          {badge}
+        </span>
+      )}
     </Link>
   );
 }
@@ -142,6 +167,37 @@ function SidebarContent({
         )}
       </div>
 
+      {/* ⌘K search trigger */}
+      <div className="px-2 pt-2 pb-1">
+        <button
+          onClick={() => {
+            const e = new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true });
+            window.dispatchEvent(e);
+          }}
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all duration-150"
+          style={{
+            background: "var(--bg-surface)",
+            boxShadow: "var(--nm-inset)",
+            border: "1px solid var(--border)",
+            color: "var(--text-muted)",
+          }}
+        >
+          <Search className="w-3.5 h-3.5 shrink-0" />
+          <span className="flex-1 text-xs text-left">Search…</span>
+          <kbd
+            className="text-xs px-1 py-0.5 rounded"
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              fontFamily: "monospace",
+              fontSize: "0.6rem",
+            }}
+          >
+            ⌘K
+          </kbd>
+        </button>
+      </div>
+
       {/* Nav */}
       <nav className="flex-1 px-2 py-2 overflow-y-auto">
         <NavGroup label="Analytics">
@@ -158,7 +214,7 @@ function SidebarContent({
         </NavGroup>
 
         <NavGroup label="Resources">
-          {NAV_RESOURCES.map(({ href, label, icon }) => (
+          {NAV_RESOURCES_TYPED.map(({ href, label, icon }) => (
             <NavItem
               key={href}
               href={href}
@@ -291,6 +347,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         <main className="flex-1 overflow-auto md:ml-[230px]">{children}</main>
+        <CommandPalette />
       </div>
     </div>
   );

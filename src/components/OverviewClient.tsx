@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useCurrency } from "@/lib/currency-context";
 import { TopCreatorsWidget, type TopCreatorEntry } from "@/components/TopCreatorsWidget";
+import { Sparkline } from "@/components/Sparkline";
 
 const USD_INR = 84;
 
@@ -30,6 +32,15 @@ export interface MonthRow {
   spendINR: number;
 }
 
+export interface MonthCPI {
+  ym: string;
+  label: string;
+  spendINR: number;
+  installs: number;
+  /** CPI in INR — divide by 84 for USD */
+  cpiINR: number | null;
+}
+
 export interface OverviewData {
   totalImp: number;
   totalClk: number;
@@ -47,6 +58,32 @@ export interface OverviewData {
   months: MonthRow[];
   platformMonths: Record<string, MonthRow[]>;
   topCreators: TopCreatorEntry[];
+  monthCPIs: MonthCPI[];
+  ytLastSync: string | null;
+  dubLastSync: string | null;
+  highPriorityActionCount: number;
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+
+function relativeTime(iso: string | null): string {
+  if (!iso) return "Never synced";
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+function freshnessColor(iso: string | null): string {
+  if (!iso) return "var(--text-muted)";
+  const hours = (Date.now() - new Date(iso).getTime()) / 3600000;
+  if (hours < 6) return "var(--green)";
+  if (hours < 26) return "var(--amber)";
+  return "var(--red)";
 }
 
 function StatCard({ label, value, sub, accent }: {
@@ -122,6 +159,71 @@ export function OverviewClient({ data }: { data: OverviewData }) {
         >
           {mode === "usd" ? "USD · ₹84/$" : "INR · ₹84/$"}
         </div>
+      </div>
+
+      {/* ── Freshness + Decision callout row ──────────────────── */}
+      <div className="flex flex-wrap gap-3">
+        {/* Data freshness */}
+        <div
+          className="flex items-center gap-4 px-4 py-2.5 rounded-2xl flex-1 min-w-0"
+          style={{ background: "var(--bg-card)", boxShadow: "var(--nm-sm)", border: "1px solid var(--border)" }}
+        >
+          <span className="text-xs font-semibold" style={{ color: "var(--text-muted)", whiteSpace: "nowrap" }}>
+            Data freshness
+          </span>
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="flex items-center gap-1.5 text-xs font-medium">
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ background: freshnessColor(data.ytLastSync) }}
+              />
+              <span style={{ color: "var(--text-secondary)" }}>YouTube</span>
+              <span style={{ color: freshnessColor(data.ytLastSync) }}>
+                {relativeTime(data.ytLastSync)}
+              </span>
+            </span>
+            <span className="flex items-center gap-1.5 text-xs font-medium">
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ background: freshnessColor(data.dubLastSync) }}
+              />
+              <span style={{ color: "var(--text-secondary)" }}>Dub</span>
+              <span style={{ color: freshnessColor(data.dubLastSync) }}>
+                {relativeTime(data.dubLastSync)}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* Decision callout */}
+        {data.highPriorityActionCount > 0 && (
+          <Link
+            href="/dashboard/decision"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-2xl transition-all duration-150 hover:translate-y-[-1px]"
+            style={{
+              background: "var(--bg-card)",
+              boxShadow: "var(--nm-sm), 0 0 0 1.5px rgba(239,68,68,0.25)",
+              border: "1px solid rgba(239,68,68,0.2)",
+              textDecoration: "none",
+            }}
+          >
+            <span
+              className="text-sm font-bold px-2 py-0.5 rounded-full"
+              style={{ background: "#ef4444", color: "#fff" }}
+            >
+              {data.highPriorityActionCount}
+            </span>
+            <div>
+              <p className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
+                Action items need attention
+              </p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                P0 / P1 issues open → Decision Center
+              </p>
+            </div>
+            <span className="text-xs ml-1" style={{ color: "var(--text-muted)" }}>→</span>
+          </Link>
+        )}
       </div>
 
       {/* ── Stat cards ─────────────────────────────────────────── */}
@@ -329,6 +431,84 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           </table>
         </div>
       </section>
+
+      {/* ── CPI Trend by Campaign Batch ──────────────────────── */}
+      {data.monthCPIs.filter((m) => m.cpiINR !== null).length >= 2 && (
+        <section className="card p-6">
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <h2 className="section-heading">CPI Trend — Campaign Batches</h2>
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                Cost-per-install for each cohort of creators launched that month
+              </p>
+            </div>
+            <div className="shrink-0" style={{ width: 160, height: 44 }}>
+              <Sparkline
+                values={data.monthCPIs.map((m) => m.cpiINR ?? 0).filter((_, i) => data.monthCPIs[i].cpiINR !== null)}
+                invertTrend
+                width={160}
+                height={44}
+              />
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  {["Cohort", "Installs", "Spend", "CPI (INR)", "CPI (USD)"].map((h) => (
+                    <th
+                      key={h}
+                      className="px-3 py-2 text-left font-semibold"
+                      style={{ color: "var(--text-muted)", letterSpacing: "0.04em" }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.monthCPIs.map((m, i) => {
+                  const cpiINR = m.cpiINR;
+                  const cpiUSD = cpiINR != null ? cpiINR / USD_INR : null;
+                  const cpiColor =
+                    cpiINR == null
+                      ? "var(--text-muted)"
+                      : cpiINR <= 300
+                      ? "#10b981"
+                      : cpiINR <= 600
+                      ? "#f59e0b"
+                      : "#ef4444";
+                  return (
+                    <tr
+                      key={m.ym}
+                      style={{ borderBottom: i < data.monthCPIs.length - 1 ? "1px solid var(--border)" : "none" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-surface)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "")}
+                      className="transition-colors"
+                    >
+                      <td className="px-3 py-2.5 font-semibold" style={{ color: "var(--text-primary)" }}>
+                        {m.label}
+                      </td>
+                      <td className="px-3 py-2.5 tabular-nums" style={{ color: "var(--text-secondary)" }}>
+                        {m.installs > 0 ? m.installs.toLocaleString() : "—"}
+                      </td>
+                      <td className="px-3 py-2.5 tabular-nums" style={{ color: "var(--text-secondary)" }}>
+                        {m.spendINR > 0 ? `₹${(m.spendINR / 1000).toFixed(1)}k` : "—"}
+                      </td>
+                      <td className="px-3 py-2.5 font-bold tabular-nums" style={{ color: cpiColor }}>
+                        {cpiINR != null ? `₹${cpiINR.toFixed(0)}` : "—"}
+                      </td>
+                      <td className="px-3 py-2.5 tabular-nums" style={{ color: "var(--text-muted)" }}>
+                        {cpiUSD != null ? `$${cpiUSD.toFixed(2)}` : "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

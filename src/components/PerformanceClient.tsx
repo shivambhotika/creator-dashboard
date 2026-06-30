@@ -33,6 +33,7 @@ interface PerfRow {
   cpi: number;
   roas: number;
   quality: "Full" | "Partial" | "No data";
+  isDubMeasured: boolean;
 }
 
 function QualityBadge({ quality }: { quality: PerfRow["quality"] }) {
@@ -105,7 +106,8 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       const cost = costs.find((c) => c.videoId === p.videoId);
       const creator = creators.find((c) => c.id === video?.creatorId);
       const installRec = installs.find((i) => i.videoId === p.videoId);
-      const videoInstalls = dubByVideo[p.videoId]?.leads ?? installRec?.installs ?? 0;
+      const isDubMeasured = dubByVideo[p.videoId] !== undefined;
+      const videoInstalls = isDubMeasured ? dubByVideo[p.videoId]!.leads : (installRec?.installs ?? 0);
       const revenue = installRec?.revenue ?? 0;
       const netCost = cost?.netCost ?? 0;
       const engagementRate = p.views > 0 ? ((p.likes + p.comments + p.shares) / p.views) * 100 : 0;
@@ -148,6 +150,7 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
         cpi,
         roas,
         quality,
+        isDubMeasured,
       };
     });
   }, []);
@@ -215,7 +218,14 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
     {
       key: "videoInstalls", label: "Installs", sortable: true,
       getValue: (r) => r.videoInstalls,
-      render: (r) => <span className="text-sm font-semibold text-indigo-500">{r.videoInstalls ? count(r.videoInstalls) : "—"}</span>,
+      render: (r) => r.videoInstalls ? (
+        <span
+          className="text-sm font-semibold text-indigo-500"
+          title={r.isDubMeasured ? "Measured via Dub" : "Estimated (no Dub link)"}
+        >
+          {r.isDubMeasured ? "" : "~"}{count(r.videoInstalls)}
+        </span>
+      ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
       key: "clickToInstallRate", label: "Click→Install", sortable: true,
@@ -230,8 +240,11 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       key: "cpi", label: "CPI", sortable: true,
       getValue: (r) => r.cpi,
       render: (r) => r.cpi ? (
-        <span className={`text-sm font-medium ${r.cpi <= 300 ? "text-emerald-500" : r.cpi <= 500 ? "text-amber-500" : "text-red-500"}`}>
-          {money(r.cpi)}
+        <span
+          className={`text-sm font-medium ${r.cpi <= 300 ? "text-emerald-500" : r.cpi <= 500 ? "text-amber-500" : "text-red-500"}`}
+          title={r.isDubMeasured ? "Measured via Dub" : "Estimated (no Dub link)"}
+        >
+          {r.isDubMeasured ? "" : "~"}{money(r.cpi)}
         </span>
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },

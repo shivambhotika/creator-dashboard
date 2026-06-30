@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { videos, performances, costs, installs, campaigns } from "@/lib/mock-data";
 import { formatNumber, formatCurrency, formatDate } from "@/lib/utils";
 import { SortableTable, type Column } from "@/components/SortableTable";
@@ -11,7 +12,7 @@ import type { Video } from "@/types";
 
 type Activity = "Active" | "Exhausted" | "Upcoming";
 
-const TODAY = "2026-06-25";
+const TODAY = new Date().toISOString().slice(0, 10);
 const ACTIVE_DAYS = 10;
 
 function computeActivity(goLiveDate: string, status: string): Activity {
@@ -85,8 +86,14 @@ function exportCSV(rows: VideoRow[]) {
 }
 
 export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, DubStats> }) {
-  const [search, setSearch]     = useState("");
+  const searchParams = useSearchParams();
+  const [search, setSearch]     = useState(searchParams.get("search") ?? "");
   const [platform, setPlatform] = useState<Platform>("All");
+
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q) setSearch(q);
+  }, [searchParams]);
   const [campaign, setCampaign] = useState("All");
   const [status, setStatus]     = useState<Status>("All");
   const [activity, setActivity] = useState<ActivityFilter>("All");

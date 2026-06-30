@@ -2,18 +2,17 @@ import React from "react";
 import { videos, performances, costs, installs, creators, getAllCreatorMetrics } from "@/lib/mock-data";
 import { getDubStats } from "@/lib/dub-server";
 import { OverviewClient } from "@/components/OverviewClient";
-import type { OverviewData, MonthRow } from "@/components/OverviewClient";
-import { isDbConnected, listSyncRuns, getInferredAttributionForGroup } from "@/lib/storage";
+import type { OverviewData, MonthRow, MonthCPI } from "@/components/OverviewClient";
+import { isDbConnected, listSyncRuns, getInferredAttributionForGroup, getLatestSyncRun } from "@/lib/storage";
 import { ATTRIBUTION_GROUPS } from "@/lib/attribution";
 import { LiveSyncStatus } from "@/components/LiveSyncStatus";
 import { SharedAttributionInferenceCard } from "@/components/SharedAttributionInferenceCard";
+import { HIGH_PRIORITY_COUNT } from "@/lib/action-items";
 import type { SyncRun, SyncSource } from "@/types";
 
 const USD_INR = 84;
 const PLATFORMS = ["YouTube", "Instagram", "LinkedIn", "Twitter"] as const;
 
-/** Use the `impressions` field when available (e.g. YouTube thumbnail impressions),
- *  otherwise fall back to views. */
 const imp = (p: { views: number; impressions?: number }) => p.impressions ?? p.views;
 
 export default async function DashboardPage() {
@@ -24,7 +23,6 @@ export default async function DashboardPage() {
   const totalClk      = dub.totalClicks > 0
     ? dub.totalClicks
     : performances.reduce((s, p) => s + p.clickThroughs, 0);
-  // Sum per-video: Dub leads when slug exists, mock installs otherwise
   const totalInst = videos.reduce((s, v) => {
     const dubLeads = dub.byVideo[v.id]?.leads;
     return s + (dubLeads !== undefined ? dubLeads : (installs.find((i) => i.videoId === v.id)?.installs ?? 0));
@@ -34,7 +32,6 @@ export default async function DashboardPage() {
   const totalCreators = creators.length;
   const liveVideos    = videos.filter((v) => v.status === "Live").length;
 
-  // Per-unit USD rates (computed correctly from USD spend)
   const cpmUSD = totalImp  > 0 ? (totalSpendUSD / totalImp) * 1000 : 0;
   const cpcUSD = totalClk  > 0 ? totalSpendUSD / totalClk           : 0;
   const cpiUSD = totalInst > 0 ? totalSpendUSD / totalInst          : 0;
@@ -54,7 +51,7 @@ export default async function DashboardPage() {
     return { platform, imp: platImp, clk, inst, spendINR };
   });
 
-  // ── Monthly buckets (all platforms) ─────────────────────────
+  // ── Monthly buckets (for MoM table) ─────────────────────────
   function buildMonthRows(filterVideoIds?: Set<string>): MonthRow[] {
     const map = new Map<string, MonthRow>();
     for (const video of videos) {
@@ -76,7 +73,7 @@ export default async function DashboardPage() {
       b.clk      += perf ? (dub.byVideo[video.id]?.clicks ?? perf.clickThroughs) : 0;
       const dubLeads = dub.byVideo[video.id]?.leads;
       b.inst     += dubLeads !== undefined ? dubLeads : (inst?.installs ?? 0);
-      b.spendINR += cost?.netCost        ?? 0;
+      b.spendINR += cost?.netCost ?? 0;
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, v]) => v);
   }
@@ -89,7 +86,36 @@ export default async function DashboardPage() {
     platformMonths[p] = buildMonthRows(ids);
   }
 
-  // ── Top creators ─────────────────────────────────────────
+  // ── CPI by go-live month (campaign batch efficiency trend) ───
+  // Groups videos by the month they went live, computes CPI for that batch.
+  // Only months with both spend AND installs are meaningful — skip ₹0 cohorts.
+  const cpiMap = new Map<string, { spendINR: number; installs: number }>();
+  for (const video of videos) {
+    const ym = video.goLiveDate?.slice(0, 7);
+    if (!ym) continue;
+    const cost = costs.find((c) => c.videoId === video.id);
+    if (!cost || cost.netCost === 0) continue;
+    const dubLeads = dub.byVideo[video.id]?.leads;
+    const videoInst = dubLeads !== undefined
+      ? dubLeads
+      : (installs.find((i) => i.videoId === video.id)?.installs ?? 0);
+    if (!cpiMap.has(ym)) cpiMap.set(ym, { spendINR: 0, installs: 0 });
+    const b = cpiMap.get(ym)!;
+    b.spendINR += cost.netCost;
+    b.installs += videoInst;
+  }
+  const monthCPIs: MonthCPI[] = [...cpiMap.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([ym, b]) => ({
+      ym,
+      label: new Date(ym + "-15").toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+      spendINR: b.spendINR,
+      installs: b.installs,
+      // INR CPI — divide by 84 at display time for USD
+      cpiINR: b.installs > 0 ? b.spendINR / b.installs : null,
+    }));
+
+  // ── Top creators ─────────────────────────────────────────────
   const allMetrics = getAllCreatorMetrics(dub.byVideo);
   const topCreators = creators.map((c) => {
     const m = allMetrics.find((x) => x.creatorId === c.id)!;
@@ -103,23 +129,22 @@ export default async function DashboardPage() {
     };
   });
 
+  // ── Data freshness ───────────────────────────────────────────
+  const [ytRun, dubRun] = await Promise.all([
+    getLatestSyncRun("youtube"),
+    getLatestSyncRun("dub"),
+  ]);
+
   const data: OverviewData = {
-    totalImp,
-    totalClk,
-    totalInst,
-    totalSpendINR,
-    totalCreators,
-    liveVideos,
-    cpmUSD,
-    cpcUSD,
-    cpiUSD,
-    ctrPct,
-    c2iPct,
+    totalImp, totalClk, totalInst, totalSpendINR,
+    totalCreators, liveVideos,
+    cpmUSD, cpcUSD, cpiUSD, ctrPct, c2iPct,
     dubPartial: dub.partial,
-    platformStats,
-    months,
-    platformMonths,
-    topCreators,
+    platformStats, months, platformMonths, topCreators,
+    monthCPIs,
+    ytLastSync: ytRun?.completedAt ?? null,
+    dubLastSync: dubRun?.completedAt ?? null,
+    highPriorityActionCount: HIGH_PRIORITY_COUNT,
   };
 
   // ── Live sync + inferred attribution ────────────────────────

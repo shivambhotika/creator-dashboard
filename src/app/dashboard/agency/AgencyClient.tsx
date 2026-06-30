@@ -8,16 +8,30 @@ export interface DubByVideo {
   [videoId: string]: { clicks: number; leads: number };
 }
 
-const AGENCIES = ["Finnet", "AEOS", "Owled", "Social Tag", "Direct"] as const;
-type Agency = (typeof AGENCIES)[number];
+// Derived from actual data — no hardcoding that silently hides agencies
+const AGENCIES = Array.from(
+  new Set(
+    creators
+      .map((c) => c.agency)
+      .filter((a): a is string => Boolean(a) && a.trim().length > 0)
+  )
+).sort() as string[];
+type Agency = string;
 
-const AGENCY_COLORS: Record<Agency, string> = {
-  Finnet: "#6366f1",
-  AEOS: "#8b5cf6",
-  Owled: "#0ea5e9",
-  "Social Tag": "#10b981",
-  Direct: "#f59e0b",
-};
+const AGENCY_COLOR_PALETTE = [
+  "#6366f1", "#8b5cf6", "#0ea5e9", "#10b981", "#f59e0b",
+  "#ef4444", "#ec4899", "#14b8a6", "#f97316", "#84cc16",
+  "#06b6d4", "#a855f7", "#64748b", "#78716c", "#d946ef",
+];
+
+function agencyColor(agency: string): string {
+  const idx = AGENCIES.indexOf(agency);
+  return AGENCY_COLOR_PALETTE[idx % AGENCY_COLOR_PALETTE.length] ?? "#6366f1";
+}
+
+const AGENCY_COLORS: Record<string, string> = Object.fromEntries(
+  AGENCIES.map((a) => [a, agencyColor(a)])
+);
 
 type SortKey = "name" | "platform" | "followers" | "spend" | "impressions" | "clicks" | "installs" | "cpi";
 type SortDir = "asc" | "desc";

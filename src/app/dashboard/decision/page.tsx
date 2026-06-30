@@ -2,6 +2,7 @@ import { videos, performances, costs, installs, creators } from "@/lib/mock-data
 import { getDubStats } from "@/lib/dub-server";
 import { ATTRIBUTION_GROUPS } from "@/lib/attribution";
 import { calculateCPI, calculateCPV, formatCurrencyINR, formatNullableNumber } from "@/lib/metrics";
+import { OPEN_ACTION_ITEMS, PRIORITY_COLOR } from "@/lib/action-items";
 
 export default async function DecisionPage() {
   const dub = await getDubStats();
@@ -38,7 +39,7 @@ export default async function DecisionPage() {
     if (s.hasSharedAttribution) return { label: "Fix attribution first", color: "#d97706" };
     if (s.cpi == null || s.totalInstalls === 0) return { label: "Insufficient data", color: "#6b7280" };
     const cpiUSD = s.cpi / 84;
-    if (cpiUSD < 5)  return { label: "Renew strongly",      color: "#10b981" };
+    if (cpiUSD < 5)  return { label: "Renew strongly",       color: "#10b981" };
     if (cpiUSD < 15) return { label: "Renew if price holds", color: "#3b82f6" };
     if (cpiUSD < 30) return { label: "Renegotiate price",    color: "#f59e0b" };
     return { label: "Do not renew", color: "#ef4444" };
@@ -53,56 +54,114 @@ export default async function DecisionPage() {
         </p>
       </div>
 
-      <div className="rounded-lg p-4 text-sm" style={{ background: "#fffbeb", border: "1px solid #fde68a" }}>
-        <strong>ROAS unavailable</strong> — no revenue or LTV data connected. Efficiency uses CPI and CPV only.
+      {/* ROAS notice — theme-aware */}
+      <div
+        className="rounded-xl p-4 text-sm"
+        style={{
+          background: "rgba(245,158,11,0.08)",
+          border: "1px solid rgba(245,158,11,0.25)",
+          color: "var(--text-secondary)",
+        }}
+      >
+        <strong style={{ color: "var(--text-primary)" }}>ROAS unavailable</strong>
+        {" "}— no revenue or LTV data connected. Efficiency uses CPI and CPV only.
       </div>
 
-      <div>
-        <h2 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Creator Renewal Matrix</h2>
-        <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
+      {/* Recommended Actions */}
+      <section className="card p-6">
+        <h2 className="section-heading mb-4">Recommended Actions</h2>
+        <div className="space-y-2">
+          {OPEN_ACTION_ITEMS.map((item) => {
+            const c = PRIORITY_COLOR[item.priority];
+            return (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 rounded-xl p-3 transition-colors"
+                style={{
+                  background: "var(--bg-surface)",
+                  border: `1px solid ${c}33`,
+                }}
+              >
+                <span
+                  className="text-xs font-bold px-1.5 py-0.5 rounded mt-0.5 whitespace-nowrap"
+                  style={{ background: `${c}22`, color: c }}
+                >
+                  {item.priority}
+                </span>
+                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                  {item.text}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Creator Renewal Matrix */}
+      <section className="card p-6">
+        <h2 className="section-heading mb-1">Creator Renewal Matrix</h2>
+        <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
           Sorted by CPI (lower = better). CPI shown in USD (÷84). Shared attribution = creator-level only, video CPI unavailable.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                {["Creator","Platform","Videos","Views","Installs","Spend","CPI (USD)","CPV (₹)","Attribution","Recommendation"].map(h => (
-                  <th key={h} className="text-left py-2 px-3 text-xs font-medium uppercase tracking-wider"
-                    style={{ color: "var(--text-muted)" }}>{h}</th>
+                {["Creator", "Platform", "Videos", "Views", "Installs", "Spend", "CPI (USD)", "CPV (₹)", "Attribution", "Recommendation"].map(h => (
+                  <th
+                    key={h}
+                    className="text-left py-2 px-3 text-xs font-semibold uppercase tracking-wider"
+                    style={{ color: "var(--text-muted)" }}
+                  >
+                    {h}
+                  </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {summaries.map(s => {
+              {summaries.map((s, i) => {
                 const r = rec(s);
                 return (
-                  <tr key={s.creator.id} style={{ borderBottom: "1px solid var(--border)" }}>
-                    <td className="py-2 px-3 font-medium" style={{ color: "var(--text-primary)" }}>{s.creator.name}</td>
-                    <td className="py-2 px-3" style={{ color: "var(--text-secondary)" }}>{s.creator.platform}</td>
-                    <td className="py-2 px-3 text-center" style={{ color: "var(--text-secondary)" }}>{s.videoCount}</td>
-                    <td className="py-2 px-3 text-right" style={{ color: "var(--text-secondary)" }}>{formatNullableNumber(s.totalViews)}</td>
-                    <td className="py-2 px-3 text-right" style={{ color: "var(--text-secondary)" }}>
+                  <tr
+                    key={s.creator.id}
+                    className="transition-colors"
+                    style={{ borderBottom: i < summaries.length - 1 ? "1px solid var(--border)" : "none" }}
+                    onMouseEnter={undefined}
+                  >
+                    <td className="py-2.5 px-3 font-medium" style={{ color: "var(--text-primary)" }}>{s.creator.name}</td>
+                    <td className="py-2.5 px-3" style={{ color: "var(--text-secondary)" }}>{s.creator.platform}</td>
+                    <td className="py-2.5 px-3 text-center" style={{ color: "var(--text-secondary)" }}>{s.videoCount}</td>
+                    <td className="py-2.5 px-3 text-right tabular-nums" style={{ color: "var(--text-secondary)" }}>{formatNullableNumber(s.totalViews)}</td>
+                    <td className="py-2.5 px-3 text-right tabular-nums" style={{ color: "var(--text-secondary)" }}>
                       {s.hasSharedAttribution
                         ? <span className="text-xs" style={{ color: "#d97706" }}>Shared</span>
                         : formatNullableNumber(s.totalInstalls)}
                     </td>
-                    <td className="py-2 px-3 text-right" style={{ color: "var(--text-secondary)" }}>{formatCurrencyINR(s.totalSpend)}</td>
-                    <td className="py-2 px-3 text-right font-mono" style={{ color: "var(--text-secondary)" }}>
+                    <td className="py-2.5 px-3 text-right tabular-nums" style={{ color: "var(--text-secondary)" }}>{formatCurrencyINR(s.totalSpend)}</td>
+                    <td className="py-2.5 px-3 text-right font-mono" style={{ color: "var(--text-secondary)" }}>
                       {s.cpi != null ? `$${(s.cpi / 84).toFixed(1)}` : "—"}
                     </td>
-                    <td className="py-2 px-3 text-right font-mono" style={{ color: "var(--text-secondary)" }}>
+                    <td className="py-2.5 px-3 text-right font-mono" style={{ color: "var(--text-secondary)" }}>
                       {s.cpv != null ? `₹${s.cpv.toFixed(2)}` : "—"}
                     </td>
-                    <td className="py-2 px-3">
-                      <span className="text-xs px-1.5 py-0.5 rounded"
-                        style={{ background: s.hasSharedAttribution ? "#fef3c7" : "#f0fdf4",
-                                 color: s.hasSharedAttribution ? "#d97706" : "#059669" }}>
+                    <td className="py-2.5 px-3">
+                      <span
+                        className="text-xs px-1.5 py-0.5 rounded-md"
+                        style={{
+                          background: s.hasSharedAttribution
+                            ? "rgba(245,158,11,0.12)"
+                            : "rgba(16,185,129,0.12)",
+                          color: s.hasSharedAttribution ? "#d97706" : "#059669",
+                        }}
+                      >
                         {s.hasSharedAttribution ? "Creator" : "Video"}
                       </span>
                     </td>
-                    <td className="py-2 px-3">
-                      <span className="text-xs font-medium px-2 py-1 rounded"
-                        style={{ background: r.color + "22", color: r.color }}>
+                    <td className="py-2.5 px-3">
+                      <span
+                        className="text-xs font-medium px-2 py-1 rounded-md"
+                        style={{ background: `${r.color}22`, color: r.color }}
+                      >
                         {r.label}
                       </span>
                     </td>
@@ -112,28 +171,7 @@ export default async function DecisionPage() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div>
-        <h2 className="text-lg font-semibold mb-3" style={{ color: "var(--text-primary)" }}>Recommended Actions</h2>
-        <div className="space-y-2">
-          {[
-            { p: "P0", t: "Create unique Dub slugs per video for Ishan, Nandini, and Anurag before next deal cycle.", c: "#ef4444" },
-            { p: "P1", t: "Ask WLDD to fix Full Disclosure Dub slug — currently conflicts with financewithjobi (v53).", c: "#d97706" },
-            { p: "P1", t: "Confirm actual video URLs for v72 (Sheryians), v74 (Arsh Goyal), v75 (Code And Bug).", c: "#d97706" },
-            { p: "P2", t: "Request per-post breakdown for Anurag Bansal v93 (IG Reel 2) — currently aggregated with v79 total.", c: "#3b82f6" },
-            { p: "P2", t: "Separate v88 Ishan April video from June reporting (use contracted spend basis).", c: "#3b82f6" },
-            { p: "P2", t: "Connect revenue/LTV data to enable ROAS calculation.", c: "#3b82f6" },
-          ].map(({ p, t, c }, i) => (
-            <div key={i} className="flex items-start gap-3 rounded-lg p-3"
-              style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded mt-0.5 whitespace-nowrap"
-                style={{ background: c + "22", color: c }}>{p}</span>
-              <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{t}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      </section>
     </div>
   );
 }
