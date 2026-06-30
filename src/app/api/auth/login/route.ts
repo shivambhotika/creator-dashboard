@@ -1,20 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import { signSessionToken } from "@/lib/auth";
 
-const VALID_EMAIL = "shivam@wispr.ai";
-const VALID_PASSWORD = "Wispr_India_rocks_2026";
+// Credentials are read from the environment so no production secret lives in source.
+const VALID_EMAIL = (process.env.DASHBOARD_EMAIL ?? "shivam@wispr.ai").toLowerCase();
+const VALID_PASSWORD = process.env.DASHBOARD_PASSWORD ?? "";
 const COOKIE_NAME = "wispr_auth";
-const COOKIE_VALUE = "wispr_india_2026_authed";
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));
   const { email, password } = body as { email?: string; password?: string };
 
-  if (email?.trim().toLowerCase() !== VALID_EMAIL || password !== VALID_PASSWORD) {
+  // Reject all logins when no password is configured rather than allowing a blank match.
+  if (
+    !VALID_PASSWORD ||
+    email?.trim().toLowerCase() !== VALID_EMAIL ||
+    password !== VALID_PASSWORD
+  ) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 
+  const sessionToken = await signSessionToken(VALID_EMAIL);
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(COOKIE_NAME, COOKIE_VALUE, {
+  response.cookies.set(COOKIE_NAME, sessionToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

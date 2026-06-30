@@ -23,6 +23,14 @@ export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const action = searchParams.get("action") ?? "links";
 
+  const ALLOWED_ACTIONS = ["links", "stats", "installs"] as const;
+  if (!(ALLOWED_ACTIONS as readonly string[]).includes(action)) {
+    return NextResponse.json(
+      { error: `Unknown action: "${action}". Allowed: ${ALLOWED_ACTIONS.join(", ")}` },
+      { status: 400 }
+    );
+  }
+
   const headers = {
     Authorization: `Bearer ${apiKey}`,
     "Content-Type": "application/json",

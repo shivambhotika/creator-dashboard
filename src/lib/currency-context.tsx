@@ -24,12 +24,14 @@ function fmtMoney(inr: number, mode: CurrencyMode): string {
     const usd = inr / USD_INR;
     if (usd >= 1_000_000) return `$${(usd / 1_000_000).toFixed(2)}M`;
     if (usd >= 1_000)     return `$${(usd / 1_000).toFixed(1)}K`;
-    return `$${usd.toFixed(2)}`;
+    if (usd >= 0.01)      return `$${usd.toFixed(2)}`;
+    return `$${usd.toFixed(4)}`; // sub-cent (CPV etc.)
   } else {
     if (inr >= 10_000_000) return `₹${(inr / 10_000_000).toFixed(2)}Cr`;
     if (inr >= 100_000)    return `₹${(inr / 100_000).toFixed(2)}L`;
     if (inr >= 1_000)      return `₹${(inr / 1_000).toFixed(1)}K`;
-    return `₹${inr.toFixed(0)}`;
+    if (inr >= 1)          return `₹${inr.toFixed(0)}`;
+    return `₹${inr.toFixed(2)}`; // sub-rupee (CPV etc.)
   }
 }
 

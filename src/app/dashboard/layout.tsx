@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Video, BarChart2,
   DollarSign, ExternalLink, Sun, Moon, Settings, CalendarDays, X, Menu, FileSpreadsheet, LogOut, Building2,
+  ShieldAlert, Target,
 } from "lucide-react";
 import { CurrencyToggle } from "@/components/CurrencyToggle";
 
@@ -19,6 +20,8 @@ const nav = [
   { href: "/dashboard/performance", label: "Performance",  icon: BarChart2 },
   { href: "/dashboard/costs",       label: "Costs & ROI",  icon: DollarSign },
   { href: "/dashboard/agency",      label: "Agencies",     icon: Building2 },
+  { href: "/dashboard/decision",    label: "Decision",     icon: Target },
+  { href: "/dashboard/data-health", label: "Data Health",  icon: ShieldAlert },
 ];
 
 function NavItem({

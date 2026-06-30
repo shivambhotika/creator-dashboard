@@ -22,49 +22,49 @@ export const creators: Creator[] = [
     id: "c1", name: "Anushka Rathod", handle: "@anushkarathod98",
     platform: "Instagram", tier: "Macro", niche: "Lifestyle / Finance",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 1000000, avgViews: 144082,
+    followers: 1000000, avgViews: 144082, dubLinkSlug: "AnushkaR",
     sheetUrl: "https://www.instagram.com/anushkarathod98/",
   },
   {
     id: "c2", name: "Nidhi Kunwar", handle: "@nidhi_kunwarr",
     platform: "Instagram", tier: "Macro", niche: "Finance / Women in Money",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 857000, avgViews: 1590533,
+    followers: 857000, avgViews: 1590533, dubLinkSlug: "NidhiK",
     sheetUrl: "https://www.instagram.com/nidhi_kunwarr/",
   },
   {
     id: "c3", name: "Ayush Shukla", handle: "@ayushshukl.a",
     platform: "Instagram", tier: "Mid", niche: "Finance / Productivity",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 244000, avgViews: 14546,
+    followers: 244000, avgViews: 14546, dubLinkSlug: "AyushS",
     sheetUrl: "https://www.instagram.com/ayushshukl.a/",
   },
   {
     id: "c4", name: "Ananya Bagri", handle: "@ananyabagri",
     platform: "Instagram", tier: "Nano", niche: "Finance / Career",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 9930, avgViews: 6500,
+    followers: 9930, avgViews: 6500, dubLinkSlug: "AnanyaB",
     sheetUrl: "https://www.instagram.com/ananyabagri",
   },
   {
     id: "c5", name: "Jayant (Markets with Jayant)", handle: "@marketswithjayant",
     platform: "Instagram", tier: "Mid", niche: "Stock Market / Finance",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 275000, avgViews: 79999,
+    followers: 275000, avgViews: 74700, dubLinkSlug: "JayantM",
     sheetUrl: "https://www.instagram.com/marketswithjayant/",
   },
   {
     id: "c6", name: "Shankar Bhalla", handle: "@shankar_unravelled",
     platform: "Instagram", tier: "Macro", niche: "Finance / Economics",
     agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 540000, avgViews: 26000,
+    followers: 540000, avgViews: 26000, dubLinkSlug: "ShankarB",
     sheetUrl: "https://www.instagram.com/shankar_unravelled/",
   },
   {
     id: "c7", name: "CA Nandini", handle: "@ca_nandini19",
     platform: "YouTube", tier: "Mid", niche: "Chartered Accountancy / Finance",
-    agency: "Finnet", contactEmail: "", status: "Active",
-    followers: 377000, avgViews: 10700,
+    agency: "Creator Dream", contactEmail: "", status: "Active",
+    followers: 437000, avgViews: 45159, dubLinkSlug: "NandiniA",
     sheetUrl: "https://www.youtube.com/@ca_nandini19/featured",
   },
   // ── AOS ───────────────────────────────────────────────────────
@@ -72,21 +72,21 @@ export const creators: Creator[] = [
     id: "c8", name: "Aevy TV", handle: "@aevytvdaily",
     platform: "Instagram", tier: "Mid", niche: "News / Finance / Business",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 329000, avgViews: 80156,
+    followers: 329000, avgViews: 264756, dubLinkSlug: "AevyTV",
     sheetUrl: "https://www.instagram.com/aevytvdaily/",
   },
   {
     id: "c9", name: "Arjun Vaidya", handle: "@abvaidya",
     platform: "Instagram", tier: "Mid", niche: "Business / Entrepreneurship",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 374000, avgViews: 33563,
+    followers: 374000, avgViews: 27684, dubLinkSlug: "ArjunV",
     sheetUrl: "https://www.instagram.com/abvaidya/?hl=en",
   },
   {
     id: "c10", name: "Maitri Mangal", handle: "@maitrimangal",
     platform: "Instagram", tier: "Mid", niche: "Finance / Lifestyle",
     agency: "AEOS", contactEmail: "", status: "Active",
-    followers: 157000, avgViews: 0,
+    followers: 157000, avgViews: 33563, dubLinkSlug: "MaitriM",
     sheetUrl: "https://www.instagram.com/maitrimangal",
   },
   // ── Palak (early batch) ───────────────────────────────────────
@@ -94,71 +94,85 @@ export const creators: Creator[] = [
     id: "c77", name: "Aarti Samant", handle: "@thesortedgirl",
     platform: "Instagram", tier: "Macro", niche: "Finance / Lifestyle",
     agency: "Palak", contactEmail: "", status: "Active",
-    followers: 419000, avgViews: 0,
+    followers: 419000, avgViews: 180000, dubLinkSlug: "AartiS",
     sheetUrl: "https://www.instagram.com/thesortedgirl/",
   },
   {
     id: "c78", name: "Gayatri Agrawal", handle: "@gayatri.tech",
     platform: "Instagram", tier: "Mid", niche: "Tech / Finance",
     agency: "Direct", contactEmail: "", status: "Active",
-    followers: 210000, avgViews: 0,
+    followers: 210000, avgViews: 53448, dubLinkSlug: "Gayatri",
     sheetUrl: "https://www.instagram.com/gayatri.tech/",
   },
   {
     id: "c79", name: "Anurag Bansal", handle: "@businesswithbansal",
-    platform: "Instagram", tier: "Mid", niche: "Business / Finance",
+    platform: "YouTube", tier: "Mid", niche: "Business / Finance",
     agency: "Direct", contactEmail: "", status: "Active",
-    followers: 366000, avgViews: 0,
-    sheetUrl: "https://www.instagram.com/businesswithbansal",
+    followers: 289000, avgViews: 45271, dubLinkSlug: "Anurag",
+    sheetUrl: "https://www.youtube.com/@businesswithbansal",
   },
   {
     id: "c80", name: "Ayush Wadhwa", handle: "@ayushwadhwa",
     platform: "Instagram", tier: "Mid", niche: "Business / Entrepreneurship",
     agency: "Direct", contactEmail: "", status: "Active",
-    followers: 380000, avgViews: 0,
+    followers: 380000, avgViews: 38676, dubLinkSlug: "Ayush",
     sheetUrl: "https://www.instagram.com/ayushwadhwa/?hl=en",
   },
   {
     id: "c81", name: "Jivraj Sachar", handle: "@jivrajsinghsachar",
     platform: "LinkedIn", tier: "Micro", niche: "Career / Productivity",
     agency: "Palak", contactEmail: "", status: "Active",
-    followers: 53000, avgViews: 0,
+    followers: 53000, avgViews: 0, dubLinkSlug: "Jivraj",
     sheetUrl: "https://www.linkedin.com/in/jivrajsinghsachar/",
   },
   {
     id: "c82", name: "Miti Shah", handle: "@miti-shah-content-creator",
     platform: "LinkedIn", tier: "Micro", niche: "Content / Marketing",
     agency: "Palak", contactEmail: "", status: "Active",
-    followers: 87000, avgViews: 0,
+    followers: 87000, avgViews: 0, dubLinkSlug: "MitiS",
     sheetUrl: "https://www.linkedin.com/in/miti-shah-content-creator/",
   },
   {
     id: "c83", name: "Ansh Mehra", handle: "@anshmehraofficial",
     platform: "Instagram", tier: "Mid", niche: "Business / Finance",
     agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 255000, avgViews: 0,
+    followers: 255000, avgViews: 109768, dubLinkSlug: "AnshM",
     sheetUrl: "https://www.youtube.com/channel/UCZknyXD-6tETm9aN8GQCi8g",
   },
   {
     id: "c84", name: "Paras Madan", handle: "@parasmadan.in",
     platform: "Instagram", tier: "Mid", niche: "Finance / Career",
     agency: "Palak", contactEmail: "", status: "Active",
-    followers: 219000, avgViews: 0,
+    followers: 219000, avgViews: 35912, dubLinkSlug: "ParasM",
     sheetUrl: "https://www.instagram.com/parasmadan.in",
   },
   {
     id: "c85", name: "Anik Jain", handle: "@anikjaindesign",
     platform: "Instagram", tier: "Macro", niche: "Design / Business",
     agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 463000, avgViews: 0,
+    followers: 463000, avgViews: 32000, dubLinkSlug: "AnikJ",
     sheetUrl: "https://www.instagram.com/anikjaindesign/?hl=en",
   },
   {
     id: "c86", name: "Aditya Agrawal", handle: "@aditya-agrawal-95422616a",
     platform: "LinkedIn", tier: "Micro", niche: "Business / Entrepreneurship",
     agency: "Palak", contactEmail: "", status: "Active",
-    followers: 40000, avgViews: 0,
+    followers: 40000, avgViews: 0, dubLinkSlug: "AdityaA",
     sheetUrl: "https://www.linkedin.com/in/aditya-agrawal-95422616a/",
+  },
+  {
+    id: "c87", name: "Ishan Sharma", handle: "@IshanSharmaYT",
+    platform: "YouTube", tier: "Macro", niche: "Tech / AI / Productivity",
+    agency: "Direct", contactEmail: "", status: "Active",
+    followers: 2150000, avgViews: 99325, dubLinkSlug: "IshanYT",
+    sheetUrl: "https://youtu.be/StMC4AU7Bds",
+  },
+  {
+    id: "c88", name: "Vaibhav Sisinity", handle: "@VaibhavSisinity",
+    platform: "YouTube", tier: "Macro", niche: "Tech / AI / Productivity",
+    agency: "Direct", contactEmail: "", status: "Active",
+    followers: 726000, avgViews: 139865, dubLinkSlug: "vaibhavyt",
+    sheetUrl: "https://www.youtube.com/watch?v=iH5vjVacPG8",
   },
   // ── Owled ─────────────────────────────────────────────────────
   // gommaboy — profile & reel both 404 as of 20 Jun 2026 (account deactivated)
@@ -336,7 +350,7 @@ export const creators: Creator[] = [
     id: "c35", name: "Suryakant Chaurasiya", handle: "@suryakantchaurasiya",
     platform: "LinkedIn", tier: "Mid", niche: "Startups / Founder",
     agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 52000, avgViews: 3556,
+    followers: 52000, avgViews: 3556, dubLinkSlug: "suryakant-chaurasiya",
     sheetUrl: "https://www.linkedin.com/in/suryakantchaurasiya/",
   },
   {
@@ -441,210 +455,207 @@ export const creators: Creator[] = [
   {
     id: "c67", name: "Coding with Sagar", handle: "@codingwithsagar",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 485000, avgViews: 45000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 485000, avgViews: 29228, dubLinkSlug: "codingwithsagar",
     sheetUrl: "https://www.youtube.com/watch?v=2tagcO5v9aw",
   },
   {
     id: "c68", name: "Nishant Chahar", handle: "@nishantchahar",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 579000, avgViews: 10000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 579000, avgViews: 14912, dubLinkSlug: "nishantchahar",
     sheetUrl: "https://youtu.be/78z_gw5rh6s",
   },
   {
     id: "c69", name: "Saumya Singh", handle: "@saumyasingh",
     platform: "YouTube", tier: "Mid", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 195000, avgViews: 90000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 195000, avgViews: 5499, dubLinkSlug: "saumyasingh",
     sheetUrl: "https://youtu.be/mJOUQ700KaY",
   },
   {
     id: "c70", name: "Pavan Lalwani", handle: "@pavanlalwani",
     platform: "YouTube", tier: "Mid", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 320000, avgViews: 23000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 320000, avgViews: 23000, dubLinkSlug: "pavanlalwani",
     sheetUrl: "https://www.youtube.com/watch?v=OrJpkD7XHt0",
   },
   {
     id: "c71", name: "Mehul Mohan", handle: "@mehulmohan",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 469000, avgViews: 6000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 469000, avgViews: 16219, dubLinkSlug: "mehulmpt",
     sheetUrl: "https://youtu.be/y--xkGbsmZc",
   },
   {
     id: "c72", name: "Sheryians Coding", handle: "@sheryianscoding",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
+    agency: "Discovr", contactEmail: "", status: "Active",
     followers: 703000, avgViews: 25000,
     sheetUrl: "https://www.youtube.com/@sheryians",
   },
   {
     id: "c73", name: "Engineering Digest", handle: "@engineeringdigest",
     platform: "YouTube", tier: "Mid", niche: "Coding / Engineering",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 248000, avgViews: 9000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 248000, avgViews: 2184, dubLinkSlug: "engineeringdigest",
     sheetUrl: "https://www.youtube.com/@engineeringdigest",
   },
   {
     id: "c74", name: "Arsh Goyal", handle: "@arshgoyal",
     platform: "YouTube", tier: "Mid", niche: "Coding / Dev / DSA",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 280000, avgViews: 2500,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 280000, avgViews: 2500, dubLinkSlug: "arshgoyal",
     sheetUrl: "https://www.youtube.com/@arshgoyal",
   },
   {
     id: "c75", name: "Code And Bug", handle: "@codeandbug",
     platform: "YouTube", tier: "Nano", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 31600, avgViews: 12000,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 31600, avgViews: 12000, dubLinkSlug: "codeandbug",
     sheetUrl: "https://www.youtube.com/@codeandbug",
   },
   {
     id: "c76", name: "Astro", handle: "@astro-yt",
     platform: "YouTube", tier: "Micro", niche: "Coding / Dev",
-    agency: "Direct", contactEmail: "", status: "Active",
-    followers: 79000, avgViews: 2500,
+    agency: "Discovr", contactEmail: "", status: "Active",
+    followers: 79000, avgViews: 2500, dubLinkSlug: "astrokj",
     sheetUrl: "https://youtu.be/TRSfMlEnLJc",
   },
   // ── Wispr × WLDD June 2026 — Instagram ─────────────────────
   {
     id: "c50", name: "infoby_shree", handle: "@infoby_shree",
     platform: "Instagram", tier: "Micro", niche: "Regional / Kannada",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 15039,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 0, avgViews: 15039, dubLinkSlug: "infobyshree",
     sheetUrl: "https://www.instagram.com/infoby_shree/",
   },
   {
     id: "c51", name: "insta__nirav", handle: "@insta__nirav",
     platform: "Instagram", tier: "Micro", niche: "Regional / Gujarati",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 4139,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 0, avgViews: 4139, dubLinkSlug: "insta-nirav",
     sheetUrl: "https://www.instagram.com/insta__nirav/",
   },
   {
     id: "c52", name: "kochu.ai", handle: "@kochu.ai",
     platform: "Instagram", tier: "Micro", niche: "Regional / Malayalam",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 20168,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 0, avgViews: 20168, dubLinkSlug: "kochu-ai",
     sheetUrl: "https://www.instagram.com/kochu.ai/",
   },
   {
     id: "c53", name: "financewithjobi", handle: "@financewithjobi",
     platform: "Instagram", tier: "Micro", niche: "Regional / Finance / Kannada",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 0,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 0, avgViews: 0, dubLinkSlug: "financewithjobi",
     sheetUrl: "https://www.instagram.com/financewithjobi/",
   },
   {
     id: "c54", name: "prettymuchbusiness", handle: "@prettymuchbusiness",
     platform: "Instagram", tier: "Mid", niche: "Regional / Business / Kannada",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 0, avgViews: 0,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 0, avgViews: 0, dubLinkSlug: "prettymuchbusiness",
     sheetUrl: "https://www.instagram.com/prettymuchbusiness/",
   },
   // ── Wispr × WLDD June 2026 — YouTube ───────────────────────
   {
     id: "c55", name: "Apple Wale Bhaiya", handle: "@applewale-bhaiya",
     platform: "YouTube", tier: "Micro", niche: "Mac / Gadgets / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 38200, avgViews: 10858,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 38200, avgViews: 10858, dubLinkSlug: "applewale-bhaiya",
     sheetUrl: "https://youtu.be/KtZwESJLohc",
   },
   {
     id: "c56", name: "ezsnippet", handle: "@ezsnippet",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 810000, avgViews: 146817,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 810000, avgViews: 157453, dubLinkSlug: "ezsnippet",
     sheetUrl: "https://www.youtube.com/@ezsnippet",
   },
   {
     id: "c57", name: "Vaibhav Kadnar", handle: "@vaibhavkadnar",
     platform: "YouTube", tier: "Macro", niche: "Business / Finance / Hindi",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 7000000, avgViews: 122900,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 7000000, avgViews: 153279, dubLinkSlug: "vaibhavkadnar",
     sheetUrl: "https://youtu.be/szGD3CmhulY",
   },
   {
     id: "c58", name: "bisboworld", handle: "@bisboworld",
     platform: "YouTube", tier: "Macro", niche: "Business / Finance / English",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 871000, avgViews: 48473,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 871000, avgViews: 48473, dubLinkSlug: "bisboworld",
     sheetUrl: "https://www.youtube.com/@bisboworld",
   },
   {
     id: "c59", name: "Akber Shaikh", handle: "@akbershaikh",
     platform: "YouTube", tier: "Micro", niche: "Coding / Dev / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 96600, avgViews: 17367,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 96600, avgViews: 23829, dubLinkSlug: "akbershaikh",
     sheetUrl: "https://youtu.be/HgsoWFIaT18",
   },
   {
     id: "c60", name: "WhyBhanshu", handle: "@WhyBhanshu",
     platform: "YouTube", tier: "Macro", niche: "Business / Finance / English",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 101000, avgViews: 4370,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 101000, avgViews: 6557, dubLinkSlug: "WhyBhanshu",
     sheetUrl: "https://youtu.be/cjp0IXYbw6I",
   },
   {
     id: "c61", name: "Mohammed Fraz", handle: "@mohammedfraz",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
-    followers: 563000, avgViews: 0,
+    agency: "WLDD", contactEmail: "", status: "Active",
+    followers: 563000, avgViews: 28344,
     sheetUrl: "https://www.youtube.com/@mohammedfraz",
   },
   {
     id: "c62", name: "Think Wings", handle: "@thinkwings",
     platform: "YouTube", tier: "Mid", niche: "Business / Finance / Hindi",
-    agency: "Social Tag", contactEmail: "", status: "Active",
+    agency: "WLDD", contactEmail: "", status: "Active",
     followers: 0, avgViews: 0,
     sheetUrl: "https://www.youtube.com/@thinkwings",
   },
   {
     id: "c63", name: "Full Disclosure", handle: "@fulldisclosureyt",
     platform: "YouTube", tier: "Mid", niche: "Business / Finance / English",
-    agency: "Social Tag", contactEmail: "", status: "Active",
+    agency: "WLDD", contactEmail: "", status: "Active",
     followers: 0, avgViews: 0,
     sheetUrl: "https://www.youtube.com/@fulldisclosureyt",
   },
   {
     id: "c64", name: "Technical Suneja", handle: "@technicalsuneja",
     platform: "YouTube", tier: "Macro", niche: "Coding / Dev / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
+    agency: "WLDD", contactEmail: "", status: "Active",
     followers: 0, avgViews: 0,
     sheetUrl: "https://www.youtube.com/@technicalsuneja",
   },
   {
     id: "c65", name: "Dhaval Kataria", handle: "@dhavalkataria",
     platform: "YouTube", tier: "Mid", niche: "AI / Business / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
+    agency: "WLDD", contactEmail: "", status: "Active",
     followers: 0, avgViews: 0,
     sheetUrl: "https://www.youtube.com/@dhavalkataria",
   },
   {
     id: "c66", name: "Tharun Speaks", handle: "@tharunspeaks",
     platform: "YouTube", tier: "Macro", niche: "Business / Growth / Hinglish",
-    agency: "Social Tag", contactEmail: "", status: "Active",
+    agency: "WLDD", contactEmail: "", status: "Active",
     followers: 0, avgViews: 0,
     sheetUrl: "https://www.youtube.com/@tharunspeaks",
   },
 ];
 
-// Total Finnet spend:  ₹4L + 3L + 2L + 12K + 2.75L + 1.6L = ₹13,47,000
-// Total AOS spend:     $4500 + $1920 + $5000 = $11,420 × ₹84 = ₹9,59,280
-// Total Owled spend:   ₹4,20,000 + 1,50,000 + 90,086 + 1,40,000 + 2,40,000 + 1,32,063 + 5,50,000 + 3,63,172 + 5,50,000 + 5,50,000 = ₹31,85,321
 export const campaigns: Campaign[] = [
   {
-    // Merged: Finnet (c1-c7) + AEOS (c8-c10) + Owled (c11-c20) + LinkedIn Seeding (c21-c31) + Batch 1 (c77-c86)
-    // Budget: ₹1,347,000 (Finnet) + ₹1,030,000 (AEOS corrected) + ₹3,185,321 (Owled)
-    //       + ₹0 (LinkedIn Seeding) + ₹2,310,000 (Batch 1: Palak/Direct/Social Tag) = ₹7,872,321
+    // camp-india total: ₹13,47,000 (Finnet) + ₹1,30,280 (AEOS USD×84) + ₹31,85,321 (Owled)
+    //   + ₹0 (LinkedIn Seeding) + ₹23,10,000 (Batch 1) + ₹1,00,000 (Anurag IG Reel 2) = ₹80,98,321
+    // Verified by: npm run audit:data
     id: "camp-india",
     name: "Wispr India Launch",
     startDate: "2026-02-01",
     endDate: "2026-06-14",
-    totalBudget: 7872321,
-    totalSpend: 7872321,
+    totalBudget: 8098321,
+    totalSpend: 8098321,
     status: "Ended",
     primaryPlatform: "Multi",
     creatorIds: [
@@ -670,18 +681,22 @@ export const campaigns: Campaign[] = [
     goal: "Mumbai Tech Week activation — LinkedIn creator network posting live from the event with referral links",
   },
   {
-    // Merged: WLDD (camp6) + Coding First (camp7) — July overflow included
-    // Budget: ₹0 (WLDD) + ₹1,182,000 (Coding First) = ₹1,182,000
+    // Merged: WLDD + Coding First + Direct (Ishan, Vaibhav, Anurag YT)
+    // Budget: ₹35,00,000 (WLDD est.) + ₹11,82,000 (Coding First) + ₹5,46,000 (Ishan) + ₹8,40,000 (Vaibhav) + ₹6,00,000 (Anurag YT) + ₹1,26,000 (Nandini v92) = ₹67,94,000
     id: "camp-june",
     name: "June 2026",
     startDate: "2026-06-01",
-    totalBudget: 1182000,
-    totalSpend: 0,
+    totalBudget: 6627000,
+    totalSpend: 6627000,
     status: "Active",
     primaryPlatform: "Multi",
     creatorIds: [
       "c50","c51","c52","c53","c54","c55","c56","c57","c58","c59","c60","c61","c62","c63","c64","c65","c66", // WLDD
       "c67","c68","c69","c70","c71","c72","c73","c74","c75","c76",  // Coding First
+      "c7",  // CA Nandini (second YT video)
+      "c87", // Ishan Sharma
+      "c88", // Vaibhav Sisinity
+      "c79", // Anurag Bansal (YouTube)
     ],
     goal: "Monthly programming — YouTube and Instagram content from coding/dev and regional creator cohorts (WLDD + Coding First)",
   },
@@ -740,8 +755,8 @@ export const videos: Video[] = [
   // ── Finnet — YouTube ────────────────────────────────────────
   {
     id: "v7", creatorId: "c7", creatorName: "CA Nandini", campaignId: "camp-india",
-    title: "CA Nandini",
-    url: "https://www.youtube.com/watch?v=0mr6d9z8iio",
+    title: "give me 8 minutes and you'll never forget anything",
+    url: "https://www.youtube.com/watch?v=K119PfYh-KY",
     platform: "YouTube", goLiveDate: "2026-03-25", format: "Integration", status: "Live",
   },
   // ── AOS — Instagram ─────────────────────────────────────────
@@ -778,9 +793,15 @@ export const videos: Video[] = [
   },
   {
     id: "v79", creatorId: "c79", creatorName: "Anurag Bansal", campaignId: "camp-india",
-    title: "Anurag Bansal",
+    title: "Anurag Bansal — IG Reel 1",
     url: "https://www.instagram.com/reel/DWEP0bCjA4L/",
     platform: "Instagram", goLiveDate: "2026-03-18", format: "Integration", status: "Live",
+  },
+  {
+    id: "v93", creatorId: "c79", creatorName: "Anurag Bansal", campaignId: "camp-india",
+    title: "Anurag Bansal — IG Reel 2",
+    url: "https://www.instagram.com/reel/DXrQdcPDKzz/",
+    platform: "Instagram", goLiveDate: "2026-05-01", format: "Integration", status: "Live",
   },
   {
     id: "v80", creatorId: "c80", creatorName: "Ayush Wadhwa", campaignId: "camp-india",
@@ -809,7 +830,7 @@ export const videos: Video[] = [
   {
     id: "v84", creatorId: "c84", creatorName: "Paras Madan", campaignId: "camp-india",
     title: "Paras Madan",
-    url: "https://www.instagram.com/reels/DWIrGS6E9ic/",
+    url: "https://www.instagram.com/reel/DWIrGS6E9ic/",
     platform: "Instagram", goLiveDate: "2026-03-19", format: "Integration", status: "Live",
   },
   {
@@ -824,12 +845,55 @@ export const videos: Video[] = [
     url: "https://www.linkedin.com/in/aditya-agrawal-95422616a/",
     platform: "LinkedIn", goLiveDate: "2026-03-20", format: "Integration", status: "Live",
   },
+  {
+    id: "v92", creatorId: "c7", creatorName: "CA Nandini", campaignId: "camp-june",
+    title: "This AI Tool is Better Than Claude? The Results will Shock You!",
+    url: "https://youtu.be/rFERndCDp28",
+    platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live",
+  },
+  {
+    id: "v87", creatorId: "c87", creatorName: "Ishan Sharma", campaignId: "camp-june",
+    title: "10 Claude Skills I Can't Live Without",
+    url: "https://youtu.be/StMC4AU7Bds",
+    platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live",
+  },
+  {
+    id: "v88", creatorId: "c87", creatorName: "Ishan Sharma", campaignId: "camp-june",
+    title: "I stopped typing after using this AI tool! Wispr Flow Tutorial",
+    url: "https://youtu.be/U9GtEUFCGdE",
+    platform: "YouTube", goLiveDate: "2026-04-25", format: "Dedicated", status: "Live",
+  },
+  {
+    id: "v94", creatorId: "c87", creatorName: "Ishan Sharma", campaignId: "camp-june",
+    title: "Full Claude Tutorial For Beginners",
+    url: "https://youtu.be/Nql-5Ph3xZs",
+    platform: "YouTube", goLiveDate: "2026-06-05", format: "Integration", status: "Live",
+  },
+  {
+    id: "v91", creatorId: "c88", creatorName: "Vaibhav Sisinity", campaignId: "camp-june",
+    title: "Claude Fable 5 Is Mythos. The Most Powerful AI Ever Made Is Now Public",
+    url: "https://www.youtube.com/watch?v=iH5vjVacPG8",
+    platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live",
+  },
+  {
+    id: "v89", creatorId: "c79", creatorName: "Anurag Bansal", campaignId: "camp-june",
+    title: "IPL's Crazy Money-Making Model Explained",
+    url: "https://www.youtube.com/watch?v=MIW5YlwoPlY",
+    platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live",
+  },
+  {
+    id: "v90", creatorId: "c79", creatorName: "Anurag Bansal", campaignId: "camp-june",
+    title: "Amazon's Big Problem With 10-Minute Delivery",
+    url: "https://www.youtube.com/watch?v=eyaQ1zeqNeY",
+    platform: "YouTube", goLiveDate: "2026-06-10", format: "Integration", status: "Live",
+  },
   // ── Owled — Instagram ───────────────────────────────────────
   {
     id: "v11", creatorId: "c11", creatorName: "gommaboy", campaignId: "camp-india",
     title: "gommaboy",
     url: "https://www.instagram.com/reel/DXok0rJD2GF/",
     platform: "Instagram", goLiveDate: "2026-05-07", format: "Integration", status: "Live",
+    confirmedDeleted: true,
   },
   {
     id: "v12", creatorId: "c12", creatorName: "Kartik Sadvij", campaignId: "camp-india",
@@ -920,8 +984,8 @@ export const videos: Video[] = [
   { id: "v50", creatorId: "c50", creatorName: "infoby_shree",       campaignId: "camp-june", title: "infoby_shree",         url: "https://www.instagram.com/reel/DZXUbN9qNmI/",               platform: "Instagram", goLiveDate: "2026-06-07", format: "Integration", status: "Live" },
   { id: "v51", creatorId: "c51", creatorName: "insta__nirav",        campaignId: "camp-june", title: "insta__nirav",          url: "https://www.instagram.com/reel/DZXW7oqsqIf/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
   { id: "v52", creatorId: "c52", creatorName: "kochu.ai",            campaignId: "camp-june", title: "kochu.ai",              url: "https://www.instagram.com/reel/DZXSVpBygnD/",               platform: "Instagram", goLiveDate: "2026-06-09", format: "Integration", status: "Live" },
-  { id: "v53", creatorId: "c53", creatorName: "financewithjobi",     campaignId: "camp-june", title: "financewithjobi",       url: "https://www.instagram.com/reel/DZmwJA2Jzz_/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
-  { id: "v54", creatorId: "c54", creatorName: "prettymuchbusiness",  campaignId: "camp-june", title: "prettymuchbusiness",    url: "https://www.instagram.com/reel/DZpZdqCRGFy/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live" },
+  { id: "v53", creatorId: "c53", creatorName: "financewithjobi",     campaignId: "camp-june", title: "financewithjobi",       url: "https://www.instagram.com/reel/DZmwJA2Jzz_/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live", missingInsightReason: "Agency (Social Tag) has not shared IG insights" },
+  { id: "v54", creatorId: "c54", creatorName: "prettymuchbusiness",  campaignId: "camp-june", title: "prettymuchbusiness",    url: "https://www.instagram.com/reel/DZpZdqCRGFy/",               platform: "Instagram", goLiveDate: "2026-06-15", format: "Integration", status: "Live", missingInsightReason: "Agency (Social Tag) has not shared IG insights" },
   // ── Wispr × WLDD June 2026 — YouTube ───────────────────────
   { id: "v55", creatorId: "c55", creatorName: "Apple Wale Bhaiya",   campaignId: "camp-june", title: "10 Mac Apps To Fix 10 Mac Problems!",        url: "https://youtu.be/KtZwESJLohc",                               platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
   { id: "v56", creatorId: "c56", creatorName: "ezsnippet",           campaignId: "camp-june", title: "VIBE Coding is DEAD 💀",                     url: "https://www.youtube.com/watch?v=G0YnO9rown0",                platform: "YouTube",   goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
@@ -929,23 +993,23 @@ export const videos: Video[] = [
   { id: "v58", creatorId: "c58", creatorName: "bisboworld",          campaignId: "camp-june", title: "Ola's Krutrim AI failure vs Sarvam",         url: "https://youtu.be/uuxdQx9EvVg",                               platform: "YouTube",   goLiveDate: "2026-06-13", format: "Integration", status: "Live" },
   { id: "v59", creatorId: "c59", creatorName: "Akber Shaikh",        campaignId: "camp-june", title: "Internship Strategy",                        url: "https://youtu.be/HgsoWFIaT18",                               platform: "YouTube",   goLiveDate: "2026-06-19", format: "Integration", status: "Live" },
   { id: "v60", creatorId: "c60", creatorName: "WhyBhanshu",          campaignId: "camp-june", title: "FIFA World Cup cost breakdown",               url: "https://youtu.be/cjp0IXYbw6I",                               platform: "YouTube",   goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
-  { id: "v61", creatorId: "c61", creatorName: "Mohammed Fraz",       campaignId: "camp-june", title: "Mohammed Fraz",         url: "https://www.youtube.com/@mohammedfraz",                      platform: "YouTube",   goLiveDate: "2026-06-21", format: "Integration", status: "Live" },
+  { id: "v61", creatorId: "c61", creatorName: "Mohammed Fraz",       campaignId: "camp-june", title: "The End of LeetCode? How AI Changed FAANG Interviews in 2026", url: "https://youtu.be/9tlsHKAoPkY", platform: "YouTube", goLiveDate: "2026-06-21", format: "Integration", status: "Live" },
   { id: "v62", creatorId: "c62", creatorName: "Think Wings",         campaignId: "camp-june", title: "Think Wings",           url: "https://www.youtube.com/@thinkwings",                         platform: "YouTube",   goLiveDate: "2026-06-27", format: "Integration", status: "Scheduled" },
   { id: "v63", creatorId: "c63", creatorName: "Full Disclosure",     campaignId: "camp-june", title: "Full Disclosure",       url: "https://www.youtube.com/@fulldisclosureyt",                   platform: "YouTube",   goLiveDate: "2026-06-30", format: "Integration", status: "Scheduled" },
   { id: "v64", creatorId: "c64", creatorName: "Technical Suneja",    campaignId: "camp-june", title: "Technical Suneja",      url: "https://www.youtube.com/@technicalsuneja",                    platform: "YouTube",   goLiveDate: "2026-07-03", format: "Integration", status: "Scheduled" },
   { id: "v65", creatorId: "c65", creatorName: "Dhaval Kataria",      campaignId: "camp-june", title: "Dhaval Kataria",        url: "https://www.youtube.com/@dhavalkataria",                      platform: "YouTube",   goLiveDate: "2026-07-07", format: "Integration", status: "Scheduled" },
   { id: "v66", creatorId: "c66", creatorName: "Tharun Speaks",       campaignId: "camp-june", title: "Tharun Speaks",         url: "https://www.youtube.com/@tharunspeaks",                       platform: "YouTube",   goLiveDate: "2026-07-10", format: "Integration", status: "Scheduled" },
   // ── Coding First — June 2026 (YouTube) ─────────────────────
-  { id: "v67", creatorId: "c67", creatorName: "Coding with Sagar",  campaignId: "camp-june", title: "Coding with Sagar",   url: "https://www.youtube.com/watch?v=2tagcO5v9aw",   platform: "YouTube", goLiveDate: "2026-06-05", format: "Integration", status: "Live" },
-  { id: "v68", creatorId: "c68", creatorName: "Nishant Chahar",     campaignId: "camp-june", title: "Nishant Chahar",      url: "https://youtu.be/78z_gw5rh6s",                  platform: "YouTube", goLiveDate: "2026-06-08", format: "Integration", status: "Live" },
-  { id: "v69", creatorId: "c69", creatorName: "Saumya Singh",       campaignId: "camp-june", title: "Saumya Singh",        url: "https://youtu.be/mJOUQ700KaY",                  platform: "YouTube", goLiveDate: "2026-06-03", format: "Integration", status: "Live" },
-  { id: "v70", creatorId: "c70", creatorName: "Pavan Lalwani",      campaignId: "camp-june", title: "Pavan Lalwani",       url: "https://www.youtube.com/watch?v=OrJpkD7XHt0",   platform: "YouTube", goLiveDate: "2026-06-17", format: "Integration", status: "Live" },
-  { id: "v71", creatorId: "c71", creatorName: "Mehul Mohan",        campaignId: "camp-june", title: "Mehul Mohan",         url: "https://youtu.be/y--xkGbsmZc",                  platform: "YouTube", goLiveDate: "2026-06-12", format: "Integration", status: "Live" },
-  { id: "v72", creatorId: "c72", creatorName: "Sheryians Coding",   campaignId: "camp-june", title: "Sheryians Coding",    url: "https://www.youtube.com/@sheryians",             platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live" },
-  { id: "v73", creatorId: "c73", creatorName: "Engineering Digest", campaignId: "camp-june", title: "Engineering Digest",  url: "https://www.youtube.com/@engineeringdigest",     platform: "YouTube", goLiveDate: "2026-06-06", format: "Integration", status: "Live" },
-  { id: "v74", creatorId: "c74", creatorName: "Arsh Goyal",         campaignId: "camp-june", title: "Arsh Goyal",          url: "https://www.youtube.com/@arshgoyal",             platform: "YouTube", goLiveDate: "2026-06-23", format: "Integration", status: "Scheduled" },
-  { id: "v75", creatorId: "c75", creatorName: "Code And Bug",       campaignId: "camp-june", title: "Code And Bug",        url: "https://www.youtube.com/@codeandbug",            platform: "YouTube", goLiveDate: "2026-06-20", format: "Integration", status: "Live" },
-  { id: "v76", creatorId: "c76", creatorName: "Astro",              campaignId: "camp-june", title: "Astro",               url: "https://youtu.be/TRSfMlEnLJc",                  platform: "YouTube", goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
+  { id: "v67", creatorId: "c67", creatorName: "Coding with Sagar",  campaignId: "camp-june", title: "FastAPI for Machine Learning - Full Course",                          url: "https://www.youtube.com/watch?v=2tagcO5v9aw",   platform: "YouTube", goLiveDate: "2026-06-05", format: "Integration", status: "Live" },
+  { id: "v68", creatorId: "c68", creatorName: "Nishant Chahar",     campaignId: "camp-june", title: "SKILLS That Will Get You High-Paying Jobs in 2026",                   url: "https://youtu.be/78z_gw5rh6s",                  platform: "YouTube", goLiveDate: "2026-06-08", format: "Integration", status: "Live" },
+  { id: "v69", creatorId: "c69", creatorName: "Saumya Singh",       campaignId: "camp-june", title: "I Reviewed 1000+ Resumes. These Projects Get You Hired in 2026",     url: "https://youtu.be/mJOUQ700KaY",                  platform: "YouTube", goLiveDate: "2026-06-03", format: "Integration", status: "Live" },
+  { id: "v70", creatorId: "c70", creatorName: "Pavan Lalwani",      campaignId: "camp-june", title: "I Used Power BI MCP and It Replaced Hours of Manual Work (2026)",    url: "https://www.youtube.com/watch?v=OrJpkD7XHt0",   platform: "YouTube", goLiveDate: "2026-06-17", format: "Integration", status: "Live" },
+  { id: "v71", creatorId: "c71", creatorName: "Mehul Mohan",        campaignId: "camp-june", title: "You Can Finally Stop Using Bun",                                     url: "https://youtu.be/y--xkGbsmZc",                  platform: "YouTube", goLiveDate: "2026-06-12", format: "Integration", status: "Live" },
+  { id: "v72", creatorId: "c72", creatorName: "Sheryians Coding",   campaignId: "camp-june", title: "Sheryians Coding",    url: "https://www.youtube.com/@sheryians",             platform: "YouTube", goLiveDate: "2026-06-01", format: "Integration", status: "Live", missingInsightReason: "No confirmed video URL — view count from Google Sheet, unverified" },
+  { id: "v73", creatorId: "c73", creatorName: "Engineering Digest", campaignId: "camp-june", title: "These 5 AI Tools Make Developers More Valuable Than Ever", url: "https://youtu.be/p09Nx8evpgk", platform: "YouTube", goLiveDate: "2026-06-24", format: "Integration", status: "Live" },
+  { id: "v74", creatorId: "c74", creatorName: "Arsh Goyal",         campaignId: "camp-june", title: "Arsh Goyal",          url: "https://www.youtube.com/@arshgoyal",             platform: "YouTube", goLiveDate: "2026-06-23", format: "Integration", status: "Scheduled", missingInsightReason: "No confirmed video URL — scheduled or not yet confirmed live" },
+  { id: "v75", creatorId: "c75", creatorName: "Code And Bug",       campaignId: "camp-june", title: "Code And Bug",        url: "https://www.youtube.com/@codeandbug",            platform: "YouTube", goLiveDate: "2026-06-20", format: "Integration", status: "Live", missingInsightReason: "No confirmed video URL — view count from Google Sheet, unverified" },
+  { id: "v76", creatorId: "c76", creatorName: "Astro",              campaignId: "camp-june", title: "This FREE AI Coding Tool From Google Is Seriously Underrated!", url: "https://youtu.be/TRSfMlEnLJc", platform: "YouTube", goLiveDate: "2026-06-10", format: "Integration", status: "Live" },
 ];
 
 // Performance data sourced from IG Insights screenshots + Google Sheet
@@ -960,7 +1024,7 @@ export const performances: VideoPerformance[] = [
   { videoId: "v5", views: 79999,   likes: 1374,  comments: 175,   shares: 307,   saves: 508,   watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-20" },
   { videoId: "v6", views: 26000,   likes: 334,   comments: 28,    shares: 18,    saves: 61,    watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-20" },
   // Finnet YouTube (Sheet: Likes, Comments, Impressions, Views — no saves)
-  { videoId: "v7", views: 10700, likes: 427, comments: 38, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 288100, recordedAt: "2026-06-20" },
+  { videoId: "v7", views: 71075, likes: 427, comments: 38, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 1776900, recordedAt: "2026-06-25" },
   // AOS Aevy TV — 8 JPEG Drive screenshots (12–18 Mar 2026 session)
   {
     videoId: "v8", views: 80156, likes: 4146, comments: 153, shares: 1115, saves: 1096, reposts: 64,
@@ -970,23 +1034,31 @@ export const performances: VideoPerformance[] = [
   },
   // AOS Arjun Vaidya — arjun_insight.jpg (Drive, 17–18 Mar 2026)
   {
-    videoId: "v9", views: 33563, likes: 540, comments: 166, shares: 86, saves: 237, reposts: 7,
+    videoId: "v9", views: 27684, likes: 557, comments: 22, shares: 279, saves: 154, reposts: 7,
     watchTimeMinutes: 4228, profileFollows: 18,
     clickThroughs: 0, recordedAt: "2026-03-18",
   },
   // AOS Maitri Mangal — insights shared as video; data pending
-  { videoId: "v10", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-03-18" },
+  { videoId: "v10", views: 33563, likes: 700, comments: 0, shares: 85, saves: 237, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-03-18" },
   // Batch 1 — Palak / Direct / Social Tag — impressions pending from agency
-  { videoId: "v77", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Aarti Samant
-  { videoId: "v78", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Gayatri Agrawal
-  { videoId: "v79", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Anurag Bansal
-  { videoId: "v80", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Ayush Wadhwa
+  { videoId: "v77", views: 180000, likes: 2912, comments: 112, shares: 6623, saves: 2279, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Aarti Samant — Mastered Data
+  { videoId: "v78", views: 53448, likes: 1326, comments: 225, shares: 320, saves: 421, watchTimeMinutes: 0, clickThroughs: 0, impressions: 64411, recordedAt: "2026-06-27" }, // Gayatri Agrawal — Mastered Data
+  { videoId: "v79", views: 418204, likes: 10354, comments: 643, shares: 2258, saves: 3637, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Anurag Bansal — combined 2 IG posts from Mastered Data
+  { videoId: "v80", views: 38676, likes: 896, comments: 34, shares: 571, saves: 500, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Ayush Wadhwa — Mastered Data
   { videoId: "v81", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Jivraj Sachar
   { videoId: "v82", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Miti Shah
-  { videoId: "v83", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Ansh Mehra
-  { videoId: "v84", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Paras Madan
-  { videoId: "v85", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Anik Jain
+  { videoId: "v83", views: 109768, likes: 472, comments: 88, shares: 135, saves: 218, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Ansh Mehra — Mastered Data
+  { videoId: "v84", views: 35912, likes: 762, comments: 161, shares: 381, saves: 522, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Paras Madan — Mastered Data
+  { videoId: "v85", views: 32000, likes: 1100, comments: 41, shares: 83, saves: 187, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Anik Jain — Mastered Data
   { videoId: "v86", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // Aditya Agrawal
+  { videoId: "v93", views: 0, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-27" }, // Anurag Bansal — IG Reel 2: views aggregated into v79 combined total (418,204)
+  { videoId: "v92", views: 19322, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 483000, recordedAt: "2026-06-25" }, // CA Nandini — This AI Tool is Better Than Claude?
+  { videoId: "v87", views: 150832, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 2200000, reportedImpressions: 2200000, impressionSource: "platform" as const, recordedAt: "2026-06-25" }, // Ishan Sharma — 10 Claude Skills (YT Studio: 2.2M imp, 5.0% CTR)
+  { videoId: "v88", views: 18743,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 302900,  reportedImpressions: 302900,  impressionSource: "platform" as const, recordedAt: "2026-06-25" }, // Ishan Sharma — Wispr Flow Tutorial (YT Studio: 302.9K imp, 4.4% CTR)
+  { videoId: "v94", views: 128400, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 2100000, reportedImpressions: 2100000, impressionSource: "platform" as const, recordedAt: "2026-06-25" }, // Ishan Sharma — Full Claude Tutorial (YT Studio: 2.1M imp, 4.5% CTR)
+  { videoId: "v91", views: 139918, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 1700000, reportedImpressions: 1700000, impressionSource: "platform" as const, recordedAt: "2026-06-25" }, // Vaibhav Sisinity — Claude Fable 5 (YT Studio: 1.7M imp, 5.9% CTR)
+  { videoId: "v89", views: 65154,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 1629000, recordedAt: "2026-06-25" }, // Anurag Bansal — IPL Money-Making
+  { videoId: "v90", views: 25389,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0, impressions: 634700,  recordedAt: "2026-06-25" }, // Anurag Bansal — Amazon Delivery
   // Owled — full metrics from Sheet 4 (1b13aZcqM5q82Hm9KQLKxDVwdVWxdguiBxxgJLrpYzp8), synced 22 Jun 2026
   { videoId: "v11", views: 0,       likes: 0,     comments: 0,   shares: 0,    saves: 0,    reposts: 0,   watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" }, // gommaboy — page deleted
   { videoId: "v12", views: 4640,    likes: 148,   comments: 6,   shares: 24,   saves: 6,    reposts: 4,   watchTimeMinutes: 0, clickThroughs: 0, recordedAt: "2026-06-22" },
@@ -1037,29 +1109,29 @@ export const performances: VideoPerformance[] = [
   { videoId: "v53", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 685,  recordedAt: "2026-06-22" }, // views not in tracker
   { videoId: "v54", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 65,   recordedAt: "2026-06-22" }, // views not in tracker
   // YouTube
-  { videoId: "v55", views: 10858,  likes: 489,  comments: 139, shares: 0, watchTimeMinutes: 0, clickThroughs: 168,  recordedAt: "2026-06-22" },
-  { videoId: "v56", views: 146817, likes: 7962, comments: 406, shares: 0, watchTimeMinutes: 0, clickThroughs: 1740, recordedAt: "2026-06-22" },
-  { videoId: "v57", views: 122900, likes: 4636, comments: 209, shares: 0, watchTimeMinutes: 0, clickThroughs: 438,  recordedAt: "2026-06-22" },
-  { videoId: "v58", views: 48473,  likes: 889,  comments: 70,  shares: 0, watchTimeMinutes: 0, clickThroughs: 51,   recordedAt: "2026-06-22" },
-  { videoId: "v59", views: 17367,  likes: 1279, comments: 250, shares: 0, watchTimeMinutes: 0, clickThroughs: 96,   recordedAt: "2026-06-22" },
-  { videoId: "v60", views: 4370,   likes: 275,  comments: 45,  shares: 0, watchTimeMinutes: 0, clickThroughs: 65,   recordedAt: "2026-06-22" },
-  { videoId: "v61", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 1,    recordedAt: "2026-06-22" }, // post link missing
+  { videoId: "v55", views: 11354,  likes: 489,  comments: 139, shares: 0, watchTimeMinutes: 0, clickThroughs: 168,  recordedAt: "2026-06-25" },
+  { videoId: "v56", views: 157488, likes: 7962, comments: 406, shares: 0, watchTimeMinutes: 0, clickThroughs: 1740, recordedAt: "2026-06-25" },
+  { videoId: "v57", views: 153343, likes: 4636, comments: 209, shares: 0, watchTimeMinutes: 0, clickThroughs: 438,  recordedAt: "2026-06-25" },
+  { videoId: "v58", views: 50170,  likes: 889,  comments: 70,  shares: 0, watchTimeMinutes: 0, clickThroughs: 51,   recordedAt: "2026-06-25" },
+  { videoId: "v59", views: 23829,  likes: 1279, comments: 250, shares: 0, watchTimeMinutes: 0, clickThroughs: 96,   recordedAt: "2026-06-25" },
+  { videoId: "v60", views: 6557,   likes: 275,  comments: 45,  shares: 0, watchTimeMinutes: 0, clickThroughs: 65,   recordedAt: "2026-06-25" },
+  { videoId: "v61", views: 28411,  likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 1,    recordedAt: "2026-06-25" }, // Mohammed Fraz
   { videoId: "v62", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 1,    recordedAt: "2026-06-22" }, // not yet live
   { videoId: "v63", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 0,    recordedAt: "2026-06-22" },
   { videoId: "v64", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 1,    recordedAt: "2026-06-22" },
   { videoId: "v65", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 0,    recordedAt: "2026-06-22" },
   { videoId: "v66", views: 0,      likes: 0,    comments: 0,   shares: 0, watchTimeMinutes: 0, clickThroughs: 0,    recordedAt: "2026-06-22" },
-  // Coding First — June 2026 — views scraped Jun 22; clickThroughs from Dub
-  { videoId: "v67", views: 45000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 179, recordedAt: "2026-06-22" },
-  { videoId: "v68", views: 10000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 219, recordedAt: "2026-06-22" },
-  { videoId: "v69", views: 90000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 46,  recordedAt: "2026-06-22" },
-  { videoId: "v70", views: 23000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 41,  recordedAt: "2026-06-22" },
-  { videoId: "v71", views: 6000,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 60,  recordedAt: "2026-06-22" },
-  { videoId: "v72", views: 25000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0,   recordedAt: "2026-06-22" }, // no UTM data
-  { videoId: "v73", views: 9000,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 1,   recordedAt: "2026-06-22" },
+  // Coding First — June 2026 — views scraped Jun 25; clickThroughs from Dub
+  { videoId: "v67", views: 29228, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 179, recordedAt: "2026-06-25" },
+  { videoId: "v68", views: 14912, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 219, recordedAt: "2026-06-25" },
+  { videoId: "v69", views: 5499,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 46,  recordedAt: "2026-06-25" },
+  { videoId: "v70", views: 22029, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 41,  recordedAt: "2026-06-25" },
+  { videoId: "v71", views: 16219, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 60,  recordedAt: "2026-06-25" },
+  { videoId: "v72", views: 25000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 0,   recordedAt: "2026-06-22" }, // no UTM data — channel URL, no scraped view count
+  { videoId: "v73", views: 2184,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 1,   recordedAt: "2026-06-25" },
   { videoId: "v74", views: 2500,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 1,   recordedAt: "2026-06-22" },
-  { videoId: "v75", views: 12000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 1,   recordedAt: "2026-06-22" }, // codeandbug Dub slug
-  { videoId: "v76", views: 2500,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 25,  recordedAt: "2026-06-22" }, // astrokj Dub slug
+  { videoId: "v75", views: 12000, likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 1,   recordedAt: "2026-06-22" }, // codeandbug — channel URL, no scraped view count
+  { videoId: "v76", views: 2879,  likes: 0, comments: 0, shares: 0, watchTimeMinutes: 0, clickThroughs: 25,  recordedAt: "2026-06-25" }, // astrokj Dub slug
 ];
 
 // MTW referral signups — tracked via wisprflow.ai/r/* short links in LinkedIn posts
@@ -1096,7 +1168,7 @@ export const costs: Cost[] = [
   { videoId: "v4",  creatorId: "c4",  campaignId: "camp-india", grossCost: 12000,  agencyFee: 0, netCost: 12000,  currency: "INR" },
   { videoId: "v5",  creatorId: "c5",  campaignId: "camp-india", grossCost: 275000, agencyFee: 0, netCost: 275000, currency: "INR" },
   { videoId: "v6",  creatorId: "c6",  campaignId: "camp-india", grossCost: 160000, agencyFee: 0, netCost: 160000, currency: "INR" },
-  // CA Nandini (v7) — no cost in sheet YT section; omitted
+  { videoId: "v7",  creatorId: "c7",  campaignId: "camp-india", grossCost: 126000, agencyFee: 0, netCost: 126000, currency: "INR" }, // CA Nandini — from Finnet sheet
   // AOS — USD costs × ₹84
   { videoId: "v8",  creatorId: "c8",  campaignId: "camp-india", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR" }, // ₹4L from Batch 1 sheet
   { videoId: "v9",  creatorId: "c9",  campaignId: "camp-india", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR" }, // ₹1.8L from Batch 1 sheet
@@ -1134,7 +1206,8 @@ export const costs: Cost[] = [
   // Batch 1 — Palak / Direct / Social Tag — fees from Batch 1 tab, claude tool - influencer sheet
   { videoId: "v77", creatorId: "c77", campaignId: "camp-india", grossCost: 220000, agencyFee: 0, netCost: 220000, currency: "INR" }, // Aarti Samant
   { videoId: "v78", creatorId: "c78", campaignId: "camp-india", grossCost: 500000, agencyFee: 0, netCost: 500000, currency: "INR" }, // Gayatri Agrawal
-  { videoId: "v79", creatorId: "c79", campaignId: "camp-india", grossCost: 250000, agencyFee: 0, netCost: 250000, currency: "INR" }, // Anurag Bansal
+  { videoId: "v79", creatorId: "c79", campaignId: "camp-india", grossCost: 250000, agencyFee: 0, netCost: 250000, currency: "INR" }, // Anurag Bansal — IG Reel 1
+  { videoId: "v93", creatorId: "c79", campaignId: "camp-india", grossCost: 100000, agencyFee: 0, netCost: 100000, currency: "INR" }, // Anurag Bansal — IG Reel 2
   { videoId: "v80", creatorId: "c80", campaignId: "camp-india", grossCost: 600000, agencyFee: 0, netCost: 600000, currency: "INR" }, // Ayush Wadhwa
   { videoId: "v81", creatorId: "c81", campaignId: "camp-india", grossCost: 40000,  agencyFee: 0, netCost: 40000,  currency: "INR" }, // Jivraj Sachar
   { videoId: "v82", creatorId: "c82", campaignId: "camp-india", grossCost: 0,      agencyFee: 0, netCost: 0,      currency: "INR" }, // Miti Shah — ₹0 fee
@@ -1143,7 +1216,25 @@ export const costs: Cost[] = [
   { videoId: "v85", creatorId: "c85", campaignId: "camp-india", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" }, // Anik Jain
   { videoId: "v86", creatorId: "c86", campaignId: "camp-india", grossCost: 35000,  agencyFee: 0, netCost: 35000,  currency: "INR" }, // Aditya Agrawal
   // LinkedIn Seeding — no cost data in sheet (organic seeding)
-  // Wispr × WLDD June 2026 — no cost data available in sheet yet
+  // Wispr × WLDD June 2026 — ₹30,60,000 actual total (confirmed from WLDD master sheet 2026-06-27)
+  // costConfidence: "actual" — exact per-creator costs from agency sheet
+  { videoId: "v50", creatorId: "c50", campaignId: "camp-june", grossCost:  20000, agencyFee: 0, netCost:  20000, currency: "INR", costConfidence: "actual" as const }, // infoby_shree
+  { videoId: "v51", creatorId: "c51", campaignId: "camp-june", grossCost:  25000, agencyFee: 0, netCost:  25000, currency: "INR", costConfidence: "actual" as const }, // insta__nirav
+  { videoId: "v52", creatorId: "c52", campaignId: "camp-june", grossCost:  30000, agencyFee: 0, netCost:  30000, currency: "INR", costConfidence: "actual" as const }, // kochu.ai
+  { videoId: "v53", creatorId: "c53", campaignId: "camp-june", grossCost:  70000, agencyFee: 0, netCost:  70000, currency: "INR", costConfidence: "actual" as const }, // financewithjobi
+  { videoId: "v54", creatorId: "c54", campaignId: "camp-june", grossCost: 100000, agencyFee: 0, netCost: 100000, currency: "INR", costConfidence: "actual" as const }, // prettymuchbusiness
+  { videoId: "v55", creatorId: "c55", campaignId: "camp-june", grossCost:  75000, agencyFee: 0, netCost:  75000, currency: "INR", costConfidence: "actual" as const }, // Apple Wale Bhaiya
+  { videoId: "v56", creatorId: "c56", campaignId: "camp-june", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR", costConfidence: "actual" as const }, // ezsnippet
+  { videoId: "v57", creatorId: "c57", campaignId: "camp-june", grossCost: 220000, agencyFee: 0, netCost: 220000, currency: "INR", costConfidence: "actual" as const }, // Vaibhav Kadnar
+  { videoId: "v58", creatorId: "c58", campaignId: "camp-june", grossCost: 200000, agencyFee: 0, netCost: 200000, currency: "INR", costConfidence: "actual" as const }, // bisboworld
+  { videoId: "v59", creatorId: "c59", campaignId: "camp-june", grossCost: 100000, agencyFee: 0, netCost: 100000, currency: "INR", costConfidence: "actual" as const }, // Akber Shaikh
+  { videoId: "v60", creatorId: "c60", campaignId: "camp-june", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR", costConfidence: "actual" as const }, // WhyBhanshu
+  { videoId: "v61", creatorId: "c61", campaignId: "camp-june", grossCost: 200000, agencyFee: 0, netCost: 200000, currency: "INR", costConfidence: "actual" as const }, // Mohammed Fraz
+  { videoId: "v62", creatorId: "c62", campaignId: "camp-june", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR", costConfidence: "actual" as const }, // Think Wings
+  { videoId: "v63", creatorId: "c63", campaignId: "camp-june", grossCost: 500000, agencyFee: 0, netCost: 500000, currency: "INR", costConfidence: "actual" as const }, // Full Disclosure
+  { videoId: "v64", creatorId: "c64", campaignId: "camp-june", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR", costConfidence: "actual" as const }, // Technical Suneja
+  { videoId: "v65", creatorId: "c65", campaignId: "camp-june", grossCost: 180000, agencyFee: 0, netCost: 180000, currency: "INR", costConfidence: "actual" as const }, // Dhaval Kataria
+  { videoId: "v66", creatorId: "c66", campaignId: "camp-june", grossCost: 400000, agencyFee: 0, netCost: 400000, currency: "INR", costConfidence: "actual" as const }, // Tharun Speaks
   // Coding First — June 2026 — costs from "coding first - june" tab, Sheet 1
   // Column D = quoted, Column G = net negotiated. Source: gviz API, 22 Jun 2026
   { videoId: "v67", creatorId: "c67", campaignId: "camp-june", grossCost: 179000, agencyFee: 0, netCost: 150000, currency: "INR" }, // Coding with Sagar
@@ -1156,11 +1247,21 @@ export const costs: Cost[] = [
   { videoId: "v74", creatorId: "c74", campaignId: "camp-june", grossCost: 143000, agencyFee: 0, netCost: 143000, currency: "INR" }, // Arsh Goyal
   { videoId: "v75", creatorId: "c75", campaignId: "camp-june", grossCost:  56000, agencyFee: 0, netCost:  56000, currency: "INR" }, // Code And Bug
   { videoId: "v76", creatorId: "c76", campaignId: "camp-june", grossCost:  62000, agencyFee: 0, netCost:  62000, currency: "INR" }, // Astro
+  { videoId: "v92", creatorId: "c7",  campaignId: "camp-june", grossCost: 126000, agencyFee: 0, netCost: 126000, currency: "INR" }, // CA Nandini — direct deal
+  { videoId: "v87", creatorId: "c87", campaignId: "camp-june", grossCost: 273000, agencyFee: 0, netCost: 273000, currency: "INR" }, // Ishan — 10 Claude Skills ($3,250 USD)
+  { videoId: "v88", creatorId: "c87", campaignId: "camp-june", grossCost: 273000, agencyFee: 0, netCost: 273000, currency: "INR" }, // Ishan — Wispr Flow Tutorial ($3,250 USD)
+  { videoId: "v94", creatorId: "c87", campaignId: "camp-june", grossCost: 273000, agencyFee: 0, netCost: 273000, currency: "INR" }, // Ishan — Full Claude Tutorial ($3,250 USD)
+  { videoId: "v91", creatorId: "c88", campaignId: "camp-june", grossCost: 840000, agencyFee: 0, netCost: 840000, currency: "INR" }, // Vaibhav Sisinity ($10K USD)
+  { videoId: "v89", creatorId: "c79", campaignId: "camp-june", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" }, // Anurag — IPL
+  { videoId: "v90", creatorId: "c79", campaignId: "camp-june", grossCost: 300000, agencyFee: 0, netCost: 300000, currency: "INR" }, // Anurag — Amazon
 ];
 
 // ── Derived metrics ──────────────────────────────────────────
 
-export function getCreatorMetrics(creatorId: string): CreatorMetrics {
+export function getCreatorMetrics(
+  creatorId: string,
+  dubByVideo?: Record<string, { clicks: number; leads: number }>
+): CreatorMetrics {
   const creatorVideos = videos.filter((v) => v.creatorId === creatorId);
   const videoIds = new Set(creatorVideos.map((v) => v.id));
 
@@ -1168,9 +1269,17 @@ export function getCreatorMetrics(creatorId: string): CreatorMetrics {
   const creatorInstalls = installs.filter((i) => i.creatorId === creatorId);
   const creatorCosts = costs.filter((c) => c.creatorId === creatorId);
 
-  const totalViews = creatorPerfs.reduce((s, p) => s + p.views, 0);
-  const totalClicks = creatorPerfs.reduce((s, p) => s + p.clickThroughs, 0);
-  const totalInstallsCount = creatorInstalls.reduce((s, i) => s + i.installs, 0);
+  const totalViews = creatorPerfs.reduce((s, p) => s + (p.impressions ?? p.views), 0);
+  const totalClicks = creatorPerfs.reduce(
+    (s, p) => s + (dubByVideo?.[p.videoId]?.clicks ?? p.clickThroughs),
+    0
+  );
+  // Use Dub leads per video when available, fall back to mock installs table
+  const totalInstallsCount = creatorVideos.reduce((s, v) => {
+    const dubLeads = dubByVideo?.[v.id]?.leads;
+    if (dubLeads !== undefined) return s + dubLeads;
+    return s + (installs.find((i) => i.videoId === v.id)?.installs ?? 0);
+  }, 0);
   const totalRevenue = creatorInstalls.reduce((s, i) => s + (i.revenue ?? 0), 0);
   const totalSpend = creatorCosts.reduce((s, c) => s + c.netCost, 0);
   const totalEngagements = creatorPerfs.reduce(
@@ -1189,7 +1298,8 @@ export function getCreatorMetrics(creatorId: string): CreatorMetrics {
   // Efficiency: CPV rank (40pt) + engagement (30pt) + saves rate (30pt)
   const allCpvs = costs.map((c) => {
     const p = performances.find((p) => p.videoId === c.videoId);
-    return p && p.views > 0 && c.netCost > 0 ? c.netCost / p.views : 0;
+    const pViews = p ? (p.impressions ?? p.views) : 0;
+    return p && pViews > 0 && c.netCost > 0 ? c.netCost / pViews : 0;
   }).filter(Boolean);
   const maxCpv = allCpvs.length ? Math.max(...allCpvs) : 1;
   const cpvScore = cpv > 0 ? (1 - cpv / maxCpv) * 40 : 20;
@@ -1222,8 +1332,10 @@ export function getCreatorMetrics(creatorId: string): CreatorMetrics {
   };
 }
 
-export function getAllCreatorMetrics(): CreatorMetrics[] {
-  return creators.map((c) => getCreatorMetrics(c.id));
+export function getAllCreatorMetrics(
+  dubByVideo?: Record<string, { clicks: number; leads: number }>
+): CreatorMetrics[] {
+  return creators.map((c) => getCreatorMetrics(c.id, dubByVideo));
 }
 
 export function getCampaignStats(campaignId: string) {
@@ -1232,7 +1344,7 @@ export function getCampaignStats(campaignId: string) {
   const videoIds = new Set(videos.filter((v) => v.campaignId === campaignId).map((v) => v.id));
   const spent = costs.filter((c) => c.campaignId === campaignId).reduce((s, c) => s + c.netCost, 0);
   const totalInstallsCount = installs.filter((i) => i.campaignId === campaignId).reduce((s, i) => s + i.installs, 0);
-  const totalViews = performances.filter((p) => videoIds.has(p.videoId)).reduce((s, p) => s + p.views, 0);
+  const totalViews = performances.filter((p) => videoIds.has(p.videoId)).reduce((s, p) => s + (p.impressions ?? p.views), 0);
   const totalRevenue = installs.filter((i) => i.campaignId === campaignId).reduce((s, i) => s + (i.revenue ?? 0), 0);
   const cpi = totalInstallsCount > 0 && spent > 0 ? spent / totalInstallsCount : 0;
   return {

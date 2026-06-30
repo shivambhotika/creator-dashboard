@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCurrency } from "@/lib/currency-context";
+import { TopCreatorsWidget, type TopCreatorEntry } from "@/components/TopCreatorsWidget";
 
 const USD_INR = 84;
 
@@ -45,6 +46,7 @@ export interface OverviewData {
   platformStats: PlatformStat[];
   months: MonthRow[];
   platformMonths: Record<string, MonthRow[]>;
+  topCreators: TopCreatorEntry[];
 }
 
 function StatCard({ label, value, sub, accent }: {
@@ -211,6 +213,9 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           </table>
         </div>
       </section>
+
+      {/* ── Top Creators ───────────────────────────────────────── */}
+      <TopCreatorsWidget creators={data.topCreators} />
 
       {/* ── Month-on-Month ─────────────────────────────────────── */}
       <section>
