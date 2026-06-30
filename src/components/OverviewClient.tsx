@@ -54,11 +54,20 @@ function StatCard({ label, value, sub, accent }: {
 }) {
   return (
     <div
-      className="rounded-xl p-5 flex flex-col gap-2"
-      style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}
+      className="rounded-[18px] p-5 flex flex-col gap-2.5 transition-all duration-200 hover:translate-y-[-2px]"
+      style={{
+        background: "var(--bg-card)",
+        boxShadow: "var(--nm-raised)",
+        border: "1px solid var(--border)",
+      }}
     >
       <p className="label-caps">{label}</p>
-      <p className="stat-number" style={accent ? { color: accent } : undefined}>{value}</p>
+      <p
+        className="stat-number"
+        style={accent ? { color: accent } : undefined}
+      >
+        {value}
+      </p>
       {sub && <p className="text-xs" style={{ color: "var(--text-muted)" }}>{sub}</p>}
     </div>
   );
@@ -92,19 +101,26 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Overview</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
+            Overview
+          </h1>
           <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-            {data.liveVideos} videos live across {data.totalCreators} creators
+            {data.liveVideos} videos live · {data.totalCreators} creators
             {data.dubPartial && (
               <span className="ml-2 text-xs" style={{ color: "var(--text-muted)" }}>· partial Dub data</span>
             )}
           </p>
         </div>
         <div
-          className="text-xs px-3 py-1.5 rounded-full font-medium"
-          style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", color: "var(--text-muted)" }}
+          className="text-xs px-3 py-1.5 rounded-full font-semibold"
+          style={{
+            background: "var(--bg-surface)",
+            boxShadow: "var(--nm-inset)",
+            border: "1px solid var(--border)",
+            color: "var(--text-muted)",
+          }}
         >
-          All costs in {mode === "usd" ? "USD · ₹84/$" : "INR · ₹84/$"}
+          {mode === "usd" ? "USD · ₹84/$" : "INR · ₹84/$"}
         </div>
       </div>
 
@@ -149,10 +165,10 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       {/* ── Platform breakdown ─────────────────────────────────── */}
       <section>
         <div className="mb-4">
-          <h2 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>Platform Breakdown</h2>
+          <h2 className="section-heading">Platform Breakdown</h2>
           <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Same funnel split by channel</p>
         </div>
-        <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+        <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: "var(--nm-raised)", border: "1px solid var(--border)" }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
@@ -221,7 +237,7 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       <section>
         <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h2 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>Month-on-Month</h2>
+            <h2 className="section-heading">Month-on-Month</h2>
             <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Δ% vs. prior month — toggle platform to drill down</p>
           </div>
           {/* Platform tabs */}
@@ -255,7 +271,7 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           </div>
         </div>
 
-        <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+        <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: "var(--nm-raised)", border: "1px solid var(--border)" }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
