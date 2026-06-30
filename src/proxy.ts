@@ -6,7 +6,7 @@ const LOGIN_PATH = "/login";
 const COOKIE_NAME = "wispr_auth";
 const LEGACY_TOKEN = "wispr_india_2026_authed";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === LOGIN_PATH || pathname.startsWith("/api/auth")) {
