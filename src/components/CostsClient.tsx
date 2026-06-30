@@ -10,6 +10,7 @@ export interface DubByVideo {
 import { SortableTable, type Column } from "@/components/SortableTable";
 import { StatCard } from "@/components/StatCard";
 import { CostCharts } from "@/components/CostCharts";
+import { Sparkline } from "@/components/Sparkline";
 import { DollarSign, TrendingUp, Target, Percent, Download } from "lucide-react";
 
 interface CostRow {
@@ -104,6 +105,27 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
   const cpvTotalNet = cpvRows.reduce((s, r) => s + r.netCost, 0);
   const cpvTotalViews = cpvRows.reduce((s, r) => s + r.views, 0);
   const avgCPV = cpvTotalViews > 0 ? cpvTotalNet / cpvTotalViews : 0;
+
+  // CPI by go-live month (campaign batch trend)
+  const monthCPIs = useMemo(() => {
+    const map = new Map<string, { spendINR: number; installs: number }>();
+    for (const row of allRows) {
+      const video = videos.find((v) => v.id === row.videoId);
+      const ym = video?.goLiveDate?.slice(0, 7);
+      if (!ym || row.netCost === 0) continue;
+      if (!map.has(ym)) map.set(ym, { spendINR: 0, installs: 0 });
+      const b = map.get(ym)!;
+      b.spendINR += row.netCost;
+      b.installs += row.videoInstalls;
+    }
+    return [...map.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([ym, b]) => ({
+        ym,
+        label: new Date(ym + "-15").toLocaleDateString("en-US", { month: "short", year: "numeric" }),
+        cpiINR: b.installs > 0 ? b.spendINR / b.installs : null,
+      }));
+  }, [allRows]);
 
   // CSV export
   function handleExport() {
@@ -245,6 +267,39 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
         <StatCard label="Overall CPI" value={overallCPI ? money(overallCPI) : "—"} sub={`${count(totalInstalls)} installs`} icon={Target} iconColor="text-indigo-500" iconBg="bg-indigo-100 dark:bg-indigo-500/10" />
         <StatCard label="Avg CPV" value={avgCPV ? money(avgCPV) : "—"} icon={TrendingUp} iconColor="text-rose-500" iconBg="bg-rose-100 dark:bg-rose-500/10" />
       </div>
+
+      {/* CPI trajectory sparkline */}
+      {monthCPIs.filter((m) => m.cpiINR !== null).length >= 2 && (
+        <div
+          className="mb-6 px-5 py-4 rounded-2xl flex items-center gap-6"
+          style={{ background: "var(--bg-card)", boxShadow: "var(--nm-sm)", border: "1px solid var(--border)" }}
+        >
+          <div className="flex-1">
+            <p className="text-xs font-semibold mb-1" style={{ color: "var(--text-muted)", letterSpacing: "0.05em", textTransform: "uppercase" }}>CPI Trend — Campaign Batches</p>
+            <div className="flex items-center gap-4 flex-wrap">
+              {monthCPIs.map((m) => (
+                m.cpiINR !== null && (
+                  <span key={m.ym} className="flex items-center gap-1 text-xs">
+                    <span style={{ color: "var(--text-muted)" }}>{m.label}</span>
+                    <span
+                      className="font-semibold"
+                      style={{ color: m.cpiINR <= 300 ? "#10b981" : m.cpiINR <= 600 ? "#f59e0b" : "#ef4444" }}
+                    >
+                      ₹{m.cpiINR.toFixed(0)}
+                    </span>
+                  </span>
+                )
+              ))}
+            </div>
+          </div>
+          <Sparkline
+            values={monthCPIs.filter((m) => m.cpiINR !== null).map((m) => m.cpiINR!)}
+            invertTrend
+            width={140}
+            height={40}
+          />
+        </div>
+      )}
 
       <CostCharts rows={allRows} />
 

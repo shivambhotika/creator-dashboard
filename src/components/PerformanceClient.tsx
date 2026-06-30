@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { videos, performances, costs, installs, creators, campaigns } from "@/lib/mock-data";
 import { useCurrency } from "@/lib/currency-context";
 import { SortableTable, type Column } from "@/components/SortableTable";
@@ -96,9 +97,15 @@ function exportCSV(rows: PerfRow[]) {
 
 export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
   const { money, count } = useCurrency();
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") ?? "");
   const [platformFilter, setPlatformFilter] = useState("All");
   const [campaignFilter, setCampaignFilter] = useState("All");
+
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q) setSearch(q);
+  }, [searchParams]);
 
   const allRows: PerfRow[] = useMemo(() => {
     return performances.map((p) => {
