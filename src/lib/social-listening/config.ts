@@ -28,6 +28,10 @@ export function getSocialListeningConfig(): SocialListeningConfig {
     process.env.SOCIAL_SCREENSHOT_URL_TEMPLATE ||
     process.env.SCREENSHOTONE_ACCESS_KEY
   );
+  const slackConfigured = Boolean(
+    process.env.SLACK_SOCIAL_DIGEST_WEBHOOK_URL ||
+    (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SOCIAL_DIGEST_CHANNEL_ID)
+  );
 
   return {
     keywords: csv(process.env.SOCIAL_LISTENING_KEYWORDS, DEFAULT_KEYWORDS),
@@ -37,7 +41,7 @@ export function getSocialListeningConfig(): SocialListeningConfig {
     hours: intEnv("SOCIAL_LISTENING_LOOKBACK_HOURS", 24, 1, 72),
     maxItems: intEnv("SOCIAL_LISTENING_MAX_ITEMS", 20, 1, 50),
     screenshotEnabled,
-    slackConfigured: Boolean(process.env.SLACK_SOCIAL_DIGEST_WEBHOOK_URL),
+    slackConfigured,
     providers: {
       x: Boolean(process.env.X_BEARER_TOKEN),
       xMcp: Boolean(process.env.SOCIAL_MCP_SEARCH_URL),

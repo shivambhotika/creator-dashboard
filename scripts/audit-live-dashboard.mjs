@@ -122,6 +122,11 @@ check("DUB_LINK_MAPPINGS exists in dub-server.ts", dubServer.includes("DUB_LINK_
 const vercel = read("vercel.json");
 check("vercel.json has cron config", vercel.includes('"crons"') && vercel.includes("/api/cron/sync-all") && vercel.includes("/api/cron/social-digest"), "Add cron config to vercel.json");
 
+// 12b. Social digest cron stays aligned to the dashboard promise (09:00 IST = 03:30 UTC)
+check("Social digest cron runs at 09:00 IST",
+  vercel.includes('"path": "/api/cron/social-digest"') && vercel.includes('"schedule": "30 3 * * *"'),
+  "Set /api/cron/social-digest schedule to 30 3 * * *");
+
 // 13. .env.example exists with required vars
 check(".env.example has required vars",
   ["DUB_API_KEY", "YOUTUBE_API_KEY", "CRON_SECRET", "DATABASE_URL"].every((v) => envExample.includes(v)),
@@ -129,7 +134,7 @@ check(".env.example has required vars",
 
 // 13b. Social listening optional provider vars are documented
 check(".env.example documents social listening vars",
-  ["SLACK_SOCIAL_DIGEST_WEBHOOK_URL", "SOCIAL_MCP_SEARCH_URL", "LINKEDIN_SEARCH_API_URL", "SERPAPI_KEY", "SCREENSHOTONE_ACCESS_KEY"].every((v) => envExample.includes(v)),
+  ["SLACK_SOCIAL_DIGEST_WEBHOOK_URL", "SLACK_BOT_TOKEN", "SLACK_SOCIAL_DIGEST_CHANNEL_ID", "SOCIAL_MCP_SEARCH_URL", "LINKEDIN_SEARCH_API_URL", "SERPAPI_KEY", "SCREENSHOTONE_ACCESS_KEY"].every((v) => envExample.includes(v)),
   "Add social listening env vars to .env.example");
 
 // 14. SKIP_AUTH_IN_DEV guard exists in proxy.ts

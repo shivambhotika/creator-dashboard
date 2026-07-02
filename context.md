@@ -1,6 +1,6 @@
 # Wispr India Creator Ops — Full Context & Change Log
 
-> **Last updated:** 2026-07-02
+> **Last updated:** 2026-07-03
 > **Repo:** github.com/shivambhotika/creator-dashboard
 > **Production:** https://creator-dashboard-steel.vercel.app
 > **Stack:** Next.js 16.2.9 (App Router) · TypeScript · Tailwind · Vercel
@@ -328,3 +328,11 @@ SNAPSHOT_STORAGE_FILE=.data/creator-dashboard-storage.json
 - Added Vercel cron schedule for `/api/cron/social-digest` at `0 3 * * *` (08:30 IST daily).
 - Added `/dashboard/social-listening` for provider readiness, keyword/filter visibility, manual preview, and test Slack sends.
 - Documented all social listening env vars in `.env.example` and extended live dashboard audit coverage for the new cron route and env documentation.
+
+### Social Digest 09:00 Schedule Pass — 2026-07-03
+
+- Updated `/api/cron/social-digest` Vercel cron to `30 3 * * *`, which sends the daily digest at 09:00 IST.
+- Updated `/dashboard/social-listening` so the schedule card shows 09:00 IST and the intended Slack target `#india-social-digest`.
+- Changed manual Slack sends from `GET /api/social-listening/digest?send=1` to authenticated `POST /api/social-listening/digest`, keeping `GET` read-only for previews.
+- Added Slack bot-token delivery support through `SLACK_BOT_TOKEN` + `SLACK_SOCIAL_DIGEST_CHANNEL_ID`, while keeping `SLACK_SOCIAL_DIGEST_WEBHOOK_URL` support.
+- Extended `.env.example` and `scripts/audit-live-dashboard.mjs` so the Slack bot/channel env vars and 09:00 IST cron are documented and checked.

@@ -30,7 +30,7 @@ export function SocialListeningClient() {
     setState(send ? "sending" : "loading");
     setError(null);
     try {
-      const res = await fetch(`/api/social-listening/digest${send ? "?send=1" : ""}`);
+      const res = await fetch("/api/social-listening/digest", { method: send ? "POST" : "GET" });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
       setDigest(json as SocialDigest);
@@ -50,7 +50,7 @@ export function SocialListeningClient() {
           className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-40 transition-colors flex items-center gap-2"
         >
           {state === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-          Preview last 24h
+          Preview latest digest
         </button>
         <button
           onClick={() => load(true)}

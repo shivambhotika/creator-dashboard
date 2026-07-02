@@ -115,7 +115,7 @@ function buildBlocks(digest: SocialDigest): SlackBlock[] {
   if (digest.posts.length === 0) {
     blocks.push({
       type: "section",
-      text: { type: "mrkdwn", text: "No relevant posts found in the last 24 hours." },
+      text: { type: "mrkdwn", text: `No relevant posts found in the last ${digest.config.hours} hours.` },
     });
   } else {
     blocks.push(...digest.posts.slice(0, 20).map(formatPost));
@@ -136,16 +136,44 @@ function buildBlocks(digest: SocialDigest): SlackBlock[] {
 }
 
 export async function sendSocialDigestToSlack(digest: SocialDigest): Promise<SlackSendResult> {
+  const botToken = process.env.SLACK_BOT_TOKEN;
+  const channelId = process.env.SLACK_SOCIAL_DIGEST_CHANNEL_ID;
+  const payload = {
+    text: `WisprFlow social digest: ${digest.posts.length} relevant posts in the last ${digest.config.hours}h`,
+    blocks: buildBlocks(digest),
+  };
+
+  if (botToken && channelId) {
+    const res = await fetch("https://slack.com/api/chat.postMessage", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${botToken}`,
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({ channel: channelId, ...payload }),
+    });
+    const json = await res.json().catch(() => ({ ok: false, error: "invalid_json" })) as { ok?: boolean; error?: string };
+    if (!res.ok || !json.ok) {
+      return {
+        sent: false,
+        warning: `Slack bot post failed: ${json.error ?? `${res.status} ${res.statusText}`}`,
+      };
+    }
+    return { sent: true };
+  }
+
   const webhook = process.env.SLACK_SOCIAL_DIGEST_WEBHOOK_URL;
-  if (!webhook) return { sent: false, warning: "SLACK_SOCIAL_DIGEST_WEBHOOK_URL not configured" };
+  if (!webhook) {
+    return {
+      sent: false,
+      warning: "Slack delivery not configured. Set SLACK_SOCIAL_DIGEST_WEBHOOK_URL or SLACK_BOT_TOKEN + SLACK_SOCIAL_DIGEST_CHANNEL_ID.",
+    };
+  }
 
   const res = await fetch(webhook, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      text: `WisprFlow social digest: ${digest.posts.length} relevant posts in the last ${digest.config.hours}h`,
-      blocks: buildBlocks(digest),
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {

@@ -12,9 +12,20 @@ export async function GET(req: NextRequest) {
 
   try {
     const digest = await buildSocialDigest();
-    const shouldSend = req.nextUrl.searchParams.get("send") === "1";
-    if (!shouldSend) return NextResponse.json(digest);
+    return NextResponse.json(digest);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Social digest failed";
+    return NextResponse.json({ error: msg, status: "failed" }, { status: 500 });
+  }
+}
 
+export async function POST(req: NextRequest) {
+  if (!(await verifyDashboardRequest(req))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const digest = await buildSocialDigest();
     const slack = await sendSocialDigestToSlack(digest);
     const warnings = slack.warning ? [...digest.warnings, slack.warning] : digest.warnings;
     return NextResponse.json({ ...digest, warnings, sentToSlack: slack.sent });

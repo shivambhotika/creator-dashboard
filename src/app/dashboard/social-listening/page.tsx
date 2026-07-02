@@ -79,8 +79,10 @@ export default function SocialListeningPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-xl p-4" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
           <p className="text-xs uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Schedule</p>
-          <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>08:30 IST</p>
-          <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>/api/cron/social-digest</p>
+          <p className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>09:00 IST</p>
+          <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+            Daily Slack send to #india-social-digest
+          </p>
         </div>
         <div className="rounded-xl p-4" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
           <p className="text-xs uppercase tracking-wider mb-2" style={{ color: "var(--text-muted)" }}>Keywords</p>
@@ -128,7 +130,7 @@ export default function SocialListeningPage() {
         <div className="rounded-xl p-4 flex gap-3" style={{ background: "#f59e0b14", border: "1px solid #f59e0b40" }}>
           <CircleAlert className="w-5 h-5 shrink-0" style={{ color: "#f59e0b" }} />
           <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-            Slack delivery is inactive until SLACK_SOCIAL_DIGEST_WEBHOOK_URL is set in the deployment environment.
+            Slack delivery is inactive until the deployment has either SLACK_SOCIAL_DIGEST_WEBHOOK_URL or SLACK_BOT_TOKEN + SLACK_SOCIAL_DIGEST_CHANNEL_ID for #india-social-digest.
           </p>
         </div>
       )}
