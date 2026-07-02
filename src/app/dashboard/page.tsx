@@ -3,11 +3,13 @@ import { videos, performances, costs, installs, creators, getAllCreatorMetrics }
 import { getDubStats } from "@/lib/dub-server";
 import { OverviewClient } from "@/components/OverviewClient";
 import type { OverviewData, MonthRow, MonthCPI } from "@/components/OverviewClient";
-import { isDbConnected, listSyncRuns, getInferredAttributionForGroup, getLatestSyncRun } from "@/lib/storage";
+import { getStorageStatus, listSyncRuns, getInferredAttributionForGroup, getLatestSyncRun } from "@/lib/storage";
 import { ATTRIBUTION_GROUPS } from "@/lib/attribution";
 import { LiveSyncStatus } from "@/components/LiveSyncStatus";
 import { SharedAttributionInferenceCard } from "@/components/SharedAttributionInferenceCard";
 import { HIGH_PRIORITY_COUNT } from "@/lib/action-items";
+import { getAllDataIssues } from "@/lib/data-quality";
+import { buildDashboardIntelligence } from "@/lib/insights";
 import type { SyncRun, SyncSource } from "@/types";
 
 const USD_INR = 84;
@@ -17,6 +19,7 @@ const imp = (p: { views: number; impressions?: number }) => p.impressions ?? p.v
 
 export default async function DashboardPage() {
   const dub = await getDubStats();
+  const intelligence = buildDashboardIntelligence(dub.byVideo);
 
   // ── Totals ──────────────────────────────────────────────────
   const totalImp      = performances.reduce((s, p) => s + imp(p), 0);
@@ -135,6 +138,19 @@ export default async function DashboardPage() {
     getLatestSyncRun("dub"),
   ]);
 
+  const openIssues = getAllDataIssues().filter((i) => i.status === "open");
+  const attributionIssueCount = openIssues.filter((i) =>
+    i.issueType === "shared_attribution" || i.issueType === "dub_missing" || i.issueType === "dub_failed"
+  ).length;
+  const linkIssueCount = openIssues.filter((i) => i.issueType === "missing_url").length;
+  const renewalReadyCount = allMetrics.filter((m) =>
+    m.totalSpend > 0 && m.totalInstalls > 0 && m.cpi > 0 && m.cpi <= 300
+  ).length;
+  const syncsToRefresh = [ytRun, dubRun].filter((run) => {
+    if (!run?.completedAt) return true;
+    return run.status === "failed" || run.status === "partial";
+  }).length;
+
   const data: OverviewData = {
     totalImp, totalClk, totalInst, totalSpendINR,
     totalCreators, liveVideos,
@@ -145,10 +161,42 @@ export default async function DashboardPage() {
     ytLastSync: ytRun?.completedAt ?? null,
     dubLastSync: dubRun?.completedAt ?? null,
     highPriorityActionCount: HIGH_PRIORITY_COUNT,
+    operatorInsights: intelligence.insights,
+    coverage: intelligence.coverage,
+    todayItems: [
+      {
+        label: "Fix attribution",
+        value: attributionIssueCount,
+        detail: "shared or missing Dub links",
+        href: "/dashboard/data-health",
+        tone: attributionIssueCount > 0 ? "warn" : "good",
+      },
+      {
+        label: "Review renewals",
+        value: renewalReadyCount,
+        detail: "creators under target CPI",
+        href: "/dashboard/decision",
+        tone: renewalReadyCount > 0 ? "good" : "neutral",
+      },
+      {
+        label: "Verify live links",
+        value: linkIssueCount,
+        detail: "URLs or insights pending",
+        href: "/dashboard/videos",
+        tone: linkIssueCount > 0 ? "warn" : "good",
+      },
+      {
+        label: "Refresh data",
+        value: syncsToRefresh,
+        detail: "sources older than 24h",
+        href: "/dashboard/data-health",
+        tone: syncsToRefresh > 0 ? "warn" : "good",
+      },
+    ],
   };
 
   // ── Live sync + inferred attribution ────────────────────────
-  const dbConnected = await isDbConnected();
+  const storage = await getStorageStatus();
   const recentRuns = await listSyncRuns(50);
   const lastSyncs: Record<string, SyncRun | null> = {};
   for (const source of ["all", "sheets", "youtube", "dub", "attribution"] as SyncSource[]) {
@@ -180,7 +228,14 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="p-6 pb-0">
-        <LiveSyncStatus lastSyncs={lastSyncs} dbConnected={dbConnected} />
+        <LiveSyncStatus
+          lastSyncs={lastSyncs}
+          storage={{
+            persistent: storage.persistent,
+            label: storage.label,
+            detail: storage.detail,
+          }}
+        />
       </div>
 
       <OverviewClient data={data} />

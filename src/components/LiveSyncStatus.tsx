@@ -5,7 +5,11 @@ import type { SyncRun } from "@/types";
 
 interface LiveSyncStatusProps {
   lastSyncs: Record<string, SyncRun | null>;
-  dbConnected: boolean;
+  storage: {
+    persistent: boolean;
+    label: string;
+    detail: string;
+  };
 }
 
 interface SyncButton {
@@ -39,7 +43,7 @@ const STATUS_COLOR: Record<string, string> = {
   queued: "#6b7280",
 };
 
-export function LiveSyncStatus({ lastSyncs, dbConnected }: LiveSyncStatusProps) {
+export function LiveSyncStatus({ lastSyncs, storage }: LiveSyncStatusProps) {
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -70,18 +74,17 @@ export function LiveSyncStatus({ lastSyncs, dbConnected }: LiveSyncStatusProps) 
         <span
           className="text-xs px-2 py-0.5 rounded-full"
           style={{
-            background: dbConnected ? "#10b98122" : "#f59e0b22",
-            color: dbConnected ? "#10b981" : "#d97706",
+            background: storage.persistent ? "#10b98122" : "#f59e0b22",
+            color: storage.persistent ? "#10b981" : "#d97706",
           }}
         >
-          {dbConnected ? "Storage connected" : "Storage not connected"}
+          {storage.label}
         </span>
       </div>
 
-      {!dbConnected && (
+      {!storage.persistent && (
         <p className="text-xs mb-3 rounded-lg p-2" style={{ background: "#fffbeb", color: "#92400e" }}>
-          Live sync storage is not connected. Dashboard is using seed/static data and live server fallback where
-          available.
+          {storage.detail}
         </p>
       )}
 

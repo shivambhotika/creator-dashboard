@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { creators, videos } from "@/lib/mock-data";
-import { Search, Users, Video, Building2, X } from "lucide-react";
+import { creators, videos, campaigns } from "@/lib/mock-data";
+import { getAllDataIssues } from "@/lib/data-quality";
+import { OPEN_ACTION_ITEMS } from "@/lib/action-items";
+import { Search, Users, Video, Building2, X, Target, ShieldAlert, Link2, LayoutDashboard, DollarSign, BarChart2, CalendarDays } from "lucide-react";
 
 // Derive unique agencies from data at module load time
 const ALL_AGENCIES = Array.from(
@@ -12,10 +14,11 @@ const ALL_AGENCIES = Array.from(
 
 interface Result {
   id: string;
-  type: "creator" | "video" | "agency";
+  type: "creator" | "video" | "agency" | "campaign" | "issue" | "action" | "slug" | "page";
   label: string;
   sub: string;
   href: string;
+  queryParam?: string;
 }
 
 function buildIndex(): Result[] {
@@ -47,6 +50,61 @@ function buildIndex(): Result[] {
       href: `/dashboard/agency`,
     });
   }
+  for (const campaign of campaigns) {
+    results.push({
+      id: `campaign-${campaign.id}`,
+      type: "campaign",
+      label: campaign.name,
+      sub: `${campaign.status} · ${campaign.primaryPlatform}`,
+      href: "/dashboard/videos",
+    });
+  }
+  for (const c of creators.filter((creator) => creator.dubLinkSlug)) {
+    results.push({
+      id: `slug-${c.id}`,
+      type: "slug",
+      label: c.dubLinkSlug ?? "",
+      sub: `${c.name} · ${c.platform}`,
+      href: "/dashboard/creators",
+    });
+  }
+  for (const issue of getAllDataIssues().filter((i) => i.status === "open")) {
+    results.push({
+      id: `issue-${issue.id}`,
+      type: "issue",
+      label: issue.title,
+      sub: `${issue.severity} · ${issue.owner ?? "Unassigned"}`,
+      href: "/dashboard/data-health",
+      queryParam: "",
+    });
+  }
+  for (const item of OPEN_ACTION_ITEMS) {
+    results.push({
+      id: `action-${item.id}`,
+      type: "action",
+      label: item.text,
+      sub: `${item.priority} · Decision Center`,
+      href: "/dashboard/decision",
+      queryParam: "",
+    });
+  }
+  [
+    { label: "Overview", href: "/dashboard", icon: "page", sub: "Top-level funnel and today strip" },
+    { label: "Performance", href: "/dashboard/performance", icon: "page", sub: "Engagement and conversion diagnostics" },
+    { label: "Costs & ROI", href: "/dashboard/costs", icon: "page", sub: "Spend, CPI, CPV, CPM" },
+    { label: "Calendar", href: "/dashboard/calendar", icon: "page", sub: "Go-live schedule" },
+    { label: "Decision Center", href: "/dashboard/decision", icon: "page", sub: "Renewal recommendations" },
+    { label: "Data Health", href: "/dashboard/data-health", icon: "page", sub: "Trust, freshness, and source issues" },
+  ].forEach((page) => {
+    results.push({
+      id: `page-${page.label}`,
+      type: "page",
+      label: page.label,
+      sub: page.sub,
+      href: page.href,
+      queryParam: "",
+    });
+  });
   return results;
 }
 
@@ -56,12 +114,30 @@ const TYPE_ICON = {
   creator: Users,
   video: Video,
   agency: Building2,
+  campaign: Target,
+  issue: ShieldAlert,
+  action: Target,
+  slug: Link2,
+  page: LayoutDashboard,
 };
 
 const TYPE_LABEL = {
   creator: "Creator",
   video: "Video",
   agency: "Agency",
+  campaign: "Campaign",
+  issue: "Issue",
+  action: "Action",
+  slug: "Slug",
+  page: "Page",
+};
+
+const PAGE_ICON: Record<string, typeof LayoutDashboard> = {
+  "Costs & ROI": DollarSign,
+  Performance: BarChart2,
+  Calendar: CalendarDays,
+  "Decision Center": Target,
+  "Data Health": ShieldAlert,
 };
 
 function score(item: Result, q: string): number {
@@ -100,7 +176,9 @@ export function CommandPalette() {
     (item: Result) => {
       close();
       // Pass the search term as a URL param so the target page pre-fills its search
-      const url = `${item.href}?search=${encodeURIComponent(item.label)}`;
+      const url = item.queryParam === ""
+        ? item.href
+        : `${item.href}?search=${encodeURIComponent(item.queryParam ?? item.label)}`;
       router.push(url);
     },
     [close, router]
@@ -209,7 +287,7 @@ export function CommandPalette() {
             </p>
           ) : (
             results.map((item, i) => {
-              const Icon = TYPE_ICON[item.type];
+              const Icon = item.type === "page" ? (PAGE_ICON[item.label] ?? TYPE_ICON.page) : TYPE_ICON[item.type];
               const active = i === cursor;
               return (
                 <button

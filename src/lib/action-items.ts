@@ -18,6 +18,7 @@ export const ACTION_ITEMS: ActionItem[] = [
     id: "ai-2",
     priority: "P1",
     text: "Ask WLDD to fix Full Disclosure Dub slug — currently conflicts with financewithjobi (v53).",
+    resolved: true,
   },
   {
     id: "ai-3",

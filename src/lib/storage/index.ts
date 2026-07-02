@@ -2,8 +2,9 @@
  * Storage abstraction for sync snapshots + sync history.
  *
  * If DATABASE_URL is set, uses the `postgres` npm package (Postgres).
- * Otherwise, falls back to in-memory Maps and warns once. The fallback
- * never throws, so page renders and sync routes degrade gracefully.
+ * Otherwise, falls back to a local JSON file when the runtime can write it,
+ * then to in-memory arrays. The fallback never throws, so page renders and
+ * sync routes degrade gracefully.
  */
 
 import type {
@@ -25,13 +26,14 @@ import type {
 type Sql = (strings: TemplateStringsArray, ...values: unknown[]) => Promise<Record<string, unknown>[]>;
 
 const DATABASE_URL = process.env.DATABASE_URL;
+const SNAPSHOT_STORAGE_FILE = process.env.SNAPSHOT_STORAGE_FILE ?? ".data/creator-dashboard-storage.json";
 
 let warned = false;
 function warnOnce(): void {
   if (!warned) {
     warned = true;
     console.warn(
-      "[storage] DATABASE_URL not set — using in-memory fallback. Sync history and snapshots will not persist."
+      "[storage] DATABASE_URL not set — using JSON file fallback when writable, otherwise in-memory storage."
     );
   }
 }
@@ -42,6 +44,110 @@ const memSyncRuns: SyncRun[] = [];
 const memDubSnapshots: DubMetricSnapshot[] = [];
 const memDubTimeseries: DubTimeseriesPoint[] = [];
 const memInferred: InferredAttribution[] = [];
+
+type StorageMode = "postgres" | "json_file" | "memory";
+
+export interface StorageStatus {
+  mode: StorageMode;
+  persistent: boolean;
+  configured: boolean;
+  label: string;
+  detail: string;
+  path?: string;
+}
+
+interface FileStorageData {
+  metricSnapshots?: ContentMetricSnapshot[];
+  syncRuns?: SyncRun[];
+  dubSnapshots?: DubMetricSnapshot[];
+  dubTimeseries?: DubTimeseriesPoint[];
+  inferred?: InferredAttribution[];
+}
+
+let fileLoadAttempted = false;
+let fileAvailable = false;
+let filePathResolved: string | null = null;
+
+function canTryFileStorage(): boolean {
+  if (SNAPSHOT_STORAGE_FILE.toLowerCase() === "memory") return false;
+  if (process.env.VERCEL && !process.env.SNAPSHOT_STORAGE_FILE) return false;
+  return true;
+}
+
+async function resolveFilePath(): Promise<string> {
+  if (filePathResolved) return filePathResolved;
+  const path = await import("path");
+  filePathResolved = path.isAbsolute(SNAPSHOT_STORAGE_FILE)
+    ? SNAPSHOT_STORAGE_FILE
+    : path.join(process.cwd(), SNAPSHOT_STORAGE_FILE);
+  return filePathResolved;
+}
+
+function replaceArray<T>(target: T[], next: T[] | undefined): void {
+  target.splice(0, target.length, ...(Array.isArray(next) ? next : []));
+}
+
+async function loadFileStore(): Promise<boolean> {
+  if (!canTryFileStorage()) return false;
+  if (fileLoadAttempted) return fileAvailable;
+  fileLoadAttempted = true;
+
+  try {
+    const fs = await import("fs/promises");
+    const path = await import("path");
+    const filePath = await resolveFilePath();
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    let raw = "";
+    try {
+      raw = await fs.readFile(filePath, "utf8");
+    } catch (err) {
+      if (!(err instanceof Error) || !("code" in err) || err.code !== "ENOENT") throw err;
+    }
+
+    if (raw.trim()) {
+      const parsed = JSON.parse(raw) as FileStorageData;
+      replaceArray(memMetricSnapshots, parsed.metricSnapshots);
+      replaceArray(memSyncRuns, parsed.syncRuns);
+      replaceArray(memDubSnapshots, parsed.dubSnapshots);
+      replaceArray(memDubTimeseries, parsed.dubTimeseries);
+      replaceArray(memInferred, parsed.inferred);
+    }
+
+    fileAvailable = true;
+    return true;
+  } catch (err) {
+    fileAvailable = false;
+    console.warn(
+      `[storage] JSON file fallback unavailable — using in-memory storage. ${err instanceof Error ? err.message : String(err)}`
+    );
+    return false;
+  }
+}
+
+async function persistFileStore(): Promise<void> {
+  if (!(await loadFileStore())) return;
+  try {
+    const fs = await import("fs/promises");
+    const filePath = await resolveFilePath();
+    const payload: FileStorageData = {
+      metricSnapshots: memMetricSnapshots,
+      syncRuns: memSyncRuns,
+      dubSnapshots: memDubSnapshots,
+      dubTimeseries: memDubTimeseries,
+      inferred: memInferred,
+    };
+    await fs.writeFile(filePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+  } catch (err) {
+    fileAvailable = false;
+    console.warn(
+      `[storage] JSON file fallback write failed — continuing in-memory. ${err instanceof Error ? err.message : String(err)}`
+    );
+  }
+}
+
+async function prepareFallbackStore(): Promise<void> {
+  await loadFileStore();
+}
 
 // ── Postgres client (lazy) ────────────────────────────────────────
 let sqlClient: Sql | null = null;
@@ -174,9 +280,42 @@ export async function isDbConnected(): Promise<boolean> {
   return sql != null;
 }
 
+export async function getStorageStatus(): Promise<StorageStatus> {
+  const sql = await getSql();
+  if (sql) {
+    return {
+      mode: "postgres",
+      persistent: true,
+      configured: true,
+      label: "Postgres connected",
+      detail: "Live snapshots and sync history persist in DATABASE_URL.",
+    };
+  }
+
+  if (await loadFileStore()) {
+    return {
+      mode: "json_file",
+      persistent: true,
+      configured: false,
+      label: "Local snapshot file",
+      detail: "DATABASE_URL is not configured, so snapshots persist to a local JSON file in this runtime.",
+      path: await resolveFilePath(),
+    };
+  }
+
+  return {
+    mode: "memory",
+    persistent: false,
+    configured: false,
+    label: "Memory fallback",
+    detail: "DATABASE_URL is not configured and no writable snapshot file is available. Sync history resets when the process restarts.",
+  };
+}
+
 export async function getLatestMetricSnapshot(videoId: string): Promise<ContentMetricSnapshot | null> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     const rows = memMetricSnapshots
       .filter((s) => s.videoId === videoId)
       .sort((a, b) => b.capturedAt.localeCompare(a.capturedAt));
@@ -193,6 +332,7 @@ export async function getLatestMetricSnapshot(videoId: string): Promise<ContentM
 export async function getMetricSnapshots(videoId: string, range?: DateRange): Promise<ContentMetricSnapshot[]> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     return memMetricSnapshots
       .filter(
         (s) =>
@@ -219,7 +359,9 @@ export async function insertMetricSnapshot(snapshot: MetricSnapshotInput): Promi
   };
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     memMetricSnapshots.push(full);
+    await persistFileStore();
     return full;
   }
   try {
@@ -252,7 +394,9 @@ export async function createSyncRun(input: SyncRunInput): Promise<SyncRun> {
   };
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     memSyncRuns.push(run);
+    await persistFileStore();
     return run;
   }
   try {
@@ -267,8 +411,10 @@ export async function createSyncRun(input: SyncRunInput): Promise<SyncRun> {
 export async function updateSyncRun(id: string, patch: Partial<SyncRun>): Promise<void> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     const idx = memSyncRuns.findIndex((r) => r.id === id);
     if (idx >= 0) memSyncRuns[idx] = { ...memSyncRuns[idx], ...patch };
+    await persistFileStore();
     return;
   }
   try {
@@ -291,6 +437,7 @@ export async function updateSyncRun(id: string, patch: Partial<SyncRun>): Promis
 export async function getLatestSyncRun(source: SyncSource): Promise<SyncRun | null> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     const rows = memSyncRuns
       .filter((r) => r.source === source)
       .sort((a, b) => b.startedAt.localeCompare(a.startedAt));
@@ -307,6 +454,7 @@ export async function getLatestSyncRun(source: SyncSource): Promise<SyncRun | nu
 export async function listSyncRuns(limit = 50): Promise<SyncRun[]> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     return [...memSyncRuns].sort((a, b) => b.startedAt.localeCompare(a.startedAt)).slice(0, limit);
   }
   try {
@@ -321,7 +469,9 @@ export async function insertDubSnapshot(input: DubSnapshotInput): Promise<DubMet
   const full: DubMetricSnapshot = { ...input, id: crypto.randomUUID() };
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     memDubSnapshots.push(full);
+    await persistFileStore();
     return full;
   }
   try {
@@ -345,6 +495,7 @@ export async function insertDubSnapshot(input: DubSnapshotInput): Promise<DubMet
 export async function getDubTimeseries(groupOrSlug: string, range?: DateRange): Promise<DubTimeseriesPoint[]> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     return memDubTimeseries
       .filter(
         (p) =>
@@ -375,6 +526,7 @@ export async function insertDubTimeseriesPoints(points: Omit<DubTimeseriesPoint,
   if (points.length === 0) return;
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     for (const p of points) {
       const existing = memDubTimeseries.findIndex(
         (e) => e.slug === p.slug && e.date === p.date && e.eventType === p.eventType
@@ -383,6 +535,7 @@ export async function insertDubTimeseriesPoints(points: Omit<DubTimeseriesPoint,
       if (existing >= 0) memDubTimeseries[existing] = withId;
       else memDubTimeseries.push(withId);
     }
+    await persistFileStore();
     return;
   }
   try {
@@ -419,7 +572,9 @@ export async function insertInferredAttribution(input: InferredAttributionInput)
   const full: InferredAttribution = { ...input, id: crypto.randomUUID() };
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     memInferred.push(full);
+    await persistFileStore();
     return full;
   }
   try {
@@ -442,6 +597,7 @@ export async function insertInferredAttribution(input: InferredAttributionInput)
 export async function getInferredAttributionForVideo(videoId: string): Promise<InferredAttribution[]> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     return memInferred.filter((a) => a.videoId === videoId);
   }
   try {
@@ -455,6 +611,7 @@ export async function getInferredAttributionForVideo(videoId: string): Promise<I
 export async function getInferredAttributionForGroup(groupId: string): Promise<InferredAttribution[]> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     return memInferred.filter((a) => a.attributionGroupId === groupId);
   }
   try {
@@ -468,9 +625,11 @@ export async function getInferredAttributionForGroup(groupId: string): Promise<I
 export async function clearInferredAttributionForGroup(groupId: string): Promise<void> {
   const sql = await getSql();
   if (!sql) {
+    await prepareFallbackStore();
     for (let i = memInferred.length - 1; i >= 0; i--) {
       if (memInferred[i].attributionGroupId === groupId) memInferred.splice(i, 1);
     }
+    await persistFileStore();
     return;
   }
   try {

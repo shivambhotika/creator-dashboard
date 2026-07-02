@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface Column<T> {
   key: string;
   label: string;
+  help?: string;
   sortable?: boolean;
   render: (row: T) => React.ReactNode;
   getValue?: (row: T) => string | number; // for sorting
@@ -17,11 +18,12 @@ interface Props<T> {
   data: T[];
   rowKey: (row: T) => string;
   emptyMessage?: string;
+  onRowClick?: (row: T) => void;
 }
 
 type SortDir = "asc" | "desc";
 
-export function SortableTable<T>({ columns, data, rowKey, emptyMessage = "No data found." }: Props<T>) {
+export function SortableTable<T>({ columns, data, rowKey, emptyMessage = "No data found.", onRowClick }: Props<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDir>("asc");
 
@@ -66,6 +68,11 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = "No dat
                 >
                   <span className="flex items-center gap-1.5">
                     {col.label}
+                    {col.help && (
+                      <span title={col.help} aria-label={col.help}>
+                        <Info className="w-3 h-3 opacity-50" />
+                      </span>
+                    )}
                     {col.sortable && (
                       sortKey === col.key
                         ? sortDir === "asc"
@@ -89,8 +96,9 @@ export function SortableTable<T>({ columns, data, rowKey, emptyMessage = "No dat
               sorted.map((row) => (
                 <tr
                   key={rowKey(row)}
-                  className="transition-colors"
+                  className={cn("transition-colors", onRowClick && "cursor-pointer")}
                   style={{ borderBottom: `1px solid var(--border-subtle)` }}
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-surface)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "")}
                 >

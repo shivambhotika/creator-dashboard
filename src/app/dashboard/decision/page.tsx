@@ -45,6 +45,28 @@ export default async function DecisionPage() {
     return { label: "Do not renew", color: "#ef4444" };
   }
 
+  const decisionRows = summaries.map((s) => ({ ...s, recommendation: rec(s) }));
+  const renewalGroups = [
+    { label: "Renew strongly", detail: "Efficient at current price", color: "#10b981" },
+    { label: "Renew if price holds", detail: "Good, but keep pricing disciplined", color: "#3b82f6" },
+    { label: "Renegotiate price", detail: "Performance needs better commercial terms", color: "#f59e0b" },
+    { label: "Fix attribution first", detail: "Do not judge video CPI yet", color: "#d97706" },
+    { label: "Do not renew", detail: "Spend is not clearing CPI guardrails", color: "#ef4444" },
+  ].map((group) => {
+    const items = decisionRows.filter((s) => s.recommendation.label === group.label);
+    return {
+      ...group,
+      count: items.length,
+      spend: items.reduce((sum, item) => sum + item.totalSpend, 0),
+      installs: items.reduce((sum, item) => sum + item.totalInstalls, 0),
+      names: items.slice(0, 3).map((item) => item.creator.name),
+    };
+  });
+
+  const priorityMoves = decisionRows
+    .filter((s) => s.recommendation.label !== "Insufficient data")
+    .slice(0, 8);
+
   return (
     <div className="space-y-6 p-6">
       <div>
@@ -66,6 +88,66 @@ export default async function DecisionPage() {
         <strong style={{ color: "var(--text-primary)" }}>ROAS unavailable</strong>
         {" "}— no revenue or LTV data connected. Efficiency uses CPI and CPV only.
       </div>
+
+      <section>
+        <div className="mb-3">
+          <h2 className="section-heading">Renewal Board</h2>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            Budget posture by recommendation, not just raw CPI order.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+          {renewalGroups.map((group) => (
+            <div
+              key={group.label}
+              className="rounded-xl p-4"
+              style={{ background: "var(--bg-card)", border: `1px solid ${group.color}33`, boxShadow: "var(--nm-sm)" }}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: group.color }}>{group.label}</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>{group.detail}</p>
+                </div>
+                <span className="text-2xl font-black tabular-nums" style={{ color: group.color }}>{group.count}</span>
+              </div>
+              <p className="text-xs mt-3" style={{ color: "var(--text-secondary)" }}>
+                {formatCurrencyINR(group.spend)} spend · {formatNullableNumber(group.installs)} installs
+              </p>
+              {group.names.length > 0 && (
+                <p className="text-xs mt-2 truncate" style={{ color: "var(--text-muted)" }}>
+                  {group.names.join(", ")}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="card p-6">
+        <h2 className="section-heading mb-4">Next Budget Moves</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {priorityMoves.slice(0, 6).map((s) => (
+            <div key={s.creator.id} className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: `1px solid ${s.recommendation.color}33` }}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold truncate" style={{ color: "var(--text-primary)" }}>{s.creator.name}</p>
+                  <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                    {s.videoCount} video{s.videoCount === 1 ? "" : "s"} · {formatCurrencyINR(s.totalSpend)} spend
+                  </p>
+                </div>
+                <span className="text-xs font-semibold px-2 py-1 rounded-md whitespace-nowrap" style={{ background: `${s.recommendation.color}22`, color: s.recommendation.color }}>
+                  {s.recommendation.label}
+                </span>
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                <span style={{ color: "var(--text-secondary)" }}>CPI {s.cpi != null ? `$${(s.cpi / 84).toFixed(1)}` : "—"}</span>
+                <span style={{ color: "var(--text-secondary)" }}>Views {formatNullableNumber(s.totalViews)}</span>
+                <span style={{ color: "var(--text-secondary)" }}>Installs {s.hasSharedAttribution ? "Shared" : formatNullableNumber(s.totalInstalls)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Recommended Actions */}
       <section className="card p-6">
@@ -119,8 +201,8 @@ export default async function DecisionPage() {
               </tr>
             </thead>
             <tbody>
-              {summaries.map((s, i) => {
-                const r = rec(s);
+              {decisionRows.map((s, i) => {
+                const r = s.recommendation;
                 return (
                   <tr
                     key={s.creator.id}

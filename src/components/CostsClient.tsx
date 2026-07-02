@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { costs, videos, creators, performances, installs, campaigns } from "@/lib/mock-data";
 import { useCurrency } from "@/lib/currency-context";
+import type { MetricConfidence } from "@/types";
 
 export interface DubByVideo {
   [videoId: string]: { clicks: number; leads: number };
@@ -11,6 +12,7 @@ import { SortableTable, type Column } from "@/components/SortableTable";
 import { StatCard } from "@/components/StatCard";
 import { CostCharts } from "@/components/CostCharts";
 import { Sparkline } from "@/components/Sparkline";
+import { ConfidenceBadge } from "@/components/MetricBadges";
 import { DollarSign, TrendingUp, Target, Percent, Download } from "lucide-react";
 
 interface CostRow {
@@ -30,6 +32,7 @@ interface CostRow {
   cpm: number;
   clickToInstallRate: number;
   roas: number;
+  confidence: MetricConfidence;
 }
 
 export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
@@ -52,6 +55,12 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
     const cpm = views > 0 && c.netCost > 0 ? (c.netCost / views) * 1000 : 0;
     const clickToInstallRate = clicks > 0 ? (videoInstalls / clicks) * 100 : 0;
     const roas = c.netCost > 0 && revenue > 0 ? revenue / c.netCost : 0;
+    const confidence: MetricConfidence =
+      c.netCost > 0 && views > 0 && videoInstalls > 0
+        ? "high"
+        : c.netCost > 0 && views > 0
+        ? "medium"
+        : "low";
     return {
       videoId: c.videoId,
       title: video?.title ?? c.videoId,
@@ -69,6 +78,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       cpm,
       clickToInstallRate,
       roas,
+      confidence,
     };
   }), [dubByVideo]);
 
@@ -171,12 +181,12 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.agency}</span>,
     },
     {
-      key: "grossCost", label: "Gross", sortable: true,
+      key: "grossCost", label: "Gross", help: "Creator payout before agency fee handling.", sortable: true,
       getValue: (r) => r.grossCost,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{money(r.grossCost)}</span>,
     },
     {
-      key: "agencyFee", label: "Agency Fee", sortable: true,
+      key: "agencyFee", label: "Agency Fee", help: "Agency fee amount and percent of gross spend.", sortable: true,
       getValue: (r) => r.agencyFee,
       render: (r) => (
         <div>
@@ -186,7 +196,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       ),
     },
     {
-      key: "netCost", label: "Net Cost", sortable: true,
+      key: "netCost", label: "Net Cost", help: "Spend used for CPI, CPV, CPM, and renewal decisions.", sortable: true,
       getValue: (r) => r.netCost,
       render: (r) => <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{money(r.netCost)}</span>,
     },
@@ -196,12 +206,12 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.views ? count(r.views) : "—"}</span>,
     },
     {
-      key: "videoInstalls", label: "Installs", sortable: true,
+      key: "videoInstalls", label: "Installs", help: "Dub leads when available; manual records as fallback.", sortable: true,
       getValue: (r) => r.videoInstalls,
       render: (r) => <span className="text-sm font-semibold text-indigo-500">{r.videoInstalls ? count(r.videoInstalls) : "—"}</span>,
     },
     {
-      key: "cpi", label: "CPI", sortable: true,
+      key: "cpi", label: "CPI", help: "Net cost divided by installs.", sortable: true,
       getValue: (r) => r.cpi,
       render: (r) => r.cpi ? (
         <span className={`text-sm font-medium ${r.cpi <= 300 ? "text-emerald-500" : r.cpi <= 500 ? "text-amber-500" : "text-red-500"}`}>
@@ -210,7 +220,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "cpv", label: "CPV", sortable: true,
+      key: "cpv", label: "CPV", help: "Net cost divided by views or impressions.", sortable: true,
       getValue: (r) => r.cpv,
       render: (r) => r.cpv ? (
         <span className={`text-sm ${r.cpv <= 0.4 ? "text-emerald-500" : r.cpv <= 0.5 ? "text-amber-500" : "text-red-500"}`}>
@@ -219,7 +229,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "cpm", label: "CPM", sortable: true,
+      key: "cpm", label: "CPM", help: "Net cost divided by views/impressions, multiplied by 1,000.", sortable: true,
       getValue: (r) => r.cpm,
       render: (r) => r.cpm ? (
         <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{money(r.cpm)}</span>
@@ -234,6 +244,11 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
         </span>
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
+    {
+      key: "confidence", label: "Trust", help: "High means spend, views, and installs are all present; medium means spend/views only; low means key cost inputs are missing.", sortable: true,
+      getValue: (r) => r.confidence,
+      render: (r) => <ConfidenceBadge confidence={r.confidence} />,
+    },
   ];
 
   return (
@@ -242,7 +257,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
         <div>
           <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
             Costs &amp; ROI
-            <span className="ml-3 text-sm font-normal px-2 py-0.5 rounded-full" style={{ background: "var(--surface-2)", color: "var(--text-muted)" }}>
+            <span className="ml-3 text-sm font-normal px-2 py-0.5 rounded-full" style={{ background: "var(--bg-surface)", color: "var(--text-muted)" }}>
               {rows.length} of {allRows.length}
             </span>
           </h1>
@@ -253,7 +268,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
         <button
           onClick={handleExport}
           className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg border transition-colors"
-          style={{ borderColor: "var(--border)", color: "var(--text-secondary)", background: "var(--surface-1)" }}
+          style={{ borderColor: "var(--border)", color: "var(--text-secondary)", background: "var(--bg-surface)" }}
         >
           <Download size={14} />
           Export CSV
@@ -312,7 +327,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="text-sm px-3 py-1.5 rounded-lg border outline-none w-64"
-          style={{ borderColor: "var(--border)", background: "var(--surface-1)", color: "var(--text-primary)" }}
+          style={{ borderColor: "var(--border)", background: "var(--bg-surface)", color: "var(--text-primary)" }}
         />
 
         {/* Agency pills */}
@@ -326,7 +341,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
                   ? "border-indigo-500 bg-indigo-500 text-white"
                   : "border-transparent"
               }`}
-              style={agencyFilter !== a ? { background: "var(--surface-2)", color: "var(--text-secondary)", borderColor: "var(--border)" } : {}}
+              style={agencyFilter !== a ? { background: "var(--bg-surface)", color: "var(--text-secondary)", borderColor: "var(--border)" } : {}}
             >
               {a}
             </button>
@@ -338,7 +353,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
           value={campaignFilter}
           onChange={(e) => setCampaignFilter(e.target.value)}
           className="text-sm px-2.5 py-1.5 rounded-lg border outline-none"
-          style={{ borderColor: "var(--border)", background: "var(--surface-1)", color: "var(--text-primary)" }}
+          style={{ borderColor: "var(--border)", background: "var(--bg-surface)", color: "var(--text-primary)" }}
         >
           <option value="All">All Campaigns</option>
           {campaignOptions.map((camp) => (

@@ -1,6 +1,6 @@
 import { FileSpreadsheet } from "lucide-react";
 import { SHEET_SOURCES } from "@/lib/sync/sheets";
-import { getLatestSyncRun, isDbConnected } from "@/lib/storage";
+import { getLatestSyncRun, getStorageStatus } from "@/lib/storage";
 import { SheetSyncControls } from "@/components/SheetSyncControls";
 
 function fmt(dt?: string | null): string {
@@ -20,7 +20,7 @@ interface PerSheet {
 }
 
 export default async function SheetsPage() {
-  const [lastSync, dbConnected] = await Promise.all([getLatestSyncRun("sheets"), isDbConnected()]);
+  const [lastSync, storage] = await Promise.all([getLatestSyncRun("sheets"), getStorageStatus()]);
   const perSheet = (lastSync?.metadata?.perSheet as Record<string, PerSheet> | undefined) ?? {};
 
   return (
@@ -36,9 +36,9 @@ export default async function SheetsPage() {
         <SheetSyncControls />
       </div>
 
-      {!dbConnected && (
+      {!storage.persistent && (
         <p className="text-xs mb-4 rounded-lg p-2" style={{ background: "#fffbeb", color: "#92400e" }}>
-          Sync storage not connected — sync runs are observed in-memory only and will not persist between deploys.
+          {storage.detail}
         </p>
       )}
 

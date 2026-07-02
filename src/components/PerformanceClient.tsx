@@ -7,11 +7,16 @@ import { useCurrency } from "@/lib/currency-context";
 import { SortableTable, type Column } from "@/components/SortableTable";
 import { PerformanceCharts } from "@/components/PerformanceCharts";
 import { StatCard } from "@/components/StatCard";
+import { ConfidenceBadge } from "@/components/MetricBadges";
 import { Eye, Zap, Download, Clock } from "lucide-react";
+import type { MetricConfidence } from "@/types";
 
 export interface DubByVideo {
   [videoId: string]: { clicks: number; leads: number };
 }
+
+const TODAY = new Date().toISOString().slice(0, 10);
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 
 interface PerfRow {
@@ -33,7 +38,9 @@ interface PerfRow {
   viewToInstallRate: number;
   cpi: number;
   roas: number;
+  daysLive: number;
   quality: "Full" | "Partial" | "No data";
+  confidence: MetricConfidence;
   isDubMeasured: boolean;
 }
 
@@ -122,6 +129,9 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       const platform = video?.platform ?? "Unknown";
       const campaign = video?.campaignId ? campaigns.find((c) => c.id === video.campaignId) : undefined;
       const campaignName = campaign?.name ?? "—";
+      const daysLive = video?.goLiveDate
+        ? Math.max(0, Math.floor((new Date(TODAY).getTime() - new Date(video.goLiveDate).getTime()) / MS_PER_DAY))
+        : 0;
 
       let quality: PerfRow["quality"];
       if (p.views === 0) {
@@ -131,6 +141,7 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       } else {
         quality = "Partial";
       }
+      const confidence: MetricConfidence = quality === "Full" ? "high" : quality === "Partial" ? "medium" : "low";
 
       return {
         videoId: p.videoId,
@@ -151,7 +162,9 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
         viewToInstallRate,
         cpi,
         roas,
+        daysLive,
         quality,
+        confidence,
         isDubMeasured,
       };
     });
@@ -194,12 +207,12 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       ),
     },
     {
-      key: "views", label: "Views", sortable: true,
+      key: "views", label: "Views", help: "Platform views from source performance data.", sortable: true,
       getValue: (r) => r.views,
       render: (r) => <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{count(r.views)}</span>,
     },
     {
-      key: "engagementRate", label: "Eng %", sortable: true,
+      key: "engagementRate", label: "Eng %", help: "Likes + comments + shares divided by views.", sortable: true,
       getValue: (r) => r.engagementRate,
       render: (r) => (
         <span className={`text-sm font-medium ${r.engagementRate >= 7 ? "text-emerald-500" : r.engagementRate >= 4 ? "text-amber-500" : "text-red-500"}`}>
@@ -213,12 +226,12 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{count(Math.round(r.watchTimeMinutes / 60))}h</span>,
     },
     {
-      key: "clickThroughs", label: "Dub Clicks", sortable: true,
+      key: "clickThroughs", label: "Dub Clicks", help: "Dub clicks when connected; otherwise the recorded fallback.", sortable: true,
       getValue: (r) => r.clickThroughs,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{count(r.clickThroughs)}</span>,
     },
     {
-      key: "videoInstalls", label: "Installs", sortable: true,
+      key: "videoInstalls", label: "Installs", help: "Dub leads when connected; otherwise manual install records.", sortable: true,
       getValue: (r) => r.videoInstalls,
       render: (r) => r.videoInstalls ? (
         <span
@@ -230,7 +243,7 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "clickToInstallRate", label: "Click→Install", sortable: true,
+      key: "clickToInstallRate", label: "Click→Install", help: "Installs divided by clicks.", sortable: true,
       getValue: (r) => r.clickToInstallRate,
       render: (r) => r.clickToInstallRate ? (
         <span className={`text-sm font-medium ${r.clickToInstallRate >= 5 ? "text-emerald-500" : r.clickToInstallRate >= 2 ? "text-amber-500" : "text-red-500"}`}>
@@ -239,7 +252,7 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "cpi", label: "CPI", sortable: true,
+      key: "cpi", label: "CPI", help: "Net spend divided by installs.", sortable: true,
       getValue: (r) => r.cpi,
       render: (r) => r.cpi ? (
         <span
@@ -270,6 +283,11 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
       key: "quality", label: "Quality", sortable: true,
       getValue: (r) => r.quality,
       render: (r) => <QualityBadge quality={r.quality} />,
+    },
+    {
+      key: "confidence", label: "Trust", help: "High has full engagement metrics, medium has partial metrics, low has missing performance.", sortable: true,
+      getValue: (r) => r.confidence,
+      render: (r) => <ConfidenceBadge confidence={r.confidence} />,
     },
   ];
 

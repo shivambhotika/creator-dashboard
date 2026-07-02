@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCurrency } from "@/lib/currency-context";
 import { TopCreatorsWidget, type TopCreatorEntry } from "@/components/TopCreatorsWidget";
 import { Sparkline } from "@/components/Sparkline";
+import { MetricHint } from "@/components/MetricHint";
 
 const USD_INR = 84;
 
@@ -62,6 +63,31 @@ export interface OverviewData {
   ytLastSync: string | null;
   dubLastSync: string | null;
   highPriorityActionCount: number;
+  operatorInsights: Array<{
+    id: string;
+    title: string;
+    body: string;
+    metric: string;
+    tone: "good" | "warn" | "bad" | "neutral";
+    href: string;
+    source: string;
+  }>;
+  coverage: Array<{
+    id: string;
+    label: string;
+    known: number;
+    total: number;
+    pct: number;
+    detail: string;
+    tone: "good" | "warn" | "bad" | "neutral";
+  }>;
+  todayItems: Array<{
+    label: string;
+    value: number;
+    detail: string;
+    href: string;
+    tone: "good" | "warn" | "bad" | "neutral";
+  }>;
 }
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -86,8 +112,8 @@ function freshnessColor(iso: string | null): string {
   return "var(--red)";
 }
 
-function StatCard({ label, value, sub, accent }: {
-  label: string; value: string; sub?: string; accent?: string;
+function StatCard({ label, value, sub, accent, help }: {
+  label: string; value: string; sub?: string; accent?: string; help?: string;
 }) {
   return (
     <div
@@ -98,7 +124,10 @@ function StatCard({ label, value, sub, accent }: {
         border: "1px solid var(--border)",
       }}
     >
-      <p className="label-caps">{label}</p>
+      <p className="label-caps flex items-center gap-1">
+        {label}
+        {help && <MetricHint text={help} />}
+      </p>
       <p
         className="stat-number"
         style={accent ? { color: accent } : undefined}
@@ -122,6 +151,13 @@ function Delta({ curr, prev }: { curr: number; prev?: number }) {
 }
 
 const ALL_PLATFORMS = ["YouTube", "Instagram", "LinkedIn", "Twitter"];
+
+function toneColor(tone: "good" | "warn" | "bad" | "neutral"): string {
+  if (tone === "good") return "#10b981";
+  if (tone === "warn") return "#f59e0b";
+  if (tone === "bad") return "#ef4444";
+  return "var(--accent)";
+}
 
 export function OverviewClient({ data }: { data: OverviewData }) {
   const { money, rate, count, pct, mode } = useCurrency();
@@ -160,6 +196,120 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           {mode === "usd" ? "USD · ₹84/$" : "INR · ₹84/$"}
         </div>
       </div>
+
+      {/* ── Today / workflow strip ───────────────────────────── */}
+      <section>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <h2 className="section-heading">Today</h2>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+              The fastest paths from diagnosis to decision
+            </p>
+          </div>
+          <Link
+            href="/dashboard/decision"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ color: "var(--accent)", background: "var(--accent-dim)", border: "1px solid var(--accent-dim-border)" }}
+          >
+            Open decision view
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {data.todayItems.map((item) => {
+            const color =
+              item.tone === "good" ? "#10b981" : item.tone === "warn" ? "#f59e0b" : item.tone === "bad" ? "#ef4444" : "var(--accent)";
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="rounded-2xl p-4 transition-all duration-150 hover:translate-y-[-1px]"
+                style={{
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  boxShadow: "var(--nm-sm)",
+                  textDecoration: "none",
+                }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>{item.label}</p>
+                    <p className="mt-1 text-xs" style={{ color: "var(--text-secondary)" }}>{item.detail}</p>
+                  </div>
+                  <span className="text-2xl font-black tabular-nums leading-none" style={{ color }}>
+                    {item.value}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ── Operator insights ────────────────────────────────── */}
+      <section>
+        <div className="mb-3">
+          <h2 className="section-heading">Operator Insights</h2>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            Computed from current campaign data, Dub availability, and known data-health issues
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {data.operatorInsights.slice(0, 6).map((insight) => {
+            const color = toneColor(insight.tone);
+            return (
+              <Link
+                key={insight.id}
+                href={insight.href}
+                className="rounded-2xl p-4 transition-all duration-150 hover:translate-y-[-1px]"
+                style={{
+                  background: "var(--bg-card)",
+                  border: `1px solid ${color}33`,
+                  boxShadow: "var(--nm-sm)",
+                  textDecoration: "none",
+                }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{insight.title}</p>
+                  <span className="text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap" style={{ background: `${color}22`, color }}>
+                    {insight.metric}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                  {insight.body}
+                </p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="section-heading">Data Precision</h2>
+          <Link href="/dashboard/data-health" className="text-xs font-semibold" style={{ color: "var(--accent)" }}>
+            See health details
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
+          {data.coverage.map((metric) => {
+            const color = toneColor(metric.tone);
+            return (
+              <div key={metric.id} className="rounded-xl p-3" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }} title={metric.detail}>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-semibold truncate" style={{ color: "var(--text-secondary)" }}>{metric.label}</p>
+                  <span className="text-xs font-bold tabular-nums" style={{ color }}>{metric.pct}%</span>
+                </div>
+                <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${metric.pct}%`, background: color }} />
+                </div>
+                <p className="mt-2 text-[0.65rem] tabular-nums" style={{ color: "var(--text-muted)" }}>
+                  {metric.known}/{metric.total}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       {/* ── Freshness + Decision callout row ──────────────────── */}
       <div className="flex flex-wrap gap-3">
@@ -232,35 +382,41 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           label="Total Impressions"
           value={count(data.totalImp)}
           sub="Views across all platforms"
+          help="Uses reported impressions when available, otherwise views as the comparable top-of-funnel volume."
         />
         <StatCard
           label="CPM"
           value={rate(data.cpmUSD)}
           sub="Cost per 1,000 impressions"
           accent="var(--accent)"
+          help="Net spend divided by impressions, multiplied by 1,000."
         />
         <StatCard
           label="Clicks"
           value={count(data.totalClk)}
           sub="Link clicks via Dub"
+          help="Prefers live Dub clicks. Falls back to recorded click-throughs where Dub data is unavailable."
         />
         <StatCard
           label="CPC"
           value={rate(data.cpcUSD)}
           sub="Cost per click"
           accent="#0ea5e9"
+          help="Net spend divided by measured or fallback clicks."
         />
         <StatCard
           label="CTR"
           value={pct(data.ctrPct, 2)}
           sub="Click-through rate"
           accent="#8b5cf6"
+          help="Clicks divided by impressions or comparable view volume."
         />
         <StatCard
           label="Cost per Install"
           value={rate(data.cpiUSD)}
           sub={`${count(data.totalInst)} installs · C→I ${pct(data.c2iPct, 1)}`}
           accent="#10b981"
+          help="Net spend divided by installs/leads. Shared attribution should be read at creator level."
         />
       </div>
 

@@ -5,12 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { creators } from "@/lib/mock-data";
 import type { CreatorMetrics } from "@/types";
 import { useCurrency } from "@/lib/currency-context";
+import { useSavedViews } from "@/lib/use-saved-views";
 import { TopCreatorsWidget } from "@/components/TopCreatorsWidget";
 import { SortableTable, type Column } from "@/components/SortableTable";
 import { Badge } from "@/components/Badge";
+import { DetailDrawer, DetailStat } from "@/components/DetailDrawer";
+import { ConfidenceBadge } from "@/components/MetricBadges";
 import { tierBadge, statusBadge, platformBadge } from "@/lib/badges";
-import { ExternalLink, Link2, Download } from "lucide-react";
-import type { Creator } from "@/types";
+import { ExternalLink, Link2, Download, BookmarkPlus, Trash2 } from "lucide-react";
+import type { Creator, MetricConfidence } from "@/types";
 
 interface CreatorRow extends Creator {
   totalSpend: number;
@@ -21,13 +24,16 @@ interface CreatorRow extends Creator {
   roas: number;
   efficiencyScore: number;
   videoCount: number;
+  confidence: MetricConfidence;
 }
 
 const PLATFORMS = ["All", "Instagram", "YouTube", "LinkedIn"] as const;
 const STATUSES = ["All", "Active", "Paused", "Past", "Negotiating"] as const;
+const SMART_VIEWS = ["All", "High spend", "Renew ready", "Needs metrics"] as const;
 
 type PlatformFilter = (typeof PLATFORMS)[number];
 type StatusFilter = (typeof STATUSES)[number];
+type SmartView = (typeof SMART_VIEWS)[number];
 
 function FilterPill({
   label,
@@ -58,6 +64,12 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
 
   const rows: CreatorRow[] = creators.map((c) => {
     const m = allMetrics.find((x) => x.creatorId === c.id)!;
+    const confidence: MetricConfidence =
+      m.totalViews > 0 && m.totalInstalls > 0 && m.totalSpend > 0
+        ? "high"
+        : m.totalViews > 0 || m.totalInstalls > 0
+        ? "medium"
+        : "low";
     return {
       ...c,
       totalSpend: m.totalSpend,
@@ -68,6 +80,7 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
       roas: m.roas,
       efficiencyScore: m.efficiencyScore,
       videoCount: m.videoCount,
+      confidence,
     };
   });
 
@@ -90,6 +103,21 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
   const [platform, setPlatform] = useState<PlatformFilter>("All");
   const [agency, setAgency] = useState("All");
   const [status, setStatus] = useState<StatusFilter>("All");
+  const [smartView, setSmartView] = useState<SmartView>("All");
+  const [viewName, setViewName] = useState("");
+  const [selectedCreatorId, setSelectedCreatorId] = useState<string | null>(null);
+
+  const { views: savedViews, saveView, applyView, deleteView } = useSavedViews(
+    "creator_ops_creator_saved_views",
+    { search, platform, agency, status, smartView },
+    (state) => {
+      setSearch(state.search ?? "");
+      setPlatform((state.platform as PlatformFilter) ?? "All");
+      setAgency(state.agency ?? "All");
+      setStatus((state.status as StatusFilter) ?? "All");
+      setSmartView((state.smartView as SmartView) ?? "All");
+    }
+  );
 
   const filteredRows = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -98,9 +126,14 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
       if (platform !== "All" && r.platform !== platform) return false;
       if (agency !== "All" && r.agency !== agency) return false;
       if (status !== "All" && r.status !== status) return false;
+      if (smartView === "High spend" && r.totalSpend < 500000) return false;
+      if (smartView === "Renew ready" && (!r.cpi || r.cpi > 300)) return false;
+      if (smartView === "Needs metrics" && (r.totalViews > 0 && r.totalInstalls > 0)) return false;
       return true;
     });
-  }, [rows, search, platform, agency, status]);
+  }, [rows, search, platform, agency, status, smartView]);
+
+  const selectedCreator = selectedCreatorId ? rows.find((r) => r.id === selectedCreatorId) ?? null : null;
 
   function exportCSV() {
     const headers = [
@@ -165,22 +198,22 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.agency}</span>,
     },
     {
-      key: "followers", label: "Followers", sortable: true,
+      key: "followers", label: "Followers", help: "Audience size from the source data.", sortable: true,
       getValue: (r) => r.followers,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{count(r.followers)}</span>,
     },
     {
-      key: "totalSpend", label: "Spend", sortable: true,
+      key: "totalSpend", label: "Spend", help: "Total net spend across this creator's mapped videos.", sortable: true,
       getValue: (r) => r.totalSpend,
       render: (r) => <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{r.totalSpend ? money(r.totalSpend) : "—"}</span>,
     },
     {
-      key: "totalInstalls", label: "Installs", sortable: true,
+      key: "totalInstalls", label: "Installs", help: "Attributed installs/leads. Live Dub data is preferred when available.", sortable: true,
       getValue: (r) => r.totalInstalls,
       render: (r) => <span className="text-sm font-semibold text-indigo-500">{r.totalInstalls ? count(r.totalInstalls) : "—"}</span>,
     },
     {
-      key: "cpi", label: "CPI", sortable: true,
+      key: "cpi", label: "CPI", help: "Net spend divided by attributed installs. Lower is better.", sortable: true,
       getValue: (r) => r.cpi,
       render: (r) => r.cpi ? (
         <span className={`text-sm font-medium ${r.cpi <= 300 ? "text-emerald-500" : r.cpi <= 500 ? "text-amber-500" : "text-red-500"}`}>
@@ -189,7 +222,7 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "clickToInstallRate", label: "Click→Install", sortable: true,
+      key: "clickToInstallRate", label: "Click→Install", help: "Installs divided by clicks.", sortable: true,
       getValue: (r) => r.clickToInstallRate,
       render: (r) => r.clickToInstallRate ? (
         <span className={`text-sm font-medium ${r.clickToInstallRate >= 5 ? "text-emerald-500" : r.clickToInstallRate >= 2 ? "text-amber-500" : "text-red-500"}`}>
@@ -219,6 +252,11 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
       ),
     },
     {
+      key: "confidence", label: "Trust", help: "High means spend, views, and installs are present; medium means partial data; low means key metrics are missing.", sortable: true,
+      getValue: (r) => r.confidence,
+      render: (r) => <ConfidenceBadge confidence={r.confidence} />,
+    },
+    {
       key: "dubLinkSlug", label: "Dub Link", sortable: false,
       getValue: (r) => r.dubLinkSlug ?? "",
       render: (r) => r.dubLinkSlug ? (
@@ -235,7 +273,7 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
     {
       key: "link", label: "",
       render: (r) => r.sheetUrl ? (
-        <a href={r.sheetUrl} target="_blank" rel="noreferrer" aria-label="Open sheet" style={{ color: "var(--text-muted)" }} className="hover:text-indigo-500 transition-colors">
+        <a href={r.sheetUrl} target="_blank" rel="noreferrer" aria-label="Open sheet" style={{ color: "var(--text-muted)" }} className="hover:text-indigo-500 transition-colors" onClick={(e) => e.stopPropagation()}>
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       ) : null,
@@ -313,13 +351,101 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
             ))}
           </div>
         </div>
+
+        {/* Smart views */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs" style={{ color: "var(--text-muted)" }}>View:</span>
+          <div className="flex gap-1">
+            {SMART_VIEWS.map((s) => (
+              <FilterPill key={s} label={s} active={smartView === s} onClick={() => setSmartView(s)} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl p-3" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
+        <input
+          value={viewName}
+          onChange={(e) => setViewName(e.target.value)}
+          placeholder="Saved view name"
+          className="text-xs px-3 py-1.5 rounded-lg outline-none"
+          style={{ background: "var(--bg-surface)", color: "var(--text-primary)", border: "1px solid var(--border)", width: 180 }}
+        />
+        <button
+          onClick={() => {
+            saveView(viewName);
+            setViewName("");
+          }}
+          className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg"
+          style={{ background: "var(--accent-dim)", color: "var(--accent)", border: "1px solid var(--accent-dim-border)" }}
+        >
+          <BookmarkPlus className="w-3.5 h-3.5" />
+          Save view
+        </button>
+        {savedViews.map((view) => (
+          <span key={view.name} className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs" style={{ background: "var(--bg-surface)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>
+            <button onClick={() => applyView(view.name)}>{view.name}</button>
+            <button onClick={() => deleteView(view.name)} aria-label={`Delete ${view.name}`}>
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </span>
+        ))}
       </div>
 
       <div className="mb-6">
         <TopCreatorsWidget creators={topCreatorEntries} />
       </div>
 
-      <SortableTable columns={columns} data={filteredRows} rowKey={(r) => r.id} emptyMessage="No creators found." />
+      <SortableTable
+        columns={columns}
+        data={filteredRows}
+        rowKey={(r) => r.id}
+        emptyMessage="No creators found."
+        onRowClick={(r) => setSelectedCreatorId(r.id)}
+      />
+
+      <DetailDrawer
+        open={selectedCreator != null}
+        title={selectedCreator?.name ?? ""}
+        subtitle={selectedCreator ? `${selectedCreator.platform} · ${selectedCreator.agency}` : undefined}
+        onClose={() => setSelectedCreatorId(null)}
+      >
+        {selectedCreator && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <DetailStat label="Spend" value={money(selectedCreator.totalSpend)} />
+              <DetailStat label="Installs" value={selectedCreator.totalInstalls ? count(selectedCreator.totalInstalls) : "—"} />
+              <DetailStat label="CPI" value={selectedCreator.cpi ? money(selectedCreator.cpi) : "—"} tone={selectedCreator.cpi && selectedCreator.cpi <= 300 ? "good" : "warn"} />
+              <DetailStat label="Views" value={selectedCreator.totalViews ? count(selectedCreator.totalViews) : "—"} />
+              <DetailStat label="Videos" value={selectedCreator.videoCount} />
+              <DetailStat label="Trust" value={<ConfidenceBadge confidence={selectedCreator.confidence} />} />
+            </div>
+            <div className="rounded-xl p-4" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Renewal read</p>
+              <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+                {selectedCreator.confidence === "low"
+                  ? "Missing creator-level performance or attribution. Review source data before making a renewal call."
+                  : selectedCreator.cpi && selectedCreator.cpi <= 300
+                  ? "Efficient creator at current pricing. Good candidate for renewal or scale-up review."
+                  : selectedCreator.cpi
+                  ? "Performance is measurable, but CPI is above target. Renegotiate or inspect creative fit before renewing."
+                  : "Metrics are partially available. Use the Decision Center before committing budget."}
+              </p>
+            </div>
+            {selectedCreator.sheetUrl && (
+              <a
+                href={selectedCreator.sheetUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold"
+                style={{ color: "var(--accent)" }}
+              >
+                Open source <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        )}
+      </DetailDrawer>
     </div>
   );
 }

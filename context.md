@@ -163,7 +163,6 @@ html.dark {
 | Priority | Item |
 |---|---|
 | P0 | Create unique Dub slugs per video for Ishan, Nandini, Anurag before next deal cycle |
-| P1 | Ask WLDD to fix Full Disclosure Dub slug — currently conflicts with financewithjobi (v53) |
 | P1 | Confirm actual video URLs for v72 (Sheryians), v74 (Arsh Goyal), v75 (Code And Bug) |
 | P2 | Request per-post breakdown for Anurag Bansal v93 (IG Reel 2) — aggregated with v79 |
 | P2 | Separate v88 Ishan April video from June reporting (use contracted spend basis) |
@@ -198,6 +197,7 @@ DASHBOARD_EMAIL=shivam@wispr.ai
 DASHBOARD_PASSWORD=<local-dashboard-password>
 CRON_SECRET=<random-cron-secret>
 DATABASE_URL=<postgres-url-optional-locally>
+SNAPSHOT_STORAGE_FILE=.data/creator-dashboard-storage.json
 ```
 
 ### Vercel (production — must be set manually in dashboard)
@@ -215,6 +215,7 @@ DATABASE_URL=<postgres-url-optional-locally>
 | `DATABASE_URL` | Postgres/Neon URL for persistent snapshots and sync history |
 
 > ⚠️ `SKIP_AUTH_IN_DEV` must **NEVER** be set on Vercel — it disables all authentication.
+> Local development can use `SNAPSHOT_STORAGE_FILE`; production should use `DATABASE_URL` for durable persistence.
 
 ---
 
@@ -260,6 +261,8 @@ DATABASE_URL=<postgres-url-optional-locally>
 | Vercel deploys blocked — git author `shivambhotika@Shivams-MacBook-Air.local` not in Vercel team | `git config --global user.email "shivam.bhotika@gmail.com"` then force-pushed |
 | CPI inferred from manual data shown without confidence signal | `~` prefix + tooltip on installs/CPI when `dubByVideo[videoId]` absent |
 | `fromHex` in `auth.ts` returning `Uint8Array` incompatible with `crypto.subtle.verify` | Changed to return `ArrayBuffer` via `DataView` |
+| Full Disclosure v63 shown as a critical Dub slug conflict after a unique URL existed | Added `fulldisclosureyt` to Dub mappings, marked the issue/action resolved |
+| Missing `DATABASE_URL` showed as a hard critical even when local sync could still run | Added JSON snapshot-file fallback plus storage-status UI copy |
 
 ---
 
@@ -271,7 +274,6 @@ DATABASE_URL=<postgres-url-optional-locally>
 - Add Google OAuth redirect URIs (see Section 9)
 - Confirm live URLs for v72 (Sheryians), v74 (Arsh Goyal), v75 (Code And Bug) when they go live
 - Create unique Dub slugs for Ishan, Nandini, Anurag (P0)
-- Fix WLDD Full Disclosure Dub slug conflict with financewithjobi v53
 
 ---
 
@@ -292,3 +294,17 @@ DATABASE_URL=<postgres-url-optional-locally>
   - `npm run audit:data` passes.
   - `npm run audit:live` passes.
   - `npm audit --omit=dev` still reports 2 moderate `postcss` advisories through Next.js with no direct fix available from npm audit.
+
+### Usability + Critical Issue Pass — 2026-07-02
+
+- Resolved the Full Disclosure critical alert by mapping `v63` to unique Dub slug `fulldisclosureyt` and marking the old conflict action as resolved.
+- Added local JSON snapshot fallback through `SNAPSHOT_STORAGE_FILE` so local sync runs/snapshots can persist without Postgres; Vercel production should still use `DATABASE_URL`.
+- Added action-first Overview “Today” workflow cards for attribution fixes, renewal review, live-link checks, and data refresh.
+- Added reusable `src/lib/insights.ts` intelligence layer to compute source coverage, platform precision, and operator insights from the current dataset + Dub availability.
+- Added protected `GET /api/insights` endpoint for other agents/platforms to consume the same dashboard intelligence without scraping UI.
+- Added Overview “Operator Insights” and “Data Precision” sections so the most relevant data/API conclusions are visible on first load.
+- Added Data Health “Source Coverage” and “Platform Precision” sections for debugging which calculations are precise enough to trust.
+- Added metric explanation tooltips, trust/confidence badges, saved views, smart filters, and click-through detail drawers for creator/video review.
+- Expanded Command Palette search across pages, campaigns, agencies, creators, videos, open data issues, action items, and Dub slugs.
+- Added diagnostic Performance charts: funnel leakage, CPI driver map, and launch velocity.
+- Made Decision Center more opinionated with a renewal board and next budget moves before the detailed matrix.

@@ -1,23 +1,31 @@
 import { getAllDataIssues, calculateDataQualityScore } from "@/lib/data-quality";
 import type { DataIssue } from "@/types";
-import { isDbConnected, getLatestMetricSnapshot, listSyncRuns } from "@/lib/storage";
+import { getStorageStatus, getLatestMetricSnapshot, listSyncRuns } from "@/lib/storage";
 import { videos } from "@/lib/mock-data";
 import { extractYouTubeVideoId } from "@/lib/youtube";
+import { getDubStats } from "@/lib/dub-server";
+import { buildDashboardIntelligence } from "@/lib/insights";
 
 const STALE_MS = 48 * 60 * 60 * 1000;
 
-async function buildDynamicIssues(): Promise<{ issues: DataIssue[]; dbConnected: boolean; lastSyncSummary: string }> {
+async function buildDynamicIssues(): Promise<{
+  issues: DataIssue[];
+  storageLabel: string;
+  storageDetail: string;
+  storagePersistent: boolean;
+  lastSyncSummary: string;
+}> {
   const issues: DataIssue[] = [];
-  const dbConnected = await isDbConnected();
+  const storage = await getStorageStatus();
 
-  if (!dbConnected) {
+  if (!storage.persistent) {
     issues.push({
       id: "dyn-snapshot-db-missing",
       entityType: "system", entityId: "storage",
-      severity: "critical", issueType: "unknown_zero",
-      title: "Snapshot database not connected",
-      description: "DATABASE_URL is not configured. Live metric snapshots and sync history are not persisted; dashboard uses seed/static data.",
-      suggestedFix: "Set DATABASE_URL in the environment to enable persistent snapshots.",
+      severity: "warning", issueType: "unknown_zero",
+      title: "Snapshot storage is temporary",
+      description: storage.detail,
+      suggestedFix: "Set DATABASE_URL in production, or set SNAPSHOT_STORAGE_FILE for a writable local runtime.",
       owner: "Shivam", status: "open",
     });
   }
@@ -35,7 +43,7 @@ async function buildDynamicIssues(): Promise<{ issues: DataIssue[]; dbConnected:
   }
 
   // Stale-snapshot detection for YouTube videos with resolvable URLs.
-  if (dbConnected) {
+  if (storage.persistent) {
     const now = Date.now();
     for (const v of videos.filter((x) => x.platform === "YouTube" && extractYouTubeVideoId(x.url))) {
       const snap = await getLatestMetricSnapshot(v.id);
@@ -61,13 +69,23 @@ async function buildDynamicIssues(): Promise<{ issues: DataIssue[]; dbConnected:
     ? "No sync runs recorded yet."
     : runs.slice(0, 5).map((r) => `${r.source}: ${r.status} (${new Date(r.startedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "short", timeStyle: "short" })})`).join(" · ");
 
-  return { issues, dbConnected, lastSyncSummary };
+  return {
+    issues,
+    storageLabel: storage.label,
+    storageDetail: storage.detail,
+    storagePersistent: storage.persistent,
+    lastSyncSummary,
+  };
 }
 
 export default async function DataHealthPage() {
   const staticIssues = getAllDataIssues();
   const scores = calculateDataQualityScore();
-  const { issues: dynamicIssues, dbConnected, lastSyncSummary } = await buildDynamicIssues();
+  const [{ issues: dynamicIssues, storageLabel, storageDetail, storagePersistent, lastSyncSummary }, dub] = await Promise.all([
+    buildDynamicIssues(),
+    getDubStats(),
+  ]);
+  const intelligence = buildDashboardIntelligence(dub.byVideo);
   const issues = [...dynamicIssues, ...staticIssues];
 
   const critical = issues.filter(i => i.severity === "critical" && i.status === "open");
@@ -95,13 +113,15 @@ export default async function DataHealthPage() {
         <div className="flex items-center gap-2 mb-1">
           <span
             className="w-2 h-2 rounded-full"
-            style={{ background: dbConnected ? "#10b981" : "#f59e0b" }}
+            style={{ background: storagePersistent ? "#10b981" : "#f59e0b" }}
           />
           <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-            Sync status — storage {dbConnected ? "connected" : "not connected"}
+            Sync status — {storageLabel}
           </h2>
         </div>
-        <p className="text-xs" style={{ color: "var(--text-muted)" }}>{lastSyncSummary}</p>
+        <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+          {storageDetail} · {lastSyncSummary}
+        </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -123,6 +143,72 @@ export default async function DataHealthPage() {
             <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>/100</p>
           </div>
         ))}
+      </div>
+
+      <div className="rounded-xl p-5" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
+        <div className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold" style={{ color: "var(--text-primary)" }}>Source Coverage</h2>
+            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+              Coverage across live videos. This is the quickest read on whether CPI/CPV decisions are precise enough.
+            </p>
+          </div>
+          <span
+            className="text-xs font-semibold px-2 py-1 rounded-full"
+            style={{ background: dub.partial ? "#f59e0b22" : "#10b98122", color: dub.partial ? "#d97706" : "#10b981" }}
+          >
+            Dub {dub.partial ? "fallback" : "live"}
+          </span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {intelligence.coverage.map((metric) => {
+            const color = metric.tone === "good" ? "#10b981" : metric.tone === "warn" ? "#f59e0b" : "#ef4444";
+            return (
+              <div key={metric.id} className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>{metric.label}</p>
+                  <span className="text-sm font-black tabular-nums" style={{ color }}>{metric.pct}%</span>
+                </div>
+                <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-card)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${metric.pct}%`, background: color }} />
+                </div>
+                <p className="text-[0.65rem] mt-2" style={{ color: "var(--text-muted)" }}>{metric.known}/{metric.total} · {metric.detail}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="rounded-xl p-5" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
+        <h2 className="text-lg font-semibold mb-1" style={{ color: "var(--text-primary)" }}>Platform Precision</h2>
+        <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
+          Same source data grouped by platform so channel decisions can be compared cleanly.
+        </p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr>
+                {["Platform", "Videos", "Views", "Clicks", "Installs", "Spend", "CPI", "CPV"].map((header) => (
+                  <th key={header} className="text-left px-3 py-2">{header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {intelligence.platforms.map((row) => (
+                <tr key={row.platform} style={{ borderBottom: "1px solid var(--border)" }}>
+                  <td className="px-3 py-2 font-semibold" style={{ color: "var(--text-primary)" }}>{row.platform}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: "var(--text-secondary)" }}>{row.videos}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: "var(--text-secondary)" }}>{row.views ? row.views.toLocaleString("en-IN") : "—"}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: "var(--text-secondary)" }}>{row.clicks ? row.clicks.toLocaleString("en-IN") : "—"}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: "var(--accent)" }}>{row.installs ? row.installs.toLocaleString("en-IN") : "—"}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: "var(--text-secondary)" }}>{row.spendINR ? `₹${Math.round(row.spendINR / 1000).toLocaleString("en-IN")}K` : "—"}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: row.cpiINR != null && row.cpiINR <= 300 ? "#10b981" : row.cpiINR != null ? "#f59e0b" : "var(--text-muted)" }}>{row.cpiINR != null ? `₹${row.cpiINR.toFixed(0)}` : "—"}</td>
+                  <td className="px-3 py-2 tabular-nums" style={{ color: row.cpvINR != null && row.cpvINR <= 0.5 ? "#10b981" : row.cpvINR != null ? "#f59e0b" : "var(--text-muted)" }}>{row.cpvINR != null ? `₹${row.cpvINR.toFixed(2)}` : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {sections.map(({ title, items, color, bg }) => (

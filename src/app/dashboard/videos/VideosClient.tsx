@@ -3,12 +3,15 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { videos, performances, costs, installs, campaigns } from "@/lib/mock-data";
+import { useSavedViews } from "@/lib/use-saved-views";
 import { formatNumber, formatCurrency, formatDate } from "@/lib/utils";
 import { SortableTable, type Column } from "@/components/SortableTable";
 import { Badge } from "@/components/Badge";
+import { DetailDrawer, DetailStat } from "@/components/DetailDrawer";
+import { ConfidenceBadge } from "@/components/MetricBadges";
 import { statusBadge, formatBadge, platformBadge } from "@/lib/badges";
-import { ExternalLink } from "lucide-react";
-import type { Video } from "@/types";
+import { BookmarkPlus, ExternalLink, Trash2 } from "lucide-react";
+import type { MetricConfidence, Video } from "@/types";
 
 type Activity = "Active" | "Exhausted" | "Upcoming";
 
@@ -38,15 +41,19 @@ interface VideoRow extends Video {
   netCost: number;
   roas: number;
   activity: Activity;
+  confidence: MetricConfidence;
+  dubMeasured: boolean;
 }
 
 const PLATFORMS = ["All", "Instagram", "YouTube", "LinkedIn"] as const;
 const STATUSES  = ["All", "Live", "Scheduled"] as const;
 const ACTIVITIES = ["All", "Active", "Exhausted", "Upcoming"] as const;
+const SMART_VIEWS = ["All", "Needs data", "High CPI", "Dub measured", "Recently live"] as const;
 
 type Platform       = (typeof PLATFORMS)[number];
 type Status         = (typeof STATUSES)[number];
 type ActivityFilter = (typeof ACTIVITIES)[number];
+type SmartView = (typeof SMART_VIEWS)[number];
 
 interface DubStats { clicks: number; leads: number }
 
@@ -93,6 +100,22 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
   const [campaign, setCampaign] = useState("All");
   const [status, setStatus]     = useState<Status>("All");
   const [activity, setActivity] = useState<ActivityFilter>("All");
+  const [smartView, setSmartView] = useState<SmartView>("All");
+  const [viewName, setViewName] = useState("");
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
+
+  const { views: savedViews, saveView, applyView, deleteView } = useSavedViews(
+    "creator_ops_video_saved_views",
+    { search, platform, campaign, status, activity, smartView },
+    (state) => {
+      setSearch(state.search ?? "");
+      setPlatform((state.platform as Platform) ?? "All");
+      setCampaign(state.campaign ?? "All");
+      setStatus((state.status as Status) ?? "All");
+      setActivity((state.activity as ActivityFilter) ?? "All");
+      setSmartView((state.smartView as SmartView) ?? "All");
+    }
+  );
 
   const allRows: VideoRow[] = useMemo(
     () =>
@@ -114,7 +137,26 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
         const cpv      = views > 0 && netCost > 0 ? netCost / views : 0;
         const clickToInstallRate = clicks > 0 ? (videoInstalls / clicks) * 100 : 0;
         const roas     = netCost > 0 && revenue > 0 ? revenue / netCost : 0;
-        return { ...v, views, clickThroughs: clicks, videoInstalls, cpi, clickToInstallRate, cpv, netCost, roas, activity: computeActivity(v.goLiveDate, v.status) };
+        const confidence: MetricConfidence =
+          dubEntry !== undefined && views > 0 && netCost > 0
+            ? "high"
+            : views > 0 || dubEntry !== undefined || videoInstalls > 0
+            ? "medium"
+            : "low";
+        return {
+          ...v,
+          views,
+          clickThroughs: clicks,
+          videoInstalls,
+          cpi,
+          clickToInstallRate,
+          cpv,
+          netCost,
+          roas,
+          activity: computeActivity(v.goLiveDate, v.status),
+          confidence,
+          dubMeasured: dubEntry !== undefined,
+        };
       }),
     [dubByVideo]
   );
@@ -127,9 +169,15 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
       if (status !== "All" && r.status !== status) return false;
       if (activity !== "All" && r.activity !== activity) return false;
       if (campaign !== "All" && r.campaignId !== campaign) return false;
+      if (smartView === "Needs data" && (r.views > 0 && r.clickThroughs > 0)) return false;
+      if (smartView === "High CPI" && (!r.cpi || r.cpi <= 500)) return false;
+      if (smartView === "Dub measured" && !r.dubMeasured) return false;
+      if (smartView === "Recently live" && r.activity !== "Active") return false;
       return true;
     });
-  }, [allRows, search, platform, status, activity, campaign]);
+  }, [allRows, search, platform, status, activity, campaign, smartView]);
+
+  const selectedVideo = selectedVideoId ? allRows.find((r) => r.id === selectedVideoId) ?? null : null;
 
   const columns: Column<VideoRow>[] = [
     {
@@ -150,19 +198,19 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
       render: (r) => <span className="text-sm whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>{formatDate(r.goLiveDate)}</span>,
     },
     {
-      key: "views", label: "Views", sortable: true, getValue: (r) => r.views,
+      key: "views", label: "Views", help: "Platform view count from the source performance data.", sortable: true, getValue: (r) => r.views,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.views ? formatNumber(r.views) : "—"}</span>,
     },
     {
-      key: "clickThroughs", label: "Clicks", sortable: true, getValue: (r) => r.clickThroughs,
+      key: "clickThroughs", label: "Clicks", help: "Prefers live Dub clicks; falls back to recorded click-throughs.", sortable: true, getValue: (r) => r.clickThroughs,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.clickThroughs ? formatNumber(r.clickThroughs) : "—"}</span>,
     },
     {
-      key: "videoInstalls", label: "Installs", sortable: true, getValue: (r) => r.videoInstalls,
+      key: "videoInstalls", label: "Installs", help: "Prefers live Dub leads; falls back to manual install records.", sortable: true, getValue: (r) => r.videoInstalls,
       render: (r) => <span className="text-sm font-semibold text-indigo-500">{r.videoInstalls ? formatNumber(r.videoInstalls) : "—"}</span>,
     },
     {
-      key: "cpi", label: "CPI", sortable: true, getValue: (r) => r.cpi,
+      key: "cpi", label: "CPI", help: "Net cost divided by installs/leads.", sortable: true, getValue: (r) => r.cpi,
       render: (r) => r.cpi ? (
         <span className={`text-sm font-medium ${r.cpi <= 300 ? "text-emerald-500" : r.cpi <= 500 ? "text-amber-500" : "text-red-500"}`}>
           {formatCurrency(r.cpi)}
@@ -170,7 +218,7 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
       ) : <span style={{ color: "var(--text-muted)" }}>—</span>,
     },
     {
-      key: "clickToInstallRate", label: "Click→Install", sortable: true, getValue: (r) => r.clickToInstallRate,
+      key: "clickToInstallRate", label: "Click→Install", help: "Installs divided by clicks.", sortable: true, getValue: (r) => r.clickToInstallRate,
       render: (r) => r.clickToInstallRate ? (
         <span className={`text-sm font-medium ${r.clickToInstallRate >= 5 ? "text-emerald-500" : r.clickToInstallRate >= 2 ? "text-amber-500" : "text-red-500"}`}>
           {r.clickToInstallRate.toFixed(1)}%
@@ -189,12 +237,16 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
       key: "netCost", label: "Net Cost", sortable: true, getValue: (r) => r.netCost,
       render: (r) => <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{r.netCost ? formatCurrency(r.netCost) : "—"}</span>,
     },
+    {
+      key: "confidence", label: "Trust", help: "High means Dub, views, and cost are present; medium means partial data; low means important fields are missing.", sortable: true, getValue: (r) => r.confidence,
+      render: (r) => <ConfidenceBadge confidence={r.confidence} />,
+    },
     { key: "status",   label: "Status",   sortable: true, getValue: (r) => r.status,   render: (r) => <Badge label={r.status}   className={statusBadge[r.status]} /> },
     { key: "activity", label: "Activity", sortable: true, getValue: (r) => r.activity, render: (r) => <Badge label={r.activity} className={ACTIVITY_BADGE[r.activity]} /> },
     {
       key: "link", label: "",
       render: (r) => (
-        <a href={r.url} target="_blank" rel="noreferrer" aria-label="Open video" style={{ color: "var(--text-muted)" }} className="hover:text-indigo-500 transition-colors">
+        <a href={r.url} target="_blank" rel="noreferrer" aria-label="Open video" style={{ color: "var(--text-muted)" }} className="hover:text-indigo-500 transition-colors" onClick={(e) => e.stopPropagation()}>
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       ),
@@ -239,6 +291,8 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
         <div className="w-px h-5 mx-1" style={{ background: "var(--border)" }} />
         {ACTIVITIES.map((a) => <PillButton key={a} label={a} active={activity === a} onClick={() => setActivity(a)} />)}
         <div className="w-px h-5 mx-1" style={{ background: "var(--border)" }} />
+        {SMART_VIEWS.map((s) => <PillButton key={s} label={s} active={smartView === s} onClick={() => setSmartView(s)} />)}
+        <div className="w-px h-5 mx-1" style={{ background: "var(--border)" }} />
         <select
           value={campaign}
           onChange={(e) => setCampaign(e.target.value)}
@@ -250,7 +304,79 @@ export function VideosClient({ dubByVideo = {} }: { dubByVideo?: Record<string, 
         </select>
       </div>
 
-      <SortableTable columns={columns} data={filteredRows} rowKey={(r) => r.id} emptyMessage="No videos match your filters." />
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl p-3" style={{ background: "var(--bg-card)", border: "1px solid var(--border)" }}>
+        <input
+          value={viewName}
+          onChange={(e) => setViewName(e.target.value)}
+          placeholder="Saved view name"
+          className="text-xs px-3 py-1.5 rounded-lg outline-none"
+          style={{ background: "var(--bg-surface)", color: "var(--text-primary)", border: "1px solid var(--border)", width: 180 }}
+        />
+        <button
+          onClick={() => {
+            saveView(viewName);
+            setViewName("");
+          }}
+          className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg"
+          style={{ background: "var(--accent-dim)", color: "var(--accent)", border: "1px solid var(--accent-dim-border)" }}
+        >
+          <BookmarkPlus className="w-3.5 h-3.5" />
+          Save view
+        </button>
+        {savedViews.map((view) => (
+          <span key={view.name} className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs" style={{ background: "var(--bg-surface)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>
+            <button onClick={() => applyView(view.name)}>{view.name}</button>
+            <button onClick={() => deleteView(view.name)} aria-label={`Delete ${view.name}`}>
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </span>
+        ))}
+      </div>
+
+      <SortableTable
+        columns={columns}
+        data={filteredRows}
+        rowKey={(r) => r.id}
+        emptyMessage="No videos match your filters."
+        onRowClick={(r) => setSelectedVideoId(r.id)}
+      />
+
+      <DetailDrawer
+        open={selectedVideo != null}
+        title={selectedVideo?.title ?? ""}
+        subtitle={selectedVideo ? `${selectedVideo.creatorName} · ${selectedVideo.platform} · ${formatDate(selectedVideo.goLiveDate)}` : undefined}
+        onClose={() => setSelectedVideoId(null)}
+      >
+        {selectedVideo && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <DetailStat label="Views" value={selectedVideo.views ? formatNumber(selectedVideo.views) : "—"} />
+              <DetailStat label="Clicks" value={selectedVideo.clickThroughs ? formatNumber(selectedVideo.clickThroughs) : "—"} />
+              <DetailStat label="Installs" value={selectedVideo.videoInstalls ? formatNumber(selectedVideo.videoInstalls) : "—"} />
+              <DetailStat label="CPI" value={selectedVideo.cpi ? formatCurrency(selectedVideo.cpi) : "—"} tone={selectedVideo.cpi && selectedVideo.cpi <= 300 ? "good" : selectedVideo.cpi > 500 ? "bad" : "warn"} />
+              <DetailStat label="Net cost" value={selectedVideo.netCost ? formatCurrency(selectedVideo.netCost) : "—"} />
+              <DetailStat label="Trust" value={<ConfidenceBadge confidence={selectedVideo.confidence} />} />
+            </div>
+            <div className="rounded-xl p-4" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Measurement read</p>
+              <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+                {selectedVideo.dubMeasured
+                  ? "Dub is connected for this video, so clicks and leads are pulled from live tracking when available."
+                  : "Dub data is not connected for this video. Clicks or installs may be manual fallback values."}
+              </p>
+            </div>
+            <a
+              href={selectedVideo.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold"
+              style={{ color: "var(--accent)" }}
+            >
+              Open link <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        )}
+      </DetailDrawer>
     </div>
   );
 }

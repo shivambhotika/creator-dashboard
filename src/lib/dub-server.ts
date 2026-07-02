@@ -24,7 +24,7 @@ export const DUB_SLUGS: Record<string, string | string[]> = {
   v60: "WhyBhanshu",
   v61: "fraz",            // Mohammed Fraz — confirmed from Social Tag sheet 2026-06-27
   v62: "thinkwings",      // Think Wings — confirmed from Social Tag sheet 2026-06-27
-  // v63 Full Disclosure: slug in sheet is "financewithjobi" — same as v53. BUG: wrong slug, needs new unique link from Social Tag.
+  v63: "fulldisclosureyt", // Full Disclosure — unique Dub path now used, no longer mixed with v53.
   v64: "technicalsuneja", // Technical Suneja — confirmed from Social Tag sheet 2026-06-27
   // Coding First — June 2026
   v67: "codingwithsagar",
@@ -91,6 +91,7 @@ export const DUB_LINK_MAPPINGS: DubLinkMapping[] = [
   { slugs: ["bisboworld"], videoIds: ["v58"], creatorId: "c58", attributionLevel: "video", exactVideoAttribution: true },
   { slugs: ["akbershaikh"], videoIds: ["v59"], creatorId: "c59", attributionLevel: "video", exactVideoAttribution: true },
   { slugs: ["WhyBhanshu"], videoIds: ["v60"], creatorId: "c60", attributionLevel: "video", exactVideoAttribution: true },
+  { slugs: ["fulldisclosureyt"], videoIds: ["v63"], creatorId: "c63", attributionLevel: "video", exactVideoAttribution: true },
   { slugs: ["codingwithsagar"], videoIds: ["v67"], creatorId: "c67", attributionLevel: "video", exactVideoAttribution: true },
   { slugs: ["nishantchahar"], videoIds: ["v68"], creatorId: "c68", attributionLevel: "video", exactVideoAttribution: true },
   { slugs: ["saumyasingh"], videoIds: ["v69"], creatorId: "c69", attributionLevel: "video", exactVideoAttribution: true },
