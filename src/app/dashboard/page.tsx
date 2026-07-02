@@ -143,14 +143,6 @@ export default async function DashboardPage() {
     i.issueType === "shared_attribution" || i.issueType === "dub_missing" || i.issueType === "dub_failed"
   ).length;
   const linkIssueCount = openIssues.filter((i) => i.issueType === "missing_url").length;
-  const renewalReadyCount = allMetrics.filter((m) =>
-    m.totalSpend > 0 && m.totalInstalls > 0 && m.cpi > 0 && m.cpi <= 300
-  ).length;
-  const syncsToRefresh = [ytRun, dubRun].filter((run) => {
-    if (!run?.completedAt) return true;
-    return run.status === "failed" || run.status === "partial";
-  }).length;
-
   const data: OverviewData = {
     totalImp, totalClk, totalInst, totalSpendINR,
     totalCreators, liveVideos,
@@ -163,20 +155,21 @@ export default async function DashboardPage() {
     highPriorityActionCount: HIGH_PRIORITY_COUNT,
     operatorInsights: intelligence.insights,
     coverage: intelligence.coverage,
+    viewLeaders: intelligence.viewLeaders,
     todayItems: [
       {
-        label: "Fix attribution",
-        value: attributionIssueCount,
-        detail: "shared or missing Dub links",
+        label: "Improve view data",
+        value: intelligence.coverage.find((item) => item.id === "views")?.pct ?? 0,
+        detail: "view coverage across live posts",
         href: "/dashboard/data-health",
-        tone: attributionIssueCount > 0 ? "warn" : "good",
+        tone: (intelligence.coverage.find((item) => item.id === "views")?.pct ?? 0) >= 80 ? "good" : "warn",
       },
       {
-        label: "Review renewals",
-        value: renewalReadyCount,
-        detail: "creators under target CPI",
-        href: "/dashboard/decision",
-        tone: renewalReadyCount > 0 ? "good" : "neutral",
+        label: "View leaders",
+        value: intelligence.viewLeaders.length,
+        detail: "top videos driving reach",
+        href: "/dashboard/performance",
+        tone: intelligence.viewLeaders.length > 0 ? "good" : "neutral",
       },
       {
         label: "Verify live links",
@@ -186,11 +179,11 @@ export default async function DashboardPage() {
         tone: linkIssueCount > 0 ? "warn" : "good",
       },
       {
-        label: "Refresh data",
-        value: syncsToRefresh,
-        detail: "sources older than 24h",
+        label: "Fix attribution",
+        value: attributionIssueCount,
+        detail: "shared or missing Dub links",
         href: "/dashboard/data-health",
-        tone: syncsToRefresh > 0 ? "warn" : "good",
+        tone: attributionIssueCount > 0 ? "warn" : "good",
       },
     ],
   };

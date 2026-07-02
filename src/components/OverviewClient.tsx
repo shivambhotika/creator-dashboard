@@ -81,6 +81,17 @@ export interface OverviewData {
     detail: string;
     tone: "good" | "warn" | "bad" | "neutral";
   }>;
+  viewLeaders: Array<{
+    videoId: string;
+    title: string;
+    creatorName: string;
+    platform: string;
+    views: number;
+    sharePct: number;
+    cpvINR: number | null;
+    clickRatePct: number | null;
+    installRatePct: number | null;
+  }>;
   todayItems: Array<{
     label: string;
     value: number;
@@ -168,6 +179,12 @@ export function OverviewClient({ data }: { data: OverviewData }) {
     : (data.platformMonths[momTab] ?? []);
 
   const maxImp = Math.max(...months.map((m) => m.imp), 1);
+  const viewsCoverage = data.coverage.find((metric) => metric.id === "views");
+  const avgViewsPerLiveVideo = data.liveVideos > 0 ? data.totalImp / data.liveVideos : 0;
+  const cpvINR = data.totalImp > 0 ? data.totalSpendINR / data.totalImp : 0;
+  const viewToInstallPct = data.totalImp > 0 ? (data.totalInst / data.totalImp) * 100 : 0;
+  const maxPlatformViews = Math.max(...data.platformStats.map((platform) => platform.imp), 1);
+  const sortedPlatformViews = [...data.platformStats].sort((a, b) => b.imp - a.imp);
 
   return (
     <div className="p-6 md:p-8 max-w-6xl space-y-10">
@@ -175,10 +192,10 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
-            Overview
+            Views Overview
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-            {data.liveVideos} videos live · {data.totalCreators} creators
+            Reach-first read across {data.liveVideos} live videos · {data.totalCreators} creators
             {data.dubPartial && (
               <span className="ml-2 text-xs" style={{ color: "var(--text-muted)" }}>· partial Dub data</span>
             )}
@@ -196,6 +213,133 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           {mode === "usd" ? "USD · ₹84/$" : "INR · ₹84/$"}
         </div>
       </div>
+
+      {/* ── Views command center ─────────────────────────────── */}
+      <section>
+        <div className="mb-3 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="section-heading">View Command Center</h2>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+              Views are the primary operating layer; conversion and spend explain what those views are worth.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/performance"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+            style={{ color: "var(--accent)", background: "var(--accent-dim)", border: "1px solid var(--accent-dim-border)" }}
+          >
+            Open performance
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-4">
+          <div className="rounded-[18px] p-5" style={{ background: "var(--bg-card)", boxShadow: "var(--nm-raised)", border: "1px solid var(--border)" }}>
+            <div className="flex items-start justify-between gap-4 flex-wrap">
+              <div>
+                <p className="label-caps flex items-center gap-1">
+                  Total views / reach
+                  <MetricHint text="Comparable top-of-funnel volume. Uses reported impressions where available and views otherwise." />
+                </p>
+                <p className="mt-2 text-4xl font-black tabular-nums leading-none" style={{ color: "var(--text-primary)" }}>
+                  {count(data.totalImp)}
+                </p>
+                <p className="mt-2 text-xs" style={{ color: "var(--text-muted)" }}>
+                  {count(avgViewsPerLiveVideo)} avg per live video · {viewsCoverage?.pct ?? 0}% view coverage
+                </p>
+              </div>
+              <div className="shrink-0" style={{ width: 190, height: 54 }}>
+                <Sparkline values={data.months.map((month) => month.imp)} width={190} height={54} />
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                <p className="label-caps">View CPV</p>
+                <p className="mt-1 text-lg font-bold" style={{ color: cpvINR > 0 && cpvINR <= 0.5 ? "#10b981" : "#f59e0b" }}>
+                  {cpvINR > 0 ? money(cpvINR) : "—"}
+                </p>
+              </div>
+              <div className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                <p className="label-caps">View → click</p>
+                <p className="mt-1 text-lg font-bold" style={{ color: data.ctrPct >= 1 ? "#10b981" : "#f59e0b" }}>
+                  {pct(data.ctrPct, 2)}
+                </p>
+              </div>
+              <div className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                <p className="label-caps">View → install</p>
+                <p className="mt-1 text-lg font-bold" style={{ color: viewToInstallPct >= 0.05 ? "#10b981" : "#f59e0b" }}>
+                  {pct(viewToInstallPct, 3)}
+                </p>
+              </div>
+              <div className="rounded-xl p-3" style={{ background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                <p className="label-caps">Views covered</p>
+                <p className="mt-1 text-lg font-bold" style={{ color: toneColor(viewsCoverage?.tone ?? "neutral") }}>
+                  {viewsCoverage?.known ?? 0}/{viewsCoverage?.total ?? 0}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              {sortedPlatformViews.map((platform) => {
+                const width = (platform.imp / maxPlatformViews) * 100;
+                const platformCpv = platform.imp > 0 && platform.spendINR > 0 ? platform.spendINR / platform.imp : null;
+                return (
+                  <div key={platform.platform}>
+                    <div className="mb-1 flex items-center justify-between gap-3 text-xs">
+                      <span className="font-semibold" style={{ color: "var(--text-secondary)" }}>{platform.platform}</span>
+                      <span style={{ color: "var(--text-muted)" }}>
+                        {platform.imp > 0 ? count(platform.imp) : "—"} · CPV {platformCpv != null ? money(platformCpv) : "—"}
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
+                      <div className="h-full rounded-full" style={{ width: `${width}%`, background: PLATFORM_COLOR[platform.platform] ?? "var(--accent)" }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="rounded-[18px] p-5" style={{ background: "var(--bg-card)", boxShadow: "var(--nm-raised)", border: "1px solid var(--border)" }}>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <h3 className="section-heading">View Leaders</h3>
+                <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Top live videos by current view volume</p>
+              </div>
+              <Link href="/dashboard/videos" className="text-xs font-semibold" style={{ color: "var(--accent)" }}>
+                View all
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {data.viewLeaders.slice(0, 6).map((leader, index) => (
+                <Link
+                  key={leader.videoId}
+                  href={`/dashboard/videos?search=${encodeURIComponent(leader.creatorName)}`}
+                  className="block rounded-xl p-3 transition-colors"
+                  style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", textDecoration: "none" }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xs font-black tabular-nums" style={{ color: "var(--accent)" }}>{index + 1}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{leader.creatorName}</p>
+                      <p className="truncate text-xs" style={{ color: "var(--text-muted)" }}>{leader.title}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>{count(leader.views)}</p>
+                      <p className="text-[0.65rem]" style={{ color: "var(--text-muted)" }}>{leader.sharePct.toFixed(1)}% share</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+              {data.viewLeaders.length === 0 && (
+                <p className="rounded-xl p-4 text-sm" style={{ color: "var(--text-muted)", background: "var(--bg-surface)" }}>
+                  No view leaders yet. Add fresh view data to source sheets or run a sync.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── Today / workflow strip ───────────────────────────── */}
       <section>
@@ -379,15 +523,15 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       {/* ── Stat cards ─────────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <StatCard
-          label="Total Impressions"
+          label="Views / Reach"
           value={count(data.totalImp)}
-          sub="Views across all platforms"
+          sub="Primary top-of-funnel volume"
           help="Uses reported impressions when available, otherwise views as the comparable top-of-funnel volume."
         />
         <StatCard
-          label="CPM"
+          label="Cost / 1k Views"
           value={rate(data.cpmUSD)}
-          sub="Cost per 1,000 impressions"
+          sub="Spend efficiency for reach"
           accent="var(--accent)"
           help="Net spend divided by impressions, multiplied by 1,000."
         />
@@ -423,14 +567,14 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       {/* ── Platform breakdown ─────────────────────────────────── */}
       <section>
         <div className="mb-4">
-          <h2 className="section-heading">Platform Breakdown</h2>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Same funnel split by channel</p>
+          <h2 className="section-heading">Platform View Breakdown</h2>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Views first, then the click/install path by channel</p>
         </div>
         <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: "var(--nm-raised)", border: "1px solid var(--border)" }}>
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
-                {["Platform", "Impressions", "CPM", "Clicks", "CTR", "CPC", "Installs", "C→I", "CPI", "Spend"].map((h) => (
+                {["Platform", "Views / Reach", "Cost / 1k", "Clicks", "View→Click", "CPC", "Installs", "C→I", "CPI", "Spend"].map((h) => (
                   <th key={h} className="text-left px-4 py-3 label-caps whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -495,8 +639,8 @@ export function OverviewClient({ data }: { data: OverviewData }) {
       <section>
         <div className="mb-4 flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h2 className="section-heading">Month-on-Month</h2>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Δ% vs. prior month — toggle platform to drill down</p>
+            <h2 className="section-heading">Monthly View Trend</h2>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>View/reach growth vs. prior month — toggle platform to drill down</p>
           </div>
           {/* Platform tabs */}
           <div className="flex gap-1 flex-wrap">
@@ -533,7 +677,7 @@ export function OverviewClient({ data }: { data: OverviewData }) {
           <table className="w-full text-sm">
             <thead>
               <tr style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
-                {["Month", "Impressions", "Δ", "CPM", "Clicks", "Δ", "CTR", "CPC", "Installs", "Δ", "CPI", "Spend"].map((h, i) => (
+                {["Month", "Views / Reach", "Δ", "Cost / 1k", "Clicks", "Δ", "View→Click", "CPC", "Installs", "Δ", "CPI", "Spend"].map((h, i) => (
                   <th key={`${h}${i}`} className="text-left px-4 py-3 label-caps whitespace-nowrap">{h}</th>
                 ))}
               </tr>

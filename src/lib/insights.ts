@@ -36,10 +36,23 @@ export interface PlatformInsight {
   cpvINR: number | null;
 }
 
+export interface ViewLeader {
+  videoId: string;
+  title: string;
+  creatorName: string;
+  platform: string;
+  views: number;
+  sharePct: number;
+  cpvINR: number | null;
+  clickRatePct: number | null;
+  installRatePct: number | null;
+}
+
 export interface DashboardIntelligence {
   coverage: CoverageMetric[];
   insights: OperatorInsight[];
   platforms: PlatformInsight[];
+  viewLeaders: ViewLeader[];
 }
 
 function pct(known: number, total: number): number {
@@ -95,6 +108,7 @@ export function buildDashboardIntelligence(
   const costKnown = liveVideos.filter((video) => (costByVideo.get(video.id)?.netCost ?? 0) > 0).length;
   const mappedDub = liveVideos.filter((video) => videoHasAnyMapping(video.id)).length;
   const exactDub = liveVideos.filter((video) => videoHasExactMapping(video.id)).length;
+  const totalViews = liveVideos.reduce((sum, video) => sum + (perfByVideo.get(video.id)?.views ?? 0), 0);
 
   const coverage = [
     coverageMetric("views", "Views coverage", viewsKnown, liveVideos.length, "Live videos with non-zero view data."),
@@ -140,8 +154,54 @@ export function buildDashboardIntelligence(
   const bestPlatform = platforms
     .filter((row) => row.cpiINR != null && row.installs >= 5)
     .sort((a, b) => (a.cpiINR ?? Infinity) - (b.cpiINR ?? Infinity))[0];
+  const bestViewPlatform = platforms
+    .filter((row) => row.cpvINR != null && row.views > 0)
+    .sort((a, b) => (a.cpvINR ?? Infinity) - (b.cpvINR ?? Infinity))[0];
+
+  const viewLeaders: ViewLeader[] = liveVideos
+    .map((video) => {
+      const perf = perfByVideo.get(video.id);
+      const viewCount = perf?.views ?? 0;
+      const spendINR = costByVideo.get(video.id)?.netCost ?? 0;
+      const clicks = dubByVideo[video.id]?.clicks ?? perf?.clickThroughs ?? 0;
+      const videoInstalls = dubByVideo[video.id]?.leads ?? installByVideo.get(video.id)?.installs ?? 0;
+      return {
+        videoId: video.id,
+        title: video.title,
+        creatorName: video.creatorName,
+        platform: video.platform,
+        views: viewCount,
+        sharePct: totalViews > 0 ? (viewCount / totalViews) * 100 : 0,
+        cpvINR: viewCount > 0 && spendINR > 0 ? spendINR / viewCount : null,
+        clickRatePct: viewCount > 0 && clicks > 0 ? (clicks / viewCount) * 100 : null,
+        installRatePct: viewCount > 0 && videoInstalls > 0 ? (videoInstalls / viewCount) * 100 : null,
+      };
+    })
+    .filter((row) => row.views > 0)
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 8);
 
   const insights: OperatorInsight[] = [
+    {
+      id: "view-coverage",
+      title: "View data coverage",
+      body: `${viewsKnown} of ${liveVideos.length} live videos have non-zero view data. The dashboard is now using this as the primary operating layer.`,
+      metric: `${pct(viewsKnown, liveVideos.length)}% views`,
+      tone: toneForPct(pct(viewsKnown, liveVideos.length)),
+      href: "/dashboard/data-health",
+      source: "mock_data",
+    },
+    {
+      id: "best-view-platform",
+      title: "Most efficient views",
+      body: bestViewPlatform
+        ? `${bestViewPlatform.platform} currently has the lowest cost per view at ${moneyCompactINR(bestViewPlatform.cpvINR ?? 0)} across ${bestViewPlatform.views.toLocaleString("en-IN")} views.`
+        : "No platform has enough spend and view data to call a view-efficiency winner yet.",
+      metric: bestViewPlatform ? bestViewPlatform.platform : "Pending",
+      tone: bestViewPlatform ? "good" : "neutral",
+      href: "/dashboard/performance",
+      source: "mock_data",
+    },
     {
       id: "exact-attribution",
       title: "Video-level precision",
@@ -206,5 +266,5 @@ export function buildDashboardIntelligence(
     },
   ];
 
-  return { coverage, insights, platforms };
+  return { coverage, insights, platforms, viewLeaders };
 }

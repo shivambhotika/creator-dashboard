@@ -14,8 +14,6 @@ export interface TopCreatorEntry {
   installs: number;
 }
 
-const MEDAL = ["🥇", "🥈", "🥉"];
-
 const PLATFORM_COLOR: Record<string, string> = {
   YouTube:   "#ff0000",
   Instagram: "#e1306c",
@@ -24,14 +22,14 @@ const PLATFORM_COLOR: Record<string, string> = {
 };
 
 const METRIC_LABELS: Record<Metric, string> = {
-  impressions: "Impressions",
+  impressions: "Views / Reach",
   clicks:      "Clicks",
   installs:    "Installs",
 };
 
 export function TopCreatorsWidget({ creators }: { creators: TopCreatorEntry[] }) {
   const { count } = useCurrency();
-  const [metric, setMetric] = useState<Metric>("installs");
+  const [metric, setMetric] = useState<Metric>("impressions");
 
   const ranked = [...creators]
     .sort((a, b) => b[metric] - a[metric])
@@ -45,10 +43,10 @@ export function TopCreatorsWidget({ creators }: { creators: TopCreatorEntry[] })
       <div className="mb-3 flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-base font-bold" style={{ color: "var(--text-primary)" }}>Top Creators</h2>
-          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Ranked by selected metric</p>
+          <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>View-first ranking with conversion toggles</p>
         </div>
         <div className="flex gap-1">
-          {(["installs", "impressions", "clicks"] as Metric[]).map((m) => (
+          {(["impressions", "clicks", "installs"] as Metric[]).map((m) => (
             <button
               key={m}
               onClick={() => setMetric(m)}
@@ -89,8 +87,12 @@ export function TopCreatorsWidget({ creators }: { creators: TopCreatorEntry[] })
                   onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-surface)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "")}
                 >
-                  {/* Rank medal */}
-                  <span className="text-xl w-8 shrink-0 text-center select-none">{MEDAL[i]}</span>
+                  <span
+                    className="w-8 shrink-0 text-center text-xs font-black tabular-nums"
+                    style={{ color: i === 0 ? "#f59e0b" : "var(--text-muted)" }}
+                  >
+                    {i + 1}
+                  </span>
 
                   {/* Platform dot + name */}
                   <div className="flex items-center gap-2 min-w-0 flex-1">

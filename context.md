@@ -308,3 +308,12 @@ SNAPSHOT_STORAGE_FILE=.data/creator-dashboard-storage.json
 - Expanded Command Palette search across pages, campaigns, agencies, creators, videos, open data issues, action items, and Dub slugs.
 - Added diagnostic Performance charts: funnel leakage, CPI driver map, and launch velocity.
 - Made Decision Center more opinionated with a renewal board and next budget moves before the detailed matrix.
+
+### View-Focused Dashboard Pass — 2026-07-02
+
+- Turned `/dashboard` into a views-first Overview: first viewport now starts with a View Command Center before workflow/actions.
+- Added view-focused operating metrics: total views/reach, average views per live video, view coverage, CPV, view-to-click, and view-to-install.
+- Added platform view mix bars and a View Leaders panel using `buildDashboardIntelligence().viewLeaders`.
+- Updated top creator ranking to default to Views / Reach instead of Installs and removed decorative medal glyphs.
+- Updated Overview language from impressions-first to views/reach-first while keeping clicks, installs, CPI, and spend as supporting diagnostics.
+- Extended `src/lib/insights.ts` with view leaders plus view coverage and best view-efficiency insights, so `/api/insights` also exposes the view-first read.
