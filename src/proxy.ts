@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/auth";
+import { DASHBOARD_COOKIE_NAME, LEGACY_DASHBOARD_TOKEN, isDevAuthBypassEnabled } from "@/lib/dashboard-auth";
 
 const PROTECTED_PREFIX = "/dashboard";
 const LOGIN_PATH = "/login";
-const COOKIE_NAME = "wispr_auth";
-const LEGACY_TOKEN = "wispr_india_2026_authed";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -18,16 +17,11 @@ export async function proxy(request: NextRequest) {
   }
 
   // Dev-only bypass — SKIP_AUTH_IN_DEV must ONLY be set in .env.local, never on Vercel.
-  const isProduction = process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
-  if (
-    process.env.SKIP_AUTH_IN_DEV === "true" &&
-    process.env.NODE_ENV === "development" &&
-    !isProduction
-  ) {
+  if (isDevAuthBypassEnabled()) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get(COOKIE_NAME)?.value;
+  const token = request.cookies.get(DASHBOARD_COOKIE_NAME)?.value;
 
   if (!token) {
     const loginUrl = new URL(LOGIN_PATH, request.url);
@@ -36,7 +30,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Legacy static token — keeps existing sessions valid after the upgrade
-  if (token === LEGACY_TOKEN) {
+  if (token === LEGACY_DASHBOARD_TOKEN) {
     return NextResponse.next();
   }
 

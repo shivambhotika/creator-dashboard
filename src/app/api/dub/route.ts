@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { DubLinkStats } from "@/types";
+import { verifyDashboardRequest } from "@/lib/dashboard-auth";
 
 const DUB_API_BASE = "https://api.dub.co";
 
@@ -12,6 +12,8 @@ const DUB_API_BASE = "https://api.dub.co";
  *    → aggregated installs from leads/sales on matching links
  */
 export async function GET(req: NextRequest) {
+  if (!(await verifyDashboardRequest(req))) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const apiKey = process.env.DUB_API_KEY;
   if (!apiKey) {
     return NextResponse.json(

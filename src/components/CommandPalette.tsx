@@ -124,11 +124,6 @@ export function CommandPalette() {
     if (open) setTimeout(() => inputRef.current?.focus(), 30);
   }, [open]);
 
-  // Keep cursor in range
-  useEffect(() => {
-    setCursor(0);
-  }, [query]);
-
   function handleKey(e: React.KeyboardEvent) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -173,14 +168,23 @@ export function CommandPalette() {
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setCursor(0);
+            }}
             onKeyDown={handleKey}
             placeholder="Search creators, videos, agencies…"
             className="flex-1 text-sm bg-transparent outline-none"
             style={{ color: "var(--text-primary)" }}
           />
           {query && (
-            <button onClick={() => setQuery("")} style={{ color: "var(--text-muted)" }}>
+            <button
+              onClick={() => {
+                setQuery("");
+                setCursor(0);
+              }}
+              style={{ color: "var(--text-muted)" }}
+            >
               <X className="w-3.5 h-3.5" />
             </button>
           )}

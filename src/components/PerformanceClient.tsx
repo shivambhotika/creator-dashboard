@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { videos, performances, costs, installs, creators, campaigns } from "@/lib/mock-data";
 import { useCurrency } from "@/lib/currency-context";
@@ -102,11 +102,6 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
   const [platformFilter, setPlatformFilter] = useState("All");
   const [campaignFilter, setCampaignFilter] = useState("All");
 
-  useEffect(() => {
-    const q = searchParams.get("search");
-    if (q) setSearch(q);
-  }, [searchParams]);
-
   const allRows: PerfRow[] = useMemo(() => {
     return performances.map((p) => {
       const video = videos.find((v) => v.id === p.videoId);
@@ -160,7 +155,7 @@ export function PerformanceClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo
         isDubMeasured,
       };
     });
-  }, []);
+  }, [dubByVideo]);
 
   const filteredRows = useMemo(() => {
     const q = search.trim().toLowerCase();

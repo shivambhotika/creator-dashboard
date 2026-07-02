@@ -14,8 +14,6 @@ import type {
 // Owled metrics: likes/comments/reposts scraped live from public IG posts 20 Jun 2026
 // Last synced: 22 Jun 2026 · Dub analytics verified via API
 
-const USD_INR = 84;
-
 export const creators: Creator[] = [
   // ── Finnet ────────────────────────────────────────────────────
   {

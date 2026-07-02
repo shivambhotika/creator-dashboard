@@ -70,7 +70,7 @@ export function CostsClient({ dubByVideo = {} }: { dubByVideo?: DubByVideo }) {
       clickToInstallRate,
       roas,
     };
-  }), []);
+  }), [dubByVideo]);
 
   // Distinct agencies and campaigns for filter controls
   const agencies = useMemo(() => {

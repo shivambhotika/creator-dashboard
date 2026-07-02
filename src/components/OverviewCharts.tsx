@@ -58,7 +58,7 @@ function Empty() {
   );
 }
 
-export function OverviewCharts({ costs, creators, performances, installs, videos }: Props) {
+export function OverviewCharts({ costs, creators, installs, videos }: Props) {
   // ── Per-creator aggregates ──────────────────────────────────────────────────
   const creatorRows = creators
     .map((c) => {

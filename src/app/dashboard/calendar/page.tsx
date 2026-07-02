@@ -5,8 +5,6 @@ import { videos, creators, campaigns, performances, installs } from "@/lib/mock-
 import type { Video } from "@/types";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 
-const USD_INR = 84;
-
 function fmtNum(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000)     return `${(n / 1_000).toFixed(1)}K`;
@@ -87,7 +85,7 @@ export default function CalendarPage() {
   const [month, setMonth] = useState(5); // 0-indexed; start at June 2026 (most active)
   const [selected, setSelected] = useState<string | null>(null);
 
-  const { weeks, firstDay } = useMemo(() => {
+  const { weeks } = useMemo(() => {
     const first = new Date(year, month, 1);
     const dow = first.getDay(); // 0=Sun
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -99,7 +97,7 @@ export default function CalendarPage() {
     while (cells.length % 7 !== 0) cells.push(null);
     const weeks: (number | null)[][] = [];
     for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
-    return { weeks, firstDay: dow };
+    return { weeks };
   }, [year, month]);
 
   function nav(delta: number) {

@@ -2,7 +2,7 @@
 import { readFileSync, existsSync } from "fs";
 
 const src = readFileSync("src/lib/mock-data.ts", "utf8");
-const contextSrc = existsSync("CONTEXT.md") ? readFileSync("CONTEXT.md", "utf8") : "";
+const contextSrc = existsSync("context.md") ? readFileSync("context.md", "utf8") : "";
 
 let passed = 0, failed = 0;
 
@@ -22,8 +22,8 @@ for (const [campId, expected] of Object.entries(campBudgets)) {
     `Cost records sum to ₹${actual.toLocaleString()}, expected ₹${expected.toLocaleString()}`);
 }
 
-// No credentials in CONTEXT.md
-check("No production password in CONTEXT.md", !contextSrc.includes("Wispr_India_rocks"), "Remove credentials from CONTEXT.md");
+// No credentials in context.md
+check("No production password in context.md", !contextSrc.includes("Wispr_India_rocks"), "Remove credentials from context.md");
 
 // v88 April go-live
 check("v88 has April 2026 go-live", src.includes('"v88"') && src.includes("2026-04-25"), "Check v88 goLiveDate");

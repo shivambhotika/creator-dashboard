@@ -2,14 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { videos } from "@/lib/mock-data";
 import { extractYouTubeVideoId, fetchYouTubeVideoStats } from "@/lib/youtube";
 import { insertMetricSnapshot } from "@/lib/storage";
-
-function verifyDashboardAuth(req: NextRequest): boolean {
-  const cookie = req.cookies.get("wispr_auth")?.value;
-  return cookie === "wispr_india_2026_authed";
-}
+import { verifyDashboardRequest } from "@/lib/dashboard-auth";
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ creatorId: string }> }) {
-  if (!verifyDashboardAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await verifyDashboardRequest(req))) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { creatorId } = await ctx.params;
   const creatorVideos = videos.filter((v) => v.creatorId === creatorId);

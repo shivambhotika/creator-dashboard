@@ -1,13 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { syncSheets } from "@/lib/sync/sheets";
-
-function verifyDashboardAuth(req: NextRequest): boolean {
-  const cookie = req.cookies.get("wispr_auth")?.value;
-  return cookie === "wispr_india_2026_authed";
-}
+import { verifyDashboardRequest } from "@/lib/dashboard-auth";
 
 export async function POST(req: NextRequest) {
-  if (!verifyDashboardAuth(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!(await verifyDashboardRequest(req))) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const result = await syncSheets();
     return NextResponse.json(result);

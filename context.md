@@ -1,9 +1,9 @@
 # Wispr India Creator Ops — Full Context & Change Log
 
-> **Last updated:** 2026-06-30  
-> **Repo:** github.com/shivambhotika/creator-dashboard  
-> **Production:** https://creator-dashboard-steel.vercel.app  
-> **Stack:** Next.js 16.2.9 (App Router, Turbopack) · TypeScript · Tailwind · Vercel
+> **Last updated:** 2026-07-02
+> **Repo:** github.com/shivambhotika/creator-dashboard
+> **Production:** https://creator-dashboard-steel.vercel.app
+> **Stack:** Next.js 16.2.9 (App Router) · TypeScript · Tailwind · Vercel
 
 ---
 
@@ -11,10 +11,13 @@
 
 Internal tool for Wispr India's creator marketing team. Tracks ~35 YouTube/Instagram/LinkedIn creators across spend, installs, CPI, CPV, and attribution. Data sources:
 
-- **Mock data** (`src/lib/mock-data.ts`) — source of truth for all creator, video, cost, performance, install records
+- **Mock/seed data** (`src/lib/mock-data.ts`) — current seeded baseline and fallback for creator, video, cost, performance, install records
+- **Postgres snapshots** (`src/lib/storage/index.ts`) — intended persistent source for sync history, YouTube snapshots, Dub snapshots, and inferred attribution when `DATABASE_URL` is set
 - **Dub.co** — live click + install (lead) tracking via unique per-video slugs
 - **Google Sheets** — syncs creator/video metadata
 - **YouTube Data API v3** — syncs view counts (10k units/day; all ~35 videos = 1 unit per run)
+
+Product direction: move operational truth from static seed arrays into persistent imported/synced records, while keeping seed data as a safe fallback for local development and demos.
 
 ---
 
@@ -170,16 +173,31 @@ html.dark {
 
 ## 8. Environment Variables
 
+### Security note — immediate action
+Real API credentials were previously documented in this context file. Treat those values as exposed because this repo is on GitHub:
+
+- Rotate the Dub API key.
+- Rotate the YouTube API key.
+- Rotate the Google OAuth client secret.
+- Regenerate `NEXTAUTH_SECRET`.
+- Re-check Vercel env vars after rotation.
+
+No real secrets should appear in `context.md`, README, source, or docs. Use `.env.example` placeholders only.
+
 ### Local (`.env.local` only — never commit)
 ```
 NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=wispr-india-dashboard-secret-2026
+NEXTAUTH_SECRET=<generate-with-openssl-rand-base64-32>
 SKIP_AUTH_IN_DEV=true
-GOOGLE_CLIENT_ID=165391270997-me6nvv31alaal4udjapg2us6h9s5p0q4.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=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
+GOOGLE_CLIENT_ID=<google-oauth-client-id>
+GOOGLE_CLIENT_SECRET=<google-oauth-client-secret>
 ALLOWED_EMAIL_DOMAIN=wispr.ai
-YOUTUBE_API_KEY=AIzaSyBdb8J0LytwC8Mn-c7X0pL-X4r1Xek1KKk
-DUB_API_KEY=dub_SC2mXwMKARWkjVbePnySUWdk
+YOUTUBE_API_KEY=<youtube-data-api-key>
+DUB_API_KEY=<dub-api-key>
+DASHBOARD_EMAIL=shivam@wispr.ai
+DASHBOARD_PASSWORD=<local-dashboard-password>
+CRON_SECRET=<random-cron-secret>
+DATABASE_URL=<postgres-url-optional-locally>
 ```
 
 ### Vercel (production — must be set manually in dashboard)
@@ -188,11 +206,13 @@ DUB_API_KEY=dub_SC2mXwMKARWkjVbePnySUWdk
 | `NEXTAUTH_URL` | `https://creator-dashboard-steel.vercel.app` |
 | `NEXTAUTH_SECRET` | Run `openssl rand -base64 32` in terminal |
 | `DASHBOARD_PASSWORD` | Your chosen login password |
-| `GOOGLE_CLIENT_ID` | Same as local |
-| `GOOGLE_CLIENT_SECRET` | Same as local |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
 | `ALLOWED_EMAIL_DOMAIN` | `wispr.ai` |
-| `YOUTUBE_API_KEY` | Same as local |
-| `DUB_API_KEY` | Same as local |
+| `YOUTUBE_API_KEY` | YouTube Data API key |
+| `DUB_API_KEY` | Dub API key |
+| `CRON_SECRET` | Random secret required by `/api/cron/*` routes |
+| `DATABASE_URL` | Postgres/Neon URL for persistent snapshots and sync history |
 
 > ⚠️ `SKIP_AUTH_IN_DEV` must **NEVER** be set on Vercel — it disables all authentication.
 
@@ -245,9 +265,30 @@ DUB_API_KEY=dub_SC2mXwMKARWkjVbePnySUWdk
 
 ## 12. What's Still Pending
 
+- Rotate all previously exposed external secrets, then update local/Vercel env vars.
 - Connect revenue/LTV data → enables ROAS across all pages
 - Set Vercel env vars (see Section 8)
 - Add Google OAuth redirect URIs (see Section 9)
 - Confirm live URLs for v72 (Sheryians), v74 (Arsh Goyal), v75 (Code And Bug) when they go live
 - Create unique Dub slugs for Ishan, Nandini, Anurag (P0)
 - Fix WLDD Full Disclosure Dub slug conflict with financewithjobi v53
+
+---
+
+## 13. Change Log — 2026-07-02
+
+- Renamed the canonical project memory file to `context.md` for cross-agent consistency.
+- Removed real credential values from committed context and added `.env.example` placeholders.
+- Documented required secret rotation for previously exposed Dub, YouTube, Google OAuth, and session secrets.
+- Added shared dashboard auth for internal APIs, repaired the Sheets setup flow, and consolidated stale docs into `context.md`.
+- Removed the external Google Fonts build dependency and set `npm run build` to `next build --webpack` after Turbopack hit a local sandbox port-binding panic.
+- Removed unused `next-auth` dependency; auth remains custom HMAC cookie-based via `src/lib/auth.ts` and `src/lib/dashboard-auth.ts`.
+- Hardened `scripts/audit-live-dashboard.mjs` so it scans root docs (`context.md`, README, agent docs) for real credential patterns.
+- Added `tsconfig.typecheck.json` so standalone `npm run typecheck` stays source-scoped; generated Next route types are validated by `next build`.
+- Verification after changes:
+  - `npm run lint` passes.
+  - `npm run typecheck` passes when run sequentially.
+  - `npm run build` passes using webpack.
+  - `npm run audit:data` passes.
+  - `npm run audit:live` passes.
+  - `npm audit --omit=dev` still reports 2 moderate `postcss` advisories through Next.js with no direct fix available from npm audit.

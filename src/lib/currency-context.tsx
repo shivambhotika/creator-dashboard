@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 export type CurrencyMode = "usd" | "inr";
 
@@ -63,14 +63,14 @@ const Ctx = createContext<CurrencyCtx>({
 });
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<CurrencyMode>("usd");
-
-  useEffect(() => {
+  const [mode, setMode] = useState<CurrencyMode>(() => {
+    if (typeof window === "undefined") return "usd";
     try {
-      const s = localStorage.getItem("wispr_currency");
-      if (s === "inr" || s === "usd") setMode(s);
+      const s = window.localStorage.getItem("wispr_currency");
+      return s === "inr" || s === "usd" ? s : "usd";
     } catch {}
-  }, []);
+    return "usd";
+  });
 
   const toggle = () =>
     setMode((m) => {

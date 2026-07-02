@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { creators } from "@/lib/mock-data";
 import type { CreatorMetrics } from "@/types";
@@ -90,11 +90,6 @@ export function CreatorsClient({ allMetrics }: { allMetrics: CreatorMetrics[] })
   const [platform, setPlatform] = useState<PlatformFilter>("All");
   const [agency, setAgency] = useState("All");
   const [status, setStatus] = useState<StatusFilter>("All");
-
-  useEffect(() => {
-    const q = searchParams.get("search");
-    if (q) setSearch(q);
-  }, [searchParams]);
 
   const filteredRows = useMemo(() => {
     const q = search.trim().toLowerCase();

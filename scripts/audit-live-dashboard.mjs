@@ -26,16 +26,25 @@ function walk(dir, out = []) {
 const mock = read("src/lib/mock-data.ts");
 const dubServer = read("src/lib/dub-server.ts");
 const envExample = read(".env.example");
-const middleware = read("src/middleware.ts");
+const proxy = read("src/proxy.ts");
+const dashboardAuth = read("src/lib/dashboard-auth.ts");
 const sheetsRoute = read("src/app/api/sheets/route.ts");
+const sheetSources = read("src/lib/sync/sheet-sources.ts");
 const attributionLib = read("src/lib/sync/attribution.ts");
 
 const allSrcFiles = walk("src");
 const allDocFiles = walk("docs");
+const rootDocFiles = ["context.md", "README.md", "AGENT_CONTEXT.md", "AGENTS.md", "CLAUDE.md"].filter(existsSync);
 
 // 1. No credentials/secrets in docs/source
-const SECRET_PATTERNS = [/Wispr_India_rocks/, /DUB_API_KEY\s*=\s*["'][A-Za-z0-9_-]{12,}["']/, /sk_live_[A-Za-z0-9]+/, /AIza[0-9A-Za-z_-]{30,}/];
-const filesToScan = [...allSrcFiles, ...allDocFiles].filter((f) => /\.(ts|tsx|md|mjs|js)$/.test(f));
+const SECRET_PATTERNS = [
+  /Wispr_India_rocks/,
+  /dub_[A-Za-z0-9_-]{20,}/,
+  /GOCSPX-[A-Za-z0-9_-]{12,}/,
+  /sk_live_[A-Za-z0-9]+/,
+  /AIza[0-9A-Za-z_-]{30,}/,
+];
+const filesToScan = [...allSrcFiles, ...allDocFiles, ...rootDocFiles].filter((f) => /\.(ts|tsx|md|mjs|js)$/.test(f));
 let secretLeak = null;
 for (const f of filesToScan) {
   const content = read(f);
@@ -78,10 +87,11 @@ check("Shared attribution videos are not marked exactVideoAttribution", !sharedE
 
 // 7. Sheets source IDs allowlisted in /api/sheets/route.ts
 check("Sheet source IDs allowlisted in /api/sheets/route.ts",
-  sheetsRoute.includes("1f0dAHqqkIv3MiRyKUxrJ7UsXDNOwWyQ7wp8M9_M0hG0") &&
-  sheetsRoute.includes("1-il4V8YW8Fob3NMogIm1db7PvBR4PsfAKGXoShWe5N8") &&
-  sheetsRoute.includes("ALLOWED_SHEET_IDS"),
-  "Ensure ALLOWED_SHEET_IDS contains both spreadsheet IDs");
+  sheetsRoute.includes("SHEET_SOURCES") &&
+  sheetsRoute.includes("ALLOWED_SHEET_IDS") &&
+  sheetSources.includes("1f0dAHqqkIv3MiRyKUxrJ7UsXDNOwWyQ7wp8M9_M0hG0") &&
+  sheetSources.includes("1-il4V8YW8Fob3NMogIm1db7PvBR4PsfAKGXoShWe5N8"),
+  "Ensure SHEET_SOURCES contains source spreadsheet IDs and /api/sheets uses the shared allowlist");
 
 // 8. Cron routes exist and import CRON_SECRET check
 const cronRoutes = ["sync-all", "sync-sheets", "sync-youtube", "sync-dub", "recompute-attribution"];
@@ -95,9 +105,9 @@ check("All cron routes exist with CRON_SECRET check", cronOk, "Add CRON_SECRET v
 const manualRoutes = ["all", "sheets", "youtube", "dub", "attribution"];
 const manualOk = manualRoutes.every((r) => {
   const c = read(`src/app/api/sync/${r}/route.ts`);
-  return c.includes("wispr_auth");
+  return c.includes("verifyDashboardRequest");
 }) && existsSync("src/app/api/sync/video/[videoId]/route.ts") && existsSync("src/app/api/sync/creator/[creatorId]/route.ts");
-check("Manual sync routes exist with cookie auth", manualOk, "Add all manual sync routes with wispr_auth check");
+check("Manual sync routes exist with shared dashboard auth", manualOk, "Add all manual sync routes with verifyDashboardRequest");
 
 // 10. storage/index.ts has DB fallback
 const storage = read("src/lib/storage/index.ts");
@@ -117,9 +127,11 @@ check(".env.example has required vars",
   ["DUB_API_KEY", "YOUTUBE_API_KEY", "CRON_SECRET", "DATABASE_URL"].every((v) => envExample.includes(v)),
   "Add all required vars to .env.example");
 
-// 14. SKIP_AUTH_IN_DEV guard exists in middleware.ts
-check("SKIP_AUTH_IN_DEV guard in middleware.ts",
-  middleware.includes("SKIP_AUTH_IN_DEV") && middleware.includes("development"),
+// 14. SKIP_AUTH_IN_DEV guard exists in proxy.ts
+check("SKIP_AUTH_IN_DEV guard in proxy.ts",
+  proxy.includes("isDevAuthBypassEnabled") &&
+  dashboardAuth.includes("SKIP_AUTH_IN_DEV") &&
+  dashboardAuth.includes("development"),
   "Guard SKIP_AUTH_IN_DEV to development only");
 
 // 15. Inferred attribution has confidence labels (not "exact" for shared groups)

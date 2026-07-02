@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyDashboardRequest } from "@/lib/dashboard-auth";
+import { SHEET_SOURCES } from "@/lib/sync/sheet-sources";
 
-const ALLOWED_SHEET_IDS = [
-  "1f0dAHqqkIv3MiRyKUxrJ7UsXDNOwWyQ7wp8M9_M0hG0",  // Finnet Campaign Master Tracker
-  "1-il4V8YW8Fob3NMogIm1db7PvBR4PsfAKGXoShWe5N8",  // Wispr × WLDD June 2026 (old)
-  "1TcE0qcDlrh1l8MKbAGTtDAzsxCytBo1MHYqDp3taPmg",  // WLDD Master Sheet (WLDD agency — live, maintained)
-  "14n9hSSi9J48KvBT4fpliWC-0GAu0hER5",              // Camp India Mastered Data (multi-agency consolidated)
-];
+const ALLOWED_SHEET_IDS = SHEET_SOURCES.map((source) => source.spreadsheetId);
 
 export async function GET(req: NextRequest) {
+  if (!(await verifyDashboardRequest(req))) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const sheetId = req.nextUrl.searchParams.get("sheetId");
   const gid = req.nextUrl.searchParams.get("gid") ?? "0";
 

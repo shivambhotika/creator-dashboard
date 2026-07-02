@@ -87,7 +87,7 @@ export default async function DataHealthPage() {
       <div>
         <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Data Health</h1>
         <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
-          Understand what you can and cannot trust. Scraped: 2026-06-25.
+          Understand what you can and cannot trust. Static issues plus live sync freshness checks.
         </p>
       </div>
 
@@ -162,9 +162,9 @@ export default async function DataHealthPage() {
         <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>Calculation Notes</h2>
         <div className="space-y-3 text-sm" style={{ color: "var(--text-secondary)" }}>
           <p><strong>YouTube Impressions:</strong> Real YT Studio data for v87, v88, v91, v94. All other YT videos use estimated impressions = views ÷ 0.04 (4% assumed thumbnail CTR). Confidence: Low.</p>
-          <p><strong>Installs:</strong> Dub leads (primary). Manual records as fallback. Never defaults to 0 for missing attribution — shows "—".</p>
+          <p><strong>Installs:</strong> Dub leads (primary). Manual records as fallback. Never defaults to 0 for missing attribution; shows blank-state dashes instead.</p>
           <p><strong>Shared Attribution:</strong> Ishan (v87/v88/v94), CA Nandini (v7/v92), Anurag (v79/v89/v90/v93) share Dub slugs. Video-level CPI unavailable — creator-level CPI only.</p>
-          <p><strong>WLDD Costs:</strong> ₹35L estimated allocation by tier × platform weight. Never present as exact per-creator costs.</p>
+          <p><strong>WLDD Costs:</strong> Actual per-creator costs are confirmed from the WLDD master sheet as of 2026-06-27.</p>
           <p><strong>ROAS:</strong> Not calculated — no revenue or LTV data connected.</p>
           <p><strong>June YouTube:</strong> Excludes v88 (Apr 25 go-live). v72/v74/v75 view counts may be unverified estimates.</p>
           <p><strong>Currency:</strong> All costs in INR. 1 USD = ₹84.</p>
