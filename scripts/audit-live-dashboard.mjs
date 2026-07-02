@@ -94,7 +94,7 @@ check("Sheet source IDs allowlisted in /api/sheets/route.ts",
   "Ensure SHEET_SOURCES contains source spreadsheet IDs and /api/sheets uses the shared allowlist");
 
 // 8. Cron routes exist and import CRON_SECRET check
-const cronRoutes = ["sync-all", "sync-sheets", "sync-youtube", "sync-dub", "recompute-attribution"];
+const cronRoutes = ["sync-all", "sync-sheets", "sync-youtube", "sync-dub", "recompute-attribution", "social-digest"];
 const cronOk = cronRoutes.every((r) => {
   const c = read(`src/app/api/cron/${r}/route.ts`);
   return c.includes("CRON_SECRET");
@@ -120,12 +120,17 @@ check("DUB_LINK_MAPPINGS exists in dub-server.ts", dubServer.includes("DUB_LINK_
 
 // 12. vercel.json has cron config
 const vercel = read("vercel.json");
-check("vercel.json has cron config", vercel.includes('"crons"') && vercel.includes("/api/cron/sync-all"), "Add cron config to vercel.json");
+check("vercel.json has cron config", vercel.includes('"crons"') && vercel.includes("/api/cron/sync-all") && vercel.includes("/api/cron/social-digest"), "Add cron config to vercel.json");
 
 // 13. .env.example exists with required vars
 check(".env.example has required vars",
   ["DUB_API_KEY", "YOUTUBE_API_KEY", "CRON_SECRET", "DATABASE_URL"].every((v) => envExample.includes(v)),
   "Add all required vars to .env.example");
+
+// 13b. Social listening optional provider vars are documented
+check(".env.example documents social listening vars",
+  ["SLACK_SOCIAL_DIGEST_WEBHOOK_URL", "SOCIAL_MCP_SEARCH_URL", "LINKEDIN_SEARCH_API_URL", "SERPAPI_KEY", "SCREENSHOTONE_ACCESS_KEY"].every((v) => envExample.includes(v)),
+  "Add social listening env vars to .env.example");
 
 // 14. SKIP_AUTH_IN_DEV guard exists in proxy.ts
 check("SKIP_AUTH_IN_DEV guard in proxy.ts",

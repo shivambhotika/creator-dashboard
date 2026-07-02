@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { creators, videos, campaigns } from "@/lib/mock-data";
 import { getAllDataIssues } from "@/lib/data-quality";
 import { OPEN_ACTION_ITEMS } from "@/lib/action-items";
-import { Search, Users, Video, Building2, X, Target, ShieldAlert, Link2, LayoutDashboard, DollarSign, BarChart2, CalendarDays } from "lucide-react";
+import { Search, Users, Video, Building2, X, Target, ShieldAlert, Link2, LayoutDashboard, DollarSign, BarChart2, CalendarDays, Radio } from "lucide-react";
 
 // Derive unique agencies from data at module load time
 const ALL_AGENCIES = Array.from(
@@ -95,6 +95,7 @@ function buildIndex(): Result[] {
     { label: "Calendar", href: "/dashboard/calendar", icon: "page", sub: "Go-live schedule" },
     { label: "Decision Center", href: "/dashboard/decision", icon: "page", sub: "Renewal recommendations" },
     { label: "Data Health", href: "/dashboard/data-health", icon: "page", sub: "Trust, freshness, and source issues" },
+    { label: "Social Digest", href: "/dashboard/social-listening", icon: "page", sub: "Daily Slack mention watch" },
   ].forEach((page) => {
     results.push({
       id: `page-${page.label}`,
@@ -138,6 +139,7 @@ const PAGE_ICON: Record<string, typeof LayoutDashboard> = {
   Calendar: CalendarDays,
   "Decision Center": Target,
   "Data Health": ShieldAlert,
+  "Social Digest": Radio,
 };
 
 function score(item: Result, q: string): number {

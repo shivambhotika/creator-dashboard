@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Video, BarChart2, Search,
   DollarSign, ExternalLink, Sun, Moon, Settings, CalendarDays, X, Menu,
-  FileSpreadsheet, LogOut, Building2, ShieldAlert, Target,
+  FileSpreadsheet, LogOut, Building2, ShieldAlert, Target, Radio,
 } from "lucide-react";
 import { CurrencyToggle } from "@/components/CurrencyToggle";
 import { CommandPalette } from "@/components/CommandPalette";
@@ -34,8 +34,9 @@ const NAV_ANALYTICS: NavEntry[] = [
 ];
 
 const NAV_RESOURCES_TYPED: NavEntry[] = [
-  { href: "/dashboard/sheets",   label: "Sheet Links",    icon: FileSpreadsheet },
-  { href: "/dashboard/settings", label: "Connect Sheets", icon: Settings },
+  { href: "/dashboard/social-listening", label: "Social Digest",  icon: Radio },
+  { href: "/dashboard/sheets",           label: "Sheet Links",    icon: FileSpreadsheet },
+  { href: "/dashboard/settings",         label: "Connect Sheets", icon: Settings },
 ];
 
 

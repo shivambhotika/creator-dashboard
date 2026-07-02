@@ -317,3 +317,14 @@ SNAPSHOT_STORAGE_FILE=.data/creator-dashboard-storage.json
 - Updated top creator ranking to default to Views / Reach instead of Installs and removed decorative medal glyphs.
 - Updated Overview language from impressions-first to views/reach-first while keeping clicks, installs, CPI, and spend as supporting diagnostics.
 - Extended `src/lib/insights.ts` with view leaders plus view coverage and best view-efficiency insights, so `/api/insights` also exposes the view-first read.
+
+### Social Listening Slack Digest Pass — 2026-07-03
+
+- Added a first-party Social Digest module for daily WisprFlow mention monitoring across X/Twitter-style providers, LinkedIn, and Reddit.
+- Added provider adapters in `src/lib/social-listening`: Reddit public search, X recent search via `X_BEARER_TOKEN`, a configurable Twitter-like MCP HTTP bridge via `SOCIAL_MCP_SEARCH_URL`, and LinkedIn search via `LINKEDIN_SEARCH_API_URL` or `SERPAPI_KEY`.
+- Added optional screenshot links through `SOCIAL_SCREENSHOT_URL_TEMPLATE` or `SCREENSHOTONE_ACCESS_KEY`, so LinkedIn/X/Reddit posts can be shown with source links plus screenshot previews in Slack where supported.
+- Added Slack delivery through `SLACK_SOCIAL_DIGEST_WEBHOOK_URL`, formatted as a last-24-hours digest with matched terms, source, author, post link, score/comment context, and warnings for disabled providers.
+- Added protected manual preview/send endpoint at `GET /api/social-listening/digest` and daily cron endpoint at `GET /api/cron/social-digest`.
+- Added Vercel cron schedule for `/api/cron/social-digest` at `0 3 * * *` (08:30 IST daily).
+- Added `/dashboard/social-listening` for provider readiness, keyword/filter visibility, manual preview, and test Slack sends.
+- Documented all social listening env vars in `.env.example` and extended live dashboard audit coverage for the new cron route and env documentation.
