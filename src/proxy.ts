@@ -5,8 +5,20 @@ import { DASHBOARD_COOKIE_NAME, LEGACY_DASHBOARD_TOKEN, isDevAuthBypassEnabled }
 const PROTECTED_PREFIX = "/dashboard";
 const LOGIN_PATH = "/login";
 
+// AUTH DISABLED (2026-08-18): dashboard is open — no login required.
+// To re-enable, set AUTH_DISABLED to false.
+const AUTH_DISABLED = true;
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (AUTH_DISABLED) {
+    // Send stray /login visits straight to the dashboard
+    if (pathname === LOGIN_PATH) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+    return NextResponse.next();
+  }
 
   if (pathname === LOGIN_PATH || pathname.startsWith("/api/auth")) {
     return NextResponse.next();
